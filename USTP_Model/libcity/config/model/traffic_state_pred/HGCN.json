@@ -22,5 +22,5 @@
   "lr_scheduler": "exponentiallr",
   "lr_decay_ratio": 0.92,
   "use_early_stop": true,
-  "patience": 15
+  "patience": 50
 }

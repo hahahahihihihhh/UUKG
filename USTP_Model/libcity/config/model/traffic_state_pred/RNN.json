@@ -12,7 +12,7 @@
   "add_time_in_day": true,
   "add_day_in_week": false,
 
-  "max_epoch": 200,
+  "max_epoch": 100,
   "learner": "adam",
   "learning_rate": 0.01,
   "lr_decay": true,
@@ -22,5 +22,5 @@
   "clip_grad_norm": true,
   "max_grad_norm": 5,
   "use_early_stop": true,
-  "patience": 15
+  "patience": 50
 }

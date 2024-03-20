@@ -8,7 +8,7 @@ import numpy as np
 
 
 DATA_PATH = "../data"
-def get_idx(path):
+def get_idx(path, dataset_name):
     """Map entities and relations to unique ids.
 
     Args:
@@ -20,15 +20,14 @@ def get_idx(path):
     """
     entities, relations = set(), set()
     for split in ["train", "valid", "test"]:
-        with open(os.path.join(path, split), "r") as lines:
+        with open(os.path.join(path, split + "_" + dataset_name + ".txt"), "r") as lines:
             for line in lines:
                 lhs, rel, rhs = line.strip().split("\t")
-                entities.add(lhs)
-                entities.add(rhs)
-                relations.add(rel)
+                entities.add(int(lhs))
+                entities.add(int(rhs))
+                relations.add(int(rel))
     ent2idx = {x: i for (i, x) in enumerate(sorted(entities))}
     rel2idx = {x: i for (i, x) in enumerate(sorted(relations))}
-
     return ent2idx, rel2idx
 
 
@@ -47,6 +46,7 @@ def to_np_array(dataset_file, ent2idx, rel2idx):
     with open(dataset_file, "r") as lines:
         for line in lines:
             lhs, rel, rhs = line.strip().split("\t")
+            lhs = int(lhs); rel = int(rel); rhs = int(rhs)
             try:
                 examples.append([ent2idx[lhs], rel2idx[rel], ent2idx[rhs]])
             except ValueError:
@@ -69,7 +69,7 @@ def get_filters(examples, n_relations):
     rhs_filters = collections.defaultdict(set)
     for lhs, rel, rhs in examples:
         rhs_filters[(lhs, rel)].add(rhs)
-        lhs_filters[(rhs, rel + n_relations)].add(lhs)
+        lhs_filters[(rhs, rel + n_relations)].add(lhs)          # to distinguish with the upper relation
     lhs_final = {}
     rhs_final = {}
     for k, v in lhs_filters.items():
@@ -89,25 +89,24 @@ def process_dataset(path, dataset_name):
       examples: Dictionary mapping splits to with Numpy array containing corresponding KG triples.
       filters: Dictionary containing filters for lhs and rhs predictions.
     """
-    ent2idx, rel2idx = get_idx(dataset_path)
-
+    ent2idx, rel2idx = get_idx(dataset_path, dataset_name)
     entity_idx = list(ent2idx.keys())
     relations_idx = list(rel2idx.keys())
     for i in range(len(entity_idx)):
         entity_idx[i] = int(entity_idx[i])
     for i in range(len(relations_idx)):
         relations_idx[i] = int(relations_idx[i])
-    entiy_id_embeddings = np.array(entity_idx)
+    entity_id_embeddings = np.array(entity_idx)        # 离散化为 int 类型
     relations_id_embeddings = np.array(relations_idx)
 
     # The index between UrbanKG id and embedding
-    np.savetxt(path + "/relations_idx_embeddings.csv", relations_id_embeddings, encoding="utf-8", delimiter=",")
-    np.savetxt(path + "/entity_idx_embedding.csv", entiy_id_embeddings, encoding="utf-8", delimiter=",")
+    np.savetxt(path + "/relations_idx.csv", relations_id_embeddings, encoding="utf-8", delimiter=",")
+    np.savetxt(path + "/entity_idx.csv", entity_id_embeddings, encoding="utf-8", delimiter=",")
 
     examples = {}
     splits = ["train", "valid", "test"]
     for split in splits:
-        dataset_file = os.path.join(path, split)
+        dataset_file = os.path.join(path, split + "_" + dataset_name + ".txt")
         examples[split] = to_np_array(dataset_file, ent2idx, rel2idx)
     all_examples = np.concatenate([examples[split] for split in splits], axis=0)
     lhs_skip, rhs_skip = get_filters(all_examples, len(rel2idx))

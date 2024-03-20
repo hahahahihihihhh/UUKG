@@ -77,14 +77,15 @@ class KGOptimizer(object):
             factors: torch.Tensor with embeddings weights to regularize
         """
         # positive samples
-        positive_score, factors = self.model(input_batch)
-        positive_score = F.logsigmoid(positive_score)
-
-        # negative samples 
-        neg_samples = self.get_neg_samples(input_batch)
-        negative_score, _ = self.model(neg_samples)
-        negative_score = F.logsigmoid(-negative_score)
-        loss = - torch.cat([positive_score, negative_score], dim=0).mean()
+        positive_score, factors = self.model(input_batch)   #   positive_score:(4120, 1)
+        # print(input_batch.shape, positive_score.shape)
+        positive_score = F.logsigmoid(positive_score)     # positive_score:(4120, 1)
+        # negative samples
+        neg_samples = self.get_neg_samples(input_batch)    #    neg_samples(206000, 3)
+        # print(neg_samples.shape)
+        negative_score, _ = self.model(neg_samples) #   negative_score:(206000, 1)
+        negative_score = F.logsigmoid(-negative_score)     # 统一为最大化相似度得分   negative_score:(4120, 1)
+        loss = - torch.cat([positive_score, negative_score], dim=0).mean()  #   （最小化得分的相反数（损失）） torch.cat():(210120, 1)
         return loss, factors
 
     def no_neg_sampling_loss(self, input_batch):
@@ -118,13 +119,14 @@ class KGOptimizer(object):
         """
         if self.neg_sample_size > 0:
             loss, factors = self.neg_sampling_loss(input_batch)
+            # print(loss, factors)
         else:
             predictions, factors = self.model(input_batch, eval_mode=True)
             truth = input_batch[:, 2]
             loss = self.loss_fn(predictions, truth)
             # loss, factors = self.no_neg_sampling_loss(input_batch)
-
         # regularization loss
+        # print(loss, factors)
         loss += self.regularizer.forward(factors)
         return loss
 
@@ -142,6 +144,7 @@ class KGOptimizer(object):
         counter = 0
         with torch.no_grad():
             while b_begin < examples.shape[0]:
+                # print(b_begin, b_begin + self.batch_size)
                 input_batch = examples[
                               b_begin:b_begin + self.batch_size
                               ].cuda()
@@ -160,7 +163,7 @@ class KGOptimizer(object):
         Returns:
             loss: torch.Tensor with loss averaged over all training examples
         """
-        actual_examples = examples[torch.randperm(examples.shape[0]), :]
+        actual_examples = examples[torch.randperm(examples.shape[0]), :]            # 随机排列
         with tqdm.tqdm(total=examples.shape[0], unit='ex', disable=not self.verbose) as bar:
             bar.set_description(f'train loss')
             b_begin = 0
@@ -170,7 +173,6 @@ class KGOptimizer(object):
                 input_batch = actual_examples[
                               b_begin:b_begin + self.batch_size
                               ].cuda()
-
                 # gradient step
                 l = self.calculate_loss(input_batch)
                 self.optimizer.zero_grad()

@@ -2,7 +2,8 @@ import argparse
 import json
 import logging
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 import torch
 import torch.optim
 import models
@@ -15,7 +16,6 @@ DATA_PATH = './data'
 
 def train(args):
     save_dir = get_savedir(args.model, args.dataset)
-
     # file logger
     logging.basicConfig(
         format="%(asctime)s %(levelname)-8s %(message)s",
@@ -36,7 +36,6 @@ def train(args):
     dataset_path = os.path.join(DATA_PATH, args.dataset)
     dataset = KGDataset(dataset_path, args.debug)
     args.sizes = dataset.get_shape()
-
     # load data
     logging.info("\t " + str(dataset.get_shape()))
     train_examples = dataset.get_examples("train")
@@ -50,11 +49,11 @@ def train(args):
 
     # create model
     model = getattr(models, args.model)(args)
+    print(model)
     total = count_params(model)
     logging.info("Total number of parameters {}".format(total))
     device = "cuda"
     model.to(device)
-
     # get optimizer
     regularizer = getattr(regularizers, args.regularizer)(args.reg)
     optim_method = getattr(torch.optim, args.optimizer)(model.parameters(), lr=args.learning_rate)
@@ -64,6 +63,7 @@ def train(args):
     best_mrr = None
     best_epoch = None
     logging.info("\t Start training")
+    # args.max_epochs
     for step in range(args.max_epochs):
 
         # Train step
@@ -95,7 +95,6 @@ def train(args):
                     break
                 elif counter == args.patience // 2:
                     pass
-
     logging.info("\t Optimization finished")
     if not best_mrr:
         torch.save(model.cpu().state_dict(), os.path.join(save_dir, "model.pt"))
@@ -122,7 +121,7 @@ parser.add_argument(
     help="Urban Knowledge Graph dataset"
 )
 parser.add_argument(
-    "--model", default="AttH", choices=all_models, help='Model name'
+    "--model", default="MurE", choices=all_models, help='Model name'
 )
 parser.add_argument(
     "--optimizer", choices=["Adagrad", "Adam", "SparseAdam"], default="Adam",
@@ -141,7 +140,7 @@ parser.add_argument(
     "--rank", default=32, type=int, help="Embedding dimension"
 )
 parser.add_argument(
-    "--batch_size", default=4120, type=int, help="Batch size"
+    "--batch_size", default=4096, type=int, help="Batch size"   # 4120
 )
 parser.add_argument(
     "--learning_rate", default=1e-3, type=float, help="Learning rate"
@@ -153,7 +152,7 @@ parser.add_argument(
     "--init_size", default=1e-3, type=float, help="Initial embeddings' scale"
 )
 parser.add_argument(
-    "--multi_c", action="store_true", help="Multiple curvatures per relation"
+    "--multi_c", action="store_true", help="Multiple curvatures per relation"   # default = true
 )
 parser.add_argument(
     "--regularizer", choices=["N3", "F2"], default="N3", help="Regularizer"
@@ -181,8 +180,7 @@ parser.add_argument(
 parser.add_argument(
     "--debug", action="store_true",
     help="Only use 1000 examples for debugging"
-)
+)   # default = false
 
 if __name__ == "__main__":
-
     train(parser.parse_args())

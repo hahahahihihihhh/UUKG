@@ -275,7 +275,7 @@ class TrafficStateDataset(AbstractDataset):
         data = []
         for i in range(0, df.shape[0], len_time):
             data.append(df[i:i + len_time].values)
-        data = np.array(data, dtype=np.float)  # (len(self.geo_ids), len_time, feature_dim)
+        data = np.array(data, dtype=float)  # (len(self.geo_ids), len_time, feature_dim)
         data = data.swapaxes(0, 1)  # (len_time, len(self.geo_ids), feature_dim)
         self._logger.info("Loaded file " + filename + '.dyna' + ', shape=' + str(data.shape))
         return data
@@ -629,18 +629,20 @@ class TrafficStateDataset(AbstractDataset):
                         data_ind = select_data[:, i]
                         data_ind = np.tile(data_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
                         data_list.append(data_ind)
-        data = np.concatenate(data_list, axis=-1)
+        data = np.concatenate(data_list, axis=-1)   # [4368, 77, 3]
+        # ---Concat
+        region_embeddings = np.load("KG/xxx_embeddings/CHI_area_embeddings.npy")
+        region_embeddings_plus = np.zeros([77, 32])
+        for i in range(region_embeddings.shape[0]):
+            region_embeddings_plus[i] = region_embeddings[i]
 
-        # region_embeddings = np.load("XXX/NYC_area_embeddingn.npy")
-        # region_embeddings_plus = np.zeros([260, 32])
-        # for i in range(region_embeddings.shape[0]):
-        #     region_embeddings_plus[i] = region_embeddings[i]
-
-        # new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + region_embeddings_plus.shape[1]])
-        # for k in range(data.shape[0]):
-        #     new_data[k] = np.concatenate([data[k], region_embeddings_plus], axis=1)
-        # return new_data
-        return data
+        new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + region_embeddings_plus.shape[1]])   # [77, 2 + 32]
+        for k in range(data.shape[0]):
+            new_data[k] = np.concatenate([data[k], region_embeddings_plus], axis=1)
+        print(new_data.shape)
+        return new_data
+        # ---Concat
+        # return data
 
     def _add_external_information_4d(self, df, ext_data=None):
         """
@@ -689,7 +691,7 @@ class TrafficStateDataset(AbstractDataset):
         data = np.concatenate(data_list, axis=-1)
 
         # region_embeddings = np.load("XXX/NYC_area_embeddingn.npy")
-        # region_embeddings_plus = np.zeros([260, 32])
+        # region_embeddings_plus = np.zeros([77, 32])
         # for i in range(region_embeddings.shape[0]):
         #     region_embeddings_plus[i] = region_embeddings[i]
 
@@ -697,7 +699,7 @@ class TrafficStateDataset(AbstractDataset):
         # for k in range(data.shape[0]):
         #     new_data[k] = np.concatenate([data[k], region_embeddings_plus], axis=1)
         # return new_data
-        
+
         return data
 
     def _add_external_information_6d(self, df, ext_data=None):
@@ -956,10 +958,10 @@ class TrafficStateDataset(AbstractDataset):
         x_train, y_train, x_val, y_val, x_test, y_test = [], [], [], [], [], []
         if self.data is None:
             self.data = {}
-            if self.cache_dataset and os.path.exists(self.cache_file_name):
-                x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
-            else:
-                x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
+            # if self.cache_dataset and os.path.exists(self.cache_file_name):
+            #     x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
+            # else:
+            x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
         # 数据归一化
         self.feature_dim = x_train.shape[-1]
         self.ext_dim = self.feature_dim - self.output_dim

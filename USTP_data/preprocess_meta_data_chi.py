@@ -10,11 +10,13 @@ File format after alignment, filtering and preprocessing:
 """
 from shapely import wkt
 from tqdm import tqdm
+import sys
 import geopandas as gpd
 import pandas as pd
 import folium
 import re
 from shapely.geometry import MultiPolygon
+from shapely.geometry import LineString
 import numpy as np
 from shapely.geometry import Point
 import pyarrow.parquet as pq
@@ -37,20 +39,19 @@ USTP_Model 1: taxi
 
 #####################################
 
-taxi_dataframe = pd.read_csv(u'./Meta_data/CHI/Flow_taxi/Taxi_Trips_-_2019.csv')
+taxi_dataframe = pd.read_csv(u'Meta_data/CHI/Flow_taxi/Taxi_Trips_-_2020.csv')
 
 # Traverse the area first, and assign each record to the area
 taxi_dataframe['start_area_id'] = None
 taxi_dataframe['end_area_id'] = None
 
 # filter time
-taxi_dataframe['Trip Start Timestamp'] = pd.to_datetime(taxi_dataframe['Trip Start Timestamp'] )
+taxi_dataframe['Trip Start Timestamp'] = pd.to_datetime(taxi_dataframe['Trip Start Timestamp'])
 taxi_dataframe['Trip End Timestamp'] = pd.to_datetime(taxi_dataframe['Trip End Timestamp'] )
-start_date = pd.to_datetime('2019-04-01')
-end_date = pd.to_datetime('2019-06-30')
+start_date = pd.to_datetime('2020-04-01')
+end_date = pd.to_datetime('2020-06-30')
 taxi_dataframe = taxi_dataframe[(taxi_dataframe['Trip Start Timestamp'] >= start_date) & (taxi_dataframe['Trip Start Timestamp'] <= end_date)]
 taxi_dataframe = taxi_dataframe[(taxi_dataframe['Trip End Timestamp'] >= start_date) & (taxi_dataframe['Trip End Timestamp'] <= end_date)]
-
 # area 对齐
 for index, row in tqdm(taxi_dataframe.iterrows(), total=taxi_dataframe.shape[0]):
     start_point = Point(taxi_dataframe.loc[index, 'Pickup Centroid Longitude'], taxi_dataframe.loc[index, 'Pickup Centroid Latitude'])
@@ -82,46 +83,73 @@ taxi_filterframe.to_csv('./Processed_data/CHI/CHI_taxi.csv')
 USTP_Model 2: bike
 
 """
-
+# 处理速度过慢
 #####################################
 
-bike_dataframe = pd.read_csv(u'./Meta_data/CHI/Flow_bike/Divvy_Trips.csv')
-
-
-bike_dataframe['start_area_id'] = None
-bike_dataframe['end_area_id'] = None
-
+# bike_dataframe = pd.read_csv(u'Meta_data/CHI/Flow_bike/Divvy_Trips.csv')
+# road_dataframe = pd.read_csv(u'./Meta_data/CHI/RoadNetwork/road_filter.csv')
+# road_datanumpy = road_dataframe[['geometry']].values
 #
-bike_dataframe['START TIME'] = pd.to_datetime(bike_dataframe['START TIME'] )
-bike_dataframe['STOP TIME'] = pd.to_datetime(bike_dataframe['STOP TIME'] )
-start_date = pd.to_datetime('2019-04-01')
-end_date = pd.to_datetime('2019-06-30')
-bike_dataframe = bike_dataframe[(bike_dataframe['START TIME'] >= start_date) & (bike_dataframe['START TIME'] <= end_date)]
-bike_dataframe = bike_dataframe[(bike_dataframe['STOP TIME'] >= start_date) & (bike_dataframe['STOP TIME'] <= end_date)]
-
-# area
-for index, row in tqdm(bike_dataframe.iterrows(), total=bike_dataframe.shape[0]):
-    start_point = Point(bike_dataframe.loc[index, 'FROM LONGITUDE'], bike_dataframe.loc[index, 'FROM LATITUDE'])
-    end_point = Point(bike_dataframe.loc[index, 'TO LONGITUDE'], bike_dataframe.loc[index, 'TO LATITUDE'])
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
-        if area_polygon.contains(start_point):
-            bike_dataframe.at[index, 'start_area_id'] = area_dataframe.iloc[j].area_numbe
-            break
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
-        if area_polygon.contains(end_point):
-            bike_dataframe.at[index, 'end_area_id'] = area_dataframe.iloc[j].area_numbe
-            break
-
-new_columns = ['start_time', 'end_time', 'start_area_id', 'end_area_id', 'start_lng', 'start_lat', 'end_lng', 'end_lat']
-selected_columns = ['START TIME', 'STOP TIME', 'start_area_id', 'end_area_id',
-                    'FROM LONGITUDE', 'FROM LATITUDE', 'TO LONGITUDE', 'TO LATITUDE']
-bike_filterframe = bike_dataframe.loc[:, selected_columns]
-bike_filterframe.columns = new_columns
-bike_filterframe = bike_filterframe[bike_filterframe['start_area_id'].notna()]
-bike_filterframe = bike_filterframe[bike_filterframe['end_area_id'].notna()]
-bike_filterframe.to_csv('./Processed_data/CHI/CHI_bike.csv')
+# bike_dataframe['start_road_id'] = None
+# bike_dataframe['end_road_id'] = None
+# bike_dataframe['start_area_id'] = None
+# bike_dataframe['end_area_id'] = None
+#
+# # filter
+# bike_dataframe['START TIME'] = pd.to_datetime(bike_dataframe['START TIME'] )
+# bike_dataframe['STOP TIME'] = pd.to_datetime(bike_dataframe['STOP TIME'] )
+# start_date = pd.to_datetime('2019-04-01')
+# end_date = pd.to_datetime('2019-06-30')
+# bike_dataframe = bike_dataframe[(bike_dataframe['START TIME'] >= start_date) & (bike_dataframe['START TIME'] <= end_date)]
+# bike_dataframe = bike_dataframe[(bike_dataframe['STOP TIME'] >= start_date) & (bike_dataframe['STOP TIME'] <= end_date)]
+#
+# # road
+# eps = 0.0005; cnt = 0
+# for index, row in tqdm(bike_dataframe.iterrows(), total=bike_dataframe.shape[0]):
+#     start_point = Point(bike_dataframe.loc[index, 'FROM LONGITUDE'], bike_dataframe.loc[index, 'FROM LATITUDE'])
+#     end_point = Point(bike_dataframe.loc[index, 'TO LONGITUDE'], bike_dataframe.loc[index, 'TO LATITUDE'])
+#     start_min_distance = sys.maxsize; start_road_id = -1
+#     for j in range(road_datanumpy.shape[0]):
+#         road_linestring = LineString(wkt.loads(str(road_datanumpy[j][0])))
+#         if (road_linestring.distance(start_point) < start_min_distance):
+#             start_road_id = road_dataframe.iloc[j].link_id; start_min_distance = road_linestring.distance(start_point)
+#     bike_dataframe.at[index, 'start_road_id'] = start_road_id if start_min_distance < eps else None
+#
+#     end_min_distance = sys.maxsize; end_road_id = -1
+#     for j in range(road_datanumpy.shape[0]):
+#         road_linestring = LineString(wkt.loads(str(road_datanumpy[j][0])))
+#         if (road_linestring.distance(end_point) < end_min_distance):
+#             end_road_id = road_dataframe.iloc[j].link_id; end_min_distance = road_linestring.distance(end_point)
+#     bike_dataframe.at[index, 'end_road_id'] = end_road_id if end_min_distance < eps else None
+#
+#     if (start_min_distance >= eps or end_min_distance >= eps):
+#         cnt += 1
+# print("偏离过大的： ", cnt)
+# # area
+# for index, row in tqdm(bike_dataframe.iterrows(), total=bike_dataframe.shape[0]):
+#     start_point = Point(bike_dataframe.loc[index, 'FROM LONGITUDE'], bike_dataframe.loc[index, 'FROM LATITUDE'])
+#     end_point = Point(bike_dataframe.loc[index, 'TO LONGITUDE'], bike_dataframe.loc[index, 'TO LATITUDE'])
+#     for j in range(area_dataframe.shape[0]):
+#         area_polygon = area_dataframe.iloc[j].geometry
+#         if area_polygon.contains(start_point):
+#             bike_dataframe.at[index, 'start_area_id'] = area_dataframe.iloc[j].area_numbe
+#             break
+#     for j in range(area_dataframe.shape[0]):
+#         area_polygon = area_dataframe.iloc[j].geometry
+#         if area_polygon.contains(end_point):
+#             bike_dataframe.at[index, 'end_area_id'] = area_dataframe.iloc[j].area_numbe
+#             break
+#
+# new_columns = ['start_time', 'end_time', 'start_road_id', 'end_road_id', 'start_area_id', 'end_area_id', 'start_lng', 'start_lat', 'end_lng', 'end_lat']
+# selected_columns = ['START TIME', 'STOP TIME', 'start_road_id', 'end_road_id', 'start_area_id', 'end_area_id',
+#                     'FROM LONGITUDE', 'FROM LATITUDE', 'TO LONGITUDE', 'TO LATITUDE']
+# bike_filterframe = bike_dataframe.loc[:, selected_columns]
+# bike_filterframe.columns = new_columns
+# bike_filterframe = bike_filterframe[bike_filterframe['start_area_id'].notna()]
+# bike_filterframe = bike_filterframe[bike_filterframe['end_area_id'].notna()]
+# bike_filterframe = bike_filterframe[bike_filterframe['start_road_id'].notna()]
+# bike_filterframe = bike_filterframe[bike_filterframe['end_road_id'].notna()]
+# bike_filterframe.to_csv('./Processed_data/CHI/CHI_bike.csv')
 
 """
 
@@ -131,7 +159,7 @@ USTP_Model 3: crime
 
 #####################################
 
-crime_dataframe = pd.read_csv(u'./Meta_data/CHI/Event_crime/CHI_complaint_20210112.csv')
+crime_dataframe = pd.read_csv(u'Meta_data/CHI/Event_crime/CHI_complaint_20210112.csv')
 
 #
 crime_dataframe['area_id'] = None
@@ -155,11 +183,11 @@ crime_dataframe.to_csv('./Processed_data/CHI/CHI_crime.csv')
 
 """
 
-USTP_Model 4: 311 service 
+USTP_Model 4: 311 service
 
 """
 
-service_dataframe = pd.read_csv(u'./Meta_data/CHI/Event_311/311_sercice_20210112.csv')
+service_dataframe = pd.read_csv(u'Meta_data/CHI/Event_311/311_sercice_20210112.csv')
 
 # First traverse the area and assign each record to the area
 service_dataframe['area_id'] = None

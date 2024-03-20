@@ -90,17 +90,17 @@ road_datanumpy = road_dataframe[['geometry']].values
 road_borough_area_id = np.full((road_datanumpy.shape[0], 2), 999)
 for i in tqdm(range(road_datanumpy.shape[0])):
     road_linestring = wkt.loads(str(road_datanumpy[i][0]))
-    ##
+    ## 遍历 borough
     for j in range(borough_dataframe.shape[0]):
         borough_polygon = borough_dataframe.iloc[j].geometry
         if borough_polygon.contains(road_linestring) or borough_polygon.touches(road_linestring):
             road_borough_area_id[i][0] = borough_dataframe.iloc[j].BoroCode
             break
-    ##
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
+    ## 遍历 area
+    for k in range(area_dataframe.shape[0]):
+        area_polygon = area_dataframe.iloc[k].geometry
         if area_polygon.contains(road_linestring) or area_polygon.touches(road_linestring):
-            road_borough_area_id[i][1] = area_dataframe.iloc[j].area_numbe
+            road_borough_area_id[i][1] = area_dataframe.iloc[k].area_numbe
             break
 
 road_dataframe[['borough_id', 'area_id']] = road_borough_area_id
@@ -123,13 +123,13 @@ junction_borough_area_id = np.full((junction_datanumpy.shape[0], 2), 999)
 
 for i in tqdm(range(junction_datanumpy.shape[0])):
     junction_point = Point(junction_datanumpy[i][0], junction_datanumpy[i][1])
-    ##
+    ## 遍历 borough
     for j in range(borough_dataframe.shape[0]):
         borough_polygon = borough_dataframe.iloc[j].geometry
         if borough_polygon.contains(junction_point):
             junction_borough_area_id[i][0] = borough_dataframe.iloc[j].BoroCode
             break
-    ##
+    ## area
     for k in range(area_dataframe.shape[0]):
         area_polygon = area_dataframe.iloc[k].geometry
         if area_polygon.contains(junction_point):

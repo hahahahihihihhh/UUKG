@@ -17,9 +17,9 @@ class KGModel(nn.Module, ABC):
         bias: string for whether to learn or fix bias (none for no bias)
         init_size: float for embeddings' initialization scale
         entity: torch.nn.Embedding with entity embeddings
-        rel: torch.nn.Embedding with relation embeddings
-        bh: torch.nn.Embedding with head entity bias embeddings
-        bt: torch.nn.Embedding with tail entity bias embeddings
+        rel: torch.nn.Embedding with relation embeddings            // relation
+        bh: torch.nn.Embedding with head entity bias embeddings     // bias head
+        bt: torch.nn.Embedding with tail entity bias embeddings     // bias tail
     """
 
     def __init__(self, sizes, rank, dropout, gamma, data_type, bias, init_size):
@@ -140,14 +140,14 @@ class KGModel(nn.Module, ABC):
             factors: embeddings to regularize
         """
         # get embeddings and similarity scores
-        lhs_e, lhs_biases = self.get_queries(queries)
+        lhs_e, lhs_biases = self.get_queries(queries)   #   lhs_e:(206000, 32), lhs_biases:(206000, 1)
         # queries = F.dropout(queries, self.dropout, training=self.training)
-        rhs_e, rhs_biases = self.get_rhs(queries, eval_mode)
+        rhs_e, rhs_biases = self.get_rhs(queries, eval_mode)    #   rhs_e:(206000, 32), rhs_biases:(206000, 1)
         # candidates = F.dropout(candidates, self.dropout, training=self.training)
         predictions = self.score((lhs_e, lhs_biases), (rhs_e, rhs_biases), eval_mode)
-
+        # print(predictions.shape, predictions)
         # get factors for regularization
-        factors = self.get_factors(queries)
+        factors = self.get_factors(queries) #   factors:(206000, 32),(206000, 32),(206000, 32)
         return predictions, factors
 
     def get_ranking(self, queries, filters, batch_size=1000):
@@ -159,26 +159,26 @@ class KGModel(nn.Module, ABC):
             batch_size: int for evaluation batch size
 
         Returns:
-            ranks: torch.Tensor with ranks or correct entities
+            ranks: torch.Tensor with ranks of correct entities
         """
         ranks = torch.ones(len(queries))
         with torch.no_grad():
             b_begin = 0
-            candidates = self.get_rhs(queries, eval_mode=True)
+            candidates = self.get_rhs(queries, eval_mode=True)  #   candidates:([140602, 3],[140602, 1])
             while b_begin < len(queries):
                 these_queries = queries[b_begin:b_begin + batch_size].cuda()
 
-                q = self.get_queries(these_queries)
-                rhs = self.get_rhs(these_queries, eval_mode=False)
-
-                scores = self.score(q, candidates, eval_mode=True)
-                targets = self.score(q, rhs, eval_mode=False)
-
+                q = self.get_queries(these_queries)             # q:([500, 32], [500, 1])
+                rhs = self.get_rhs(these_queries, eval_mode=False)  # rhs:([500, 32], [500, 1])
+                scores = self.score(q, candidates, eval_mode=True) # scores:[500, 140602]
+                targets = self.score(q, rhs, eval_mode=False)   # targets:[500, 1]
                 # set filtered and true scores to -1e6 to be ignored
                 for i, query in enumerate(these_queries):
                     filter_out = filters[(query[0].item(), query[1].item())]
+                    assert filter_out.count(queries[b_begin + i, 2].item())
                     filter_out += [queries[b_begin + i, 2].item()]
                     scores[i, torch.LongTensor(filter_out)] = -1e6
+                # print((scores >= targets).shape)        # (scores >= targets):[500, 140602]
                 ranks[b_begin:b_begin + batch_size] += torch.sum(
                     (scores >= targets).float(), dim=1
                 ).cpu()
@@ -201,18 +201,22 @@ class KGModel(nn.Module, ABC):
         hits_at = {}
 
         for m in ["rhs", "lhs"]:
-            q = examples.clone()
+            q = examples.clone()    #   q:[28220, 3]
             if m == "lhs":
                 tmp = torch.clone(q[:, 0])
                 q[:, 0] = q[:, 2]
                 q[:, 2] = tmp
                 q[:, 1] += self.sizes[1] // 2
-            ranks = self.get_ranking(q, filters[m], batch_size=batch_size)
+            ranks = self.get_ranking(q, filters[m], batch_size=batch_size)      # 所有询问在结果中的排名   rank:(28220,1)
             mean_rank[m] = torch.mean(ranks).item()
             mean_reciprocal_rank[m] = torch.mean(1. / ranks).item()
-            hits_at[m] = torch.FloatTensor((list(map(
-                lambda x: torch.mean((ranks <= x).float()).item(),
-                (1, 3, 10)
-            ))))
-
+            hits_at[m] = torch.FloatTensor(
+                    (
+                    list(
+                        map(
+                            lambda x: torch.mean((ranks <= x).float()).item(), (1, 3, 10)
+                        )
+                    )
+                )
+            )   #   hits_at[m]:tensor([?,?,?])
         return mean_rank, mean_reciprocal_rank, hits_at

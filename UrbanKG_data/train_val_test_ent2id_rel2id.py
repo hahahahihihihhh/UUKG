@@ -23,11 +23,10 @@ def get_entity2id_relation2id(KG, entity2id, relation2id):
             entity.append(temp[0])
             entity.append(temp[2])
             relations.append(temp[1])
-    entity = list(set(entity))
-    relations = list(set(relations))
+    entity = sorted(list(set(entity)))
+    relations = sorted(list(set(relations)))
     f.close()
-
-    with open(entity2id,'w') as f2:
+    with open(entity2id, 'w') as f2:
         for i in range(len(entity)):
             f2.write(entity[i] + ' ')
             f2.write(str(i))
@@ -35,7 +34,7 @@ def get_entity2id_relation2id(KG, entity2id, relation2id):
         f2.close()
 
 
-    with open(relation2id,'w') as f3:
+    with open(relation2id, 'w') as f3:
         for j in range(len(relations)):
             f3.write(relations[j]+' ')
             f3.write(str(j))
@@ -137,7 +136,7 @@ if __name__ == "__main__":
     produce_train_val_test(KG_CHI, entity2id_CHI, relation2id_CHI, triple_CHI)
     get_train_val_test(triple_CHI, train_CHI, valid_CHI, test_CHI)
 
-    # Extract the KG_id of the required entiy
+    # Extract the KG of the required entiy
     # with open("/home/ningyansong/UrbanKG/KDD_data_prepare/NYC/entity2id_NYC_GUrbanKG.txt") as f:
     #     crime_entity = []
     #     for line in f.readlines():

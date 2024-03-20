@@ -59,10 +59,10 @@ for i in range(crime_numpy.shape[0]):
 
 now = datetime.strptime(begin_time, format_pattern)
 
-NYCTaxi20200406_dyna = []
-NYCTaxi20200406_dyna.append('dyna_id,type,time,entity_id,flow')
-NYCTaxi20200406_geo = []
-NYCTaxi20200406_geo.append('geo_id,type,coordinates')
+CHICrime20210112_dyna = []
+CHICrime20210112_dyna.append('dyna_id,type,time,entity_id,flow')
+CHICrime20210112_geo = []
+CHICrime20210112_geo.append('geo_id,type,coordinates')
 
 dyna_id = 0
 type = 'state'
@@ -75,25 +75,25 @@ for i in tqdm(range(crime_flow.shape[1])):
 
         grid_record = str(dyna_id) + ',' + type + ',' + str(time_write) + ',' + str(i+1) + ',' + str(int(flow))
         dyna_id += 1
-        NYCTaxi20200406_dyna.append(grid_record)
+        CHICrime20210112_dyna.append(grid_record)
 
     geo_record = str(i+1) + ',' + 'Point' + ',"[]"'
-    NYCTaxi20200406_geo.append(geo_record)
+    CHICrime20210112_geo.append(geo_record)
 
 with open(r'./USTP/CHI/CHICrime20210112/CHICrime20210112.dyna','w') as f1:
-    for i in range(len(NYCTaxi20200406_dyna)):
-        f1.write(NYCTaxi20200406_dyna[i])
+    for i in range(len(CHICrime20210112_dyna)):
+        f1.write(CHICrime20210112_dyna[i])
         f1.write('\n')
 f1.close()
 
 with open(r'./USTP/CHI/CHICrime20210112/CHICrime20210112.geo','w') as f1:
-    for i in range(len(NYCTaxi20200406_geo)):
-        f1.write(NYCTaxi20200406_geo[i])
+    for i in range(len(CHICrime20210112_geo)):
+        f1.write(CHICrime20210112_geo[i])
         f1.write('\n')
 f1.close()
 
-NYCTaxi20200406_rel = []
-NYCTaxi20200406_rel.append('rel_id,type,origin_id,destination_id,cost')
+CHICrime20210112_rel = []
+CHICrime20210112_rel.append('rel_id,type,origin_id,destination_id,cost')
 
 rel_id = 0
 type = 'geo'
@@ -102,13 +102,13 @@ for i in tqdm(range(area_dataframe.shape[0])):
     for j in range(area_dataframe.shape[0]):
         tail_area = area_dataframe.iloc[j].geometry
         distance = head_area.distance(tail_area)
-        NYCTaxi20200406_rel.append(str(rel_id) + ',' +  type + ',' + str(area_dataframe.iloc[i].area_numbe) + ',' + str(area_dataframe.iloc[j].area_numbe)
+        CHICrime20210112_rel.append(str(rel_id) + ',' +  type + ',' + str(area_dataframe.iloc[i].area_numbe) + ',' + str(area_dataframe.iloc[j].area_numbe)
                                    + ',' + str(distance))
         rel_id += 1
 
 with open(r'./USTP/CHI/CHICrime20210112/CHICrime20210112.rel','w') as f1:
-    for i in range(len(NYCTaxi20200406_rel)):
-        f1.write(NYCTaxi20200406_rel[i])
+    for i in range(len(CHICrime20210112_rel)):
+        f1.write(CHICrime20210112_rel[i])
         f1.write('\n')
 f1.close()
 
@@ -119,59 +119,59 @@ f1.close()
 USTP_data 5: 311 service
 
 """
-crime_dataframe = pd.read_csv('./Processed_data/CHI/CHI_311_service.csv')
+service_dataframe = pd.read_csv('./Processed_data/CHI/CHI_311_service.csv')
 
-crime_numpy = crime_dataframe[['time', 'area_id']].values
+service_numpy = service_dataframe[['time', 'area_id']].values
 
 begin_time = '2021-01-01 00:00:00'
 format_pattern = '%Y-%m-%d %H:%M:%S'
 
-crime_flow = np.zeros([4380, 77])
+service_flow = np.zeros([4380, 77])
 
-for i in range(crime_numpy.shape[0]):
-    time_spannn_out = datetime.strptime(str(crime_numpy[i][0]), format_pattern) - datetime.strptime(begin_time, format_pattern)
+for i in range(service_numpy.shape[0]):
+    time_spannn_out = datetime.strptime(str(service_numpy[i][0]), format_pattern) - datetime.strptime(begin_time, format_pattern)
     total_seconds_out = int(time_spannn_out.total_seconds())
     time_step_out =  int(total_seconds_out / 7200)
     if 0<= time_step_out <= 4380 :
-        crime_flow[time_step_out][ int(crime_numpy[i][1]) -1 ] = 1
+        service_flow[time_step_out][ int(service_numpy[i][1]) -1 ] = 1
 
 now = datetime.strptime(begin_time, format_pattern)
 
-NYCTaxi20200406_dyna = []
-NYCTaxi20200406_dyna.append('dyna_id,type,time,entity_id,flow')
-NYCTaxi20200406_geo = []
-NYCTaxi20200406_geo.append('geo_id,type,coordinates')
+CHIService20210112_dyna = []
+CHIService20210112_dyna.append('dyna_id,type,time,entity_id,flow')
+CHIService20210112_geo = []
+CHIService20210112_geo.append('geo_id,type,coordinates')
 
 dyna_id = 0
 type = 'state'
 
-for i in tqdm(range(crime_flow.shape[1])):
-    for j in range(crime_flow.shape[0]):
+for i in tqdm(range(service_flow.shape[1])):
+    for j in range(service_flow.shape[0]):
         time_origin = now + timedelta(minutes=120 * j)
         time_write = time_origin.strftime('%Y-%m-%dT%H:%M:%SZ')
-        flow = crime_flow[j][i]
+        flow = service_flow[j][i]
 
         grid_record = str(dyna_id) + ',' + type + ',' + str(time_write) + ',' + str(i+1) + ',' + str(int(flow))
         dyna_id += 1
-        NYCTaxi20200406_dyna.append(grid_record)
+        CHIService20210112_dyna.append(grid_record)
 
     geo_record = str(i+1) + ',' + 'Point' + ',"[]"'
-    NYCTaxi20200406_geo.append(geo_record)
+    CHIService20210112_geo.append(geo_record)
 
 with open(r'./USTP/CHI/CHI311Service20210112/CHI311Service20210112.dyna','w') as f1:
-    for i in range(len(NYCTaxi20200406_dyna)):
-        f1.write(NYCTaxi20200406_dyna[i])
+    for i in range(len(CHIService20210112_dyna)):
+        f1.write(CHIService20210112_dyna[i])
         f1.write('\n')
 f1.close()
 
 with open(r'./USTP/CHI/CHI311Service20210112/CHI311Service20210112.geo','w') as f1:
-    for i in range(len(NYCTaxi20200406_geo)):
-        f1.write(NYCTaxi20200406_geo[i])
+    for i in range(len(CHIService20210112_geo)):
+        f1.write(CHIService20210112_geo[i])
         f1.write('\n')
 f1.close()
 
-NYCTaxi20200406_rel = []
-NYCTaxi20200406_rel.append('rel_id,type,origin_id,destination_id,cost')
+CHIService20210112_rel = []
+CHIService20210112_rel.append('rel_id,type,origin_id,destination_id,cost')
 
 rel_id = 0
 type = 'geo'
@@ -180,12 +180,12 @@ for i in tqdm(range(area_dataframe.shape[0])):
     for j in range(area_dataframe.shape[0]):
         tail_area = area_dataframe.iloc[j].geometry
         distance = head_area.distance(tail_area)
-        NYCTaxi20200406_rel.append(str(rel_id) + ',' +  type + ',' + str(area_dataframe.iloc[i].area_numbe) + ',' + str(area_dataframe.iloc[j].area_numbe)
+        CHIService20210112_rel.append(str(rel_id) + ',' +  type + ',' + str(area_dataframe.iloc[i].area_numbe) + ',' + str(area_dataframe.iloc[j].area_numbe)
                                    + ',' + str(distance))
         rel_id += 1
 
 with open(r'./USTP/CHI/CHI311Service20210112/CHI311Service20210112.rel','w') as f1:
-    for i in range(len(NYCTaxi20200406_rel)):
-        f1.write(NYCTaxi20200406_rel[i])
+    for i in range(len(CHIService20210112_rel)):
+        f1.write(CHIService20210112_rel[i])
         f1.write('\n')
 f1.close()

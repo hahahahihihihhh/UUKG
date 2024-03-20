@@ -204,7 +204,7 @@ PLA.extend(ANA)
 PLA.extend(PHPC)
 PLA.extend(RHRC)
 PLA.extend(JHJC)
-with open(r'./UrbanKG/CHI/UrbanKG_CHI.txt','w') as f2:
+with open(r'UrbanKG/CHI/UrbanKG_CHI.txt', 'w') as f2:
     for i in range(len(PLA)):
         f2.write(PLA[i])
         f2.write('\n')

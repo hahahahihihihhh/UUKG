@@ -19,6 +19,7 @@ class BaseE(KGModel):
     def __init__(self, args):
         super(BaseE, self).__init__(args.sizes, args.rank, args.dropout, args.gamma, args.dtype, args.bias,
                                     args.init_size)
+        #   self.sizes:(14602, 26, 14602)
         self.entity.weight.data = self.init_size * torch.randn((self.sizes[0], self.rank), dtype=self.data_type)
         self.rel.weight.data = self.init_size * torch.randn((self.sizes[1], self.rank), dtype=self.data_type)
 
@@ -37,7 +38,7 @@ class BaseE(KGModel):
             else:
                 score = torch.sum(lhs_e * rhs_e, dim=-1, keepdim=True)
         else:
-            score = - euc_sqdistance(lhs_e, rhs_e, eval_mode)
+            score = - euc_sqdistance(lhs_e, rhs_e, eval_mode) # lhs_e:(4120,32)   rhs_e:(4120,32)   score:(4120,1) 距离越小，得分越大，越优
         return score
 
 
@@ -74,7 +75,7 @@ class MurE(BaseE):
     def __init__(self, args):
         super(MurE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0 # (-1, 1) 均匀分布
         self.sim = "dist"
 
     def get_queries(self, queries: torch.Tensor):
@@ -141,23 +142,23 @@ class AttE(BaseE):
         lhs_ref_e = givens_reflection(
             self.ref(queries[:, 1]), self.entity(queries[:, 0])
         )
-        return lhs_ref_e
+        return lhs_ref_e    #   lhs_ref_e:(206000, 32)
 
     def get_rotation_queries(self, queries):
         lhs_rot_e = givens_rotations(
             self.rot(queries[:, 1]), self.entity(queries[:, 0])
         )
-        return lhs_rot_e
+        return lhs_rot_e    #   lhs_rot_e:(206000, 32)
 
     def get_queries(self, queries):
         """Compute embedding and biases of queries."""
-        lhs_ref_e = self.get_reflection_queries(queries).view((-1, 1, self.rank))
-        lhs_rot_e = self.get_rotation_queries(queries).view((-1, 1, self.rank))
-
+        lhs_ref_e = self.get_reflection_queries(queries).view((-1, 1, self.rank))   #   lhs_ref_e:(206000, 1, 32)
+        lhs_rot_e = self.get_rotation_queries(queries).view((-1, 1, self.rank)) #   lhs_rot_e:(206000, 1, 32)
         # self-attention mechanism
-        cands = torch.cat([lhs_ref_e, lhs_rot_e], dim=1)
-        context_vec = self.context_vec(queries[:, 1]).view((-1, 1, self.rank))
-        att_weights = torch.sum(context_vec * cands * self.scale, dim=-1, keepdim=True)
-        att_weights = self.act(att_weights)
-        lhs_e = torch.sum(att_weights * cands, dim=1) + self.rel(queries[:, 1])
-        return lhs_e, self.bh(queries[:, 0])
+        cands = torch.cat([lhs_ref_e, lhs_rot_e], dim=1)    #   cands:(206000, 2, 32)
+        context_vec = self.context_vec(queries[:, 1]).view((-1, 1, self.rank))  #   context_vec:(206000, 1, 32)
+        att_weights = torch.sum(context_vec * cands * self.scale, dim=-1, keepdim=True) #   att_weights:(206000, 2, 1)
+        # print((context_vec * cands * self.scale).shape, att_weights.shape)
+        att_weights = self.act(att_weights) #   att_weights:(206000, 2, 1)
+        lhs_e = torch.sum(att_weights * cands, dim=1) + self.rel(queries[:, 1])     #   lhs_e:(206000, 32)
+        return lhs_e, self.bh(queries[:, 0])    #   lhs_e:(206000, 32)  self.bh():(206000, 1)

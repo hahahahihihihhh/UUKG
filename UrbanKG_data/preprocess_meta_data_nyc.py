@@ -96,10 +96,10 @@ for i in tqdm(range(road_datanumpy.shape[0])):
             road_borough_area_id[i][0] = borough_dataframe.iloc[j].BoroCode
             break
     ##  area
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
+    for k in range(area_dataframe.shape[0]):
+        area_polygon = area_dataframe.iloc[k].geometry
         if area_polygon.contains(road_linestring) or area_polygon.touches(road_linestring):
-            road_borough_area_id[i][1] = area_dataframe.iloc[j].OBJECTID
+            road_borough_area_id[i][1] = area_dataframe.iloc[k].OBJECTID
             break
 # filter
 road_dataframe[['borough_id', 'area_id']] = road_borough_area_id

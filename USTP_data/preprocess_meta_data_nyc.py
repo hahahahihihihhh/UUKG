@@ -70,38 +70,39 @@ taxi_filterframe.to_csv('./Processed_data/NYC/NYC_taxi.csv')
 USTP_Model 2: bike
 
 """
-bikedata_2020_04 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202004-citibike-tripdata.csv')
-bikedata_2020_05 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202005-citibike-tripdata.csv')
-bikedata_2020_06 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202006-citibike-tripdata.csv')
-
-bike_dataframe = pd.concat([bikedata_2020_04, bikedata_2020_05, bikedata_2020_06], ignore_index=True)
-
-
-bike_dataframe['start_area_id'] = None
-bike_dataframe['end_area_id'] = None
-
-for index, row in tqdm(bike_dataframe.iterrows(), total=bike_dataframe.shape[0]):
-    start_point = Point(bike_dataframe.loc[index, 'start station longitude'], bike_dataframe.loc[index, 'start station latitude'])
-    end_point = Point(bike_dataframe.loc[index, 'end station longitude'], bike_dataframe.loc[index, 'end station latitude'])
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
-        if area_polygon.contains(start_point):
-            bike_dataframe.at[index, 'start_area_id'] = area_dataframe.iloc[j].OBJECTID
-            break
-    for j in range(area_dataframe.shape[0]):
-        area_polygon = area_dataframe.iloc[j].geometry
-        if area_polygon.contains(end_point):
-            bike_dataframe.at[index, 'end_area_id'] = area_dataframe.iloc[j].OBJECTID
-            break
-
-new_columns = ['start_time', 'end_time', 'start_area_id', 'end_area_id', 'start_lng', 'start_lat', 'end_lng', 'end_lat']
-selected_columns = ['starttime', 'stoptime', 'start_area_id', 'end_area_id',
-                    'start station longitude', 'start station latitude', 'end station longitude', 'end station latitude']
-bike_filterframe = bike_dataframe.loc[:, selected_columns]
-bike_filterframe.columns = new_columns
-bike_filterframe = bike_filterframe[bike_filterframe['start_area_id'].notna()]
-bike_filterframe = bike_filterframe[bike_filterframe['end_area_id'].notna()]
-bike_filterframe.to_csv('./Processed_data/NYC/NYC_bike.csv')
+# 处理方法有误，若改为正确方法如 CHI 的处理，则处理速度过慢
+# bikedata_2020_04 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202004-citibike-tripdata.csv')
+# bikedata_2020_05 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202005-citibike-tripdata.csv')
+# bikedata_2020_06 = pd.read_csv(u'./Meta_data/NYC/Flow_bike/202006-citibike-tripdata.csv')
+#
+# bike_dataframe = pd.concat([bikedata_2020_04, bikedata_2020_05, bikedata_2020_06], ignore_index=True)
+#
+#
+# bike_dataframe['start_area_id'] = None
+# bike_dataframe['end_area_id'] = None
+#
+# for index, row in tqdm(bike_dataframe.iterrows(), total=bike_dataframe.shape[0]):
+#     start_point = Point(bike_dataframe.loc[index, 'start station longitude'], bike_dataframe.loc[index, 'start station latitude'])
+#     end_point = Point(bike_dataframe.loc[index, 'end station longitude'], bike_dataframe.loc[index, 'end station latitude'])
+#     for j in range(area_dataframe.shape[0]):
+#         area_polygon = area_dataframe.iloc[j].geometry
+#         if area_polygon.contains(start_point):
+#             bike_dataframe.at[index, 'start_area_id'] = area_dataframe.iloc[j].OBJECTID
+#             break
+#     for j in range(area_dataframe.shape[0]):
+#         area_polygon = area_dataframe.iloc[j].geometry
+#         if area_polygon.contains(end_point):
+#             bike_dataframe.at[index, 'end_area_id'] = area_dataframe.iloc[j].OBJECTID
+#             break
+#
+# new_columns = ['start_time', 'end_time', 'start_area_id', 'end_area_id', 'start_lng', 'start_lat', 'end_lng', 'end_lat']
+# selected_columns = ['starttime', 'stoptime', 'start_area_id', 'end_area_id',
+#                     'start station longitude', 'start station latitude', 'end station longitude', 'end station latitude']
+# bike_filterframe = bike_dataframe.loc[:, selected_columns]
+# bike_filterframe.columns = new_columns
+# bike_filterframe = bike_filterframe[bike_filterframe['start_area_id'].notna()]
+# bike_filterframe = bike_filterframe[bike_filterframe['end_area_id'].notna()]
+# bike_filterframe.to_csv('./Processed_data/NYC/NYC_bike.csv')
 
 
 """
@@ -142,7 +143,6 @@ service_dataframe = pd.read_csv(u'./Meta_data/NYC/Event_311/311_sercice_20210112
 
 service_dataframe['area_id'] = None
 
-
 for index, row in tqdm(service_dataframe.iterrows(), total=service_dataframe.shape[0]):
     crime_point = Point(service_dataframe.loc[index, 'Longitude'], service_dataframe.loc[index, 'Latitude'])
     for j in range(area_dataframe.shape[0]):
@@ -150,7 +150,6 @@ for index, row in tqdm(service_dataframe.iterrows(), total=service_dataframe.sha
         if area_polygon.contains(crime_point):
             service_dataframe.at[index, 'area_id'] = area_dataframe.iloc[j].OBJECTID
             break
-
 new_columns = ['time', 'area_id', 'lng', 'lat']
 selected_columns = ['Time', 'area_id', 'Longitude', 'Latitude']
 service_dataframe = service_dataframe.loc[:, selected_columns]

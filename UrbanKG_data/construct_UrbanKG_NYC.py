@@ -80,7 +80,7 @@ PLA = []
 PBB = []
 PHPC = []
 
-poi_dataframe = pd.read_csv('./Processed_data/NYC/NYC_poi.csv')
+poi_dataframe = pd.read_csv('Processed_data/NYC/NYC_poi.csv')
 poi_datanumpy = np.array(poi_dataframe[[ "poi_id", "borough_id", "area_id", "cate"]])
 
 for i in tqdm(range(poi_datanumpy.shape[0])):
@@ -111,7 +111,7 @@ RLA = []
 RBB = []
 RHRC = []
 
-road_dataframe = pd.read_csv('./Processed_data/NYC/NYC_road.csv')
+road_dataframe = pd.read_csv('Processed_data/NYC/NYC_road.csv')
 road_datanumpy = np.array(road_dataframe[[ "link_id", "borough_id", "area_id", "link_type_name"]])
 
 for i in tqdm(range(road_datanumpy.shape[0])):
@@ -142,7 +142,7 @@ JLA = []
 JBB = []
 JHJC = []
 
-junction_dataframe = pd.read_csv('./Processed_data/NYC/NYC_junction.csv')
+junction_dataframe = pd.read_csv('Processed_data/NYC/NYC_junction.csv')
 junction_datanumpy = np.array(junction_dataframe[[ "node_id", "borough_id", "area_id", "osm_highway"]])
 
 for i in tqdm(range(junction_datanumpy.shape[0])):
@@ -168,7 +168,7 @@ Relation 12：Junction Belongs to Road JBR
 # #####################################
 JBR = []
 
-road_dataframe = pd.read_csv('./Processed_data/NYC/NYC_road.csv')
+road_dataframe = pd.read_csv('Processed_data/NYC/NYC_road.csv')
 road_datanumpy = road_dataframe[['from_node_id', 'to_node_id', 'link_id']].values
 for i in tqdm(range(road_datanumpy.shape[0])):
     JBR.append('Junction/' + str(road_datanumpy[i][0]) + ' JBR '
@@ -207,7 +207,7 @@ PLA.extend(ANA)
 PLA.extend(PHPC)
 PLA.extend(RHRC)
 PLA.extend(JHJC)
-with open(r'./UrbanKG/NYC/UrbanKG_NYC.txt','w') as f2:
+with open(r'UrbanKG/NYC/UrbanKG_NYC.txt', 'w') as f2:
     for i in range(len(PLA)):
         f2.write(PLA[i])
         f2.write('\n')

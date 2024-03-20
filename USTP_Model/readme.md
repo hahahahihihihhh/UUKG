@@ -7,8 +7,9 @@ This code is the official PyTorch implementation of [UUKG: Unified Urban Knowled
 Create a python 3.7 environment and install dependencies:
 
 ```bash
-conda create -n python3.7 UUKG
-source activate UUKG
+conda create -n libcity python==3.7.3
+conda activate libcity
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
 pip install -r requirements.txt
 ```
 

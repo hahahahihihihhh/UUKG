@@ -233,6 +233,7 @@ def hyper_parameter(task=None, model_name=None, dataset_name=None, config_file=N
 
 def objective_function(task=None, model_name=None, dataset_name=None, config_file=None,
                        saved_model=True, train=True, other_args=None, hyper_config_dict=None):
+    print(model_name, task, "111111111")
     config = ConfigParser(task, model_name, dataset_name,
                           config_file, saved_model, train, other_args, hyper_config_dict)
     dataset = get_dataset(config)

@@ -7,16 +7,13 @@ from libcity.model import loss
 from logging import getLogger
 from libcity.evaluator.abstract_evaluator import AbstractEvaluator
 
-log = '/home/ningyansong/UrbanKG/Nips_Benchmark/USTP_Model/log/'
 
 class TrafficStateEvaluator(AbstractEvaluator):
 
     def __init__(self, config):
         self.metrics = config.get('metrics', ['MAE'])  # 评估指标, 是一个 list
         self.allowed_metrics = ['MAE', 'MSE', 'RMSE', 'MAPE', 'masked_MAE',
-                                'masked_MSE', 'masked_RMSE', 'masked_MAPE', 'R2', 'EVAR', 'micro-F1', 'macro-F1']
-        # self.allowed_metrics = ['MAE', 'MSE', 'RMSE', 'MAPE', 'masked_MAE',
-        #                         'masked_MSE', 'masked_RMSE', 'masked_MAPE', 'R2', 'EVAR']
+                                'masked_MSE', 'masked_RMSE', 'masked_MAPE', 'R2', 'EVAR']
         self.save_modes = config.get('save_mode', ['csv', 'json'])
         self.mode = config.get('evaluator_mode', 'single')  # or average
         self.config = config
@@ -86,12 +83,6 @@ class TrafficStateEvaluator(AbstractEvaluator):
                     elif metric == 'EVAR':
                         self.intermediate_result[metric + '@' + str(i)].append(
                             loss.explained_variance_score_torch(y_pred[:, :i], y_true[:, :i]).item())
-                    elif metric == 'micro-F1':
-                        self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.micro_f1(y_pred[:, :i], y_true[:, :i]).item())
-                    elif metric == 'macro-F1':
-                        self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.macro_f1(y_pred[:, :i], y_true[:, :i]).item())
         elif self.mode.lower() == 'single':  # 第i个时间步的loss
             for i in range(1, self.len_timeslots + 1):
                 for metric in self.metrics:
@@ -125,12 +116,6 @@ class TrafficStateEvaluator(AbstractEvaluator):
                     elif metric == 'EVAR':
                         self.intermediate_result[metric + '@' + str(i)].append(
                             loss.explained_variance_score_torch(y_pred[:, i-1], y_true[:, i-1]).item())
-                    elif metric == 'micro-F1':
-                        self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.micro_f1(y_pred[:, i-1], y_true[:, i-1]).item())
-                    elif metric == 'macro-F1':
-                        self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.macro_f1(y_pred[:, i-1], y_true[:, i-1]).item())
         else:
             raise ValueError('Error parameter evaluator_mode={}, please set `single` or `average`.'.format(self.mode))
 
@@ -156,8 +141,9 @@ class TrafficStateEvaluator(AbstractEvaluator):
         self.evaluate()
         ensure_dir(save_path)
         if filename is None:  # 使用时间戳
-            filename = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '_' + \
-                       self.config['model'] + '_' + self.config['dataset']
+            #!!! filename = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '_' + \
+            #            self.config['model'] + '_' + self.config['dataset']
+            filename = self.config['model'] + '_' + self.config['dataset']
 
         if 'json' in self.save_modes:
             self._logger.info('Evaluate result is ' + json.dumps(self.result))
@@ -175,14 +161,6 @@ class TrafficStateEvaluator(AbstractEvaluator):
                     dataframe[metric].append(self.result[metric+'@'+str(i)])
             dataframe = pd.DataFrame(dataframe, index=range(1, self.len_timeslots + 1))
             dataframe.to_csv(os.path.join(save_path, '{}.csv'.format(filename)), index=False)
-
-            ## 将结果存入csv文件
-            save_path = log + self.config['dataset'][0:3] + '/' + self.config['model'] + '_' + self.config['dataset'] +'/'
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            dataframe.to_csv(os.path.join(save_path, '{}.csv'.format(filename)), index=False)
-
-
             self._logger.info('Evaluate result is saved at ' +
                               os.path.join(save_path, '{}.csv'.format(filename)))
             self._logger.info("\n" + str(dataframe))

@@ -24,15 +24,15 @@ taxi_data = pd.read_csv(file_path)
 # Create a Folium heat map Travel starting point
 taxi_start_m = folium.Map(location=[taxi_data['start_lat'].mean(), taxi_data['start_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
 taxi_end_m = folium.Map(location=[taxi_data['end_lat'].mean(), taxi_data['end_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
-#
-# HeatMap(taxi_data[['start_lat', 'start_lng']].values).add_to(taxi_start_m)
-# HeatMap(taxi_data[['end_lat', 'end_lng']].values).add_to(taxi_end_m)
-#
-# # Save Heatmap
-# taxi_start_m.save('taxi_start_m.html')
-# taxi_end_m.save('taxi_end_m.html')
-#
-#
+
+HeatMap(taxi_data[['start_lat', 'start_lng']].values).add_to(taxi_start_m)
+HeatMap(taxi_data[['end_lat', 'end_lng']].values).add_to(taxi_end_m)
+
+# Save Heatmap
+taxi_start_m.save('taxi_start_m.html')
+taxi_end_m.save('taxi_end_m.html')
+
+
 # Extract time information and format
 date_format = "%Y-%m-%d %H:%M:%S"
 taxi_data['start_time'] = pd.to_datetime(taxi_data['start_time'], format=date_format)
@@ -74,23 +74,26 @@ Bike
 """
 
 # # 读取CSV文件
-file_path = '../Processed_data/CHI/CHI_bike_road.csv'
+#!! file_path = '../Processed_data/CHI/CHI_bike_road.csv'
+file_path = '../Processed_data/CHI/CHI_bike.csv'
+
 bike_data = pd.read_csv(file_path)
 
 # 创建Folium热力图   出行起始点
 bike_start_m = folium.Map(location=[bike_data['start_lat'].mean(), bike_data['start_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
 bike_end_m = folium.Map(location=[bike_data['end_lat'].mean(), bike_data['end_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
 
-# HeatMap(bike_data[['start_lat', 'start_lng']].values).add_to(bike_start_m)
-# HeatMap(bike_data[['end_lat', 'end_lng']].values).add_to(bike_end_m)
-#
-# # 保存热力图
-# bike_start_m.save('bike_start_m.html')
-# bike_end_m.save('bike_end_m.html')
-#
-#
-# # 提取时间信息并格式化
-date_format = "%Y-%m-%d %H:%M:%S"
+HeatMap(bike_data[['start_lat', 'start_lng']].values).add_to(bike_start_m)
+HeatMap(bike_data[['end_lat', 'end_lng']].values).add_to(bike_end_m)
+
+# 保存热力图
+bike_start_m.save('bike_start_m.html')
+bike_end_m.save('bike_end_m.html')
+
+
+# 提取时间信息并格式化
+#!! date_format = "%Y-%m-%d %H:%M:%S"
+date_format = "%Y/%m/%d %H:%M"
 bike_data['start_time'] = pd.to_datetime(bike_data['start_time'], format=date_format)
 
 # # 绘制时间维度上的频率分布（按小时分组）
@@ -135,16 +138,17 @@ human_data = pd.read_csv(file_path)
 human_start_m = folium.Map(location=[human_data['start_lat'].mean(), human_data['start_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
 human_end_m = folium.Map(location=[human_data['end_lat'].mean(), human_data['end_lng'].mean()], zoom_start=10, tiles="cartodbpositron")
 
-# HeatMap(human_data[['start_lat', 'start_lng']].values).add_to(human_start_m)
-# HeatMap(human_data[['end_lat', 'end_lng']].values).add_to(human_end_m)
-#
-# # 保存热力图
-# human_start_m.save('human_start_m.html')
-# human_end_m.save('human_end_m.html')
-#
-#
-# # 提取时间信息并格式化
-date_format = "%Y-%m-%d %H:%M:%S"
+HeatMap(human_data[['start_lat', 'start_lng']].values).add_to(human_start_m)
+HeatMap(human_data[['end_lat', 'end_lng']].values).add_to(human_end_m)
+
+# 保存热力图
+human_start_m.save('human_start_m.html')
+human_end_m.save('human_end_m.html')
+
+
+# 提取时间信息并格式化
+#!! date_format = "%Y-%m-%d %H:%M:%S"
+date_format = "%Y/%m/%d %H:%M"
 human_data['start_time'] = pd.to_datetime(human_data['start_time'], format=date_format)
 
 # 绘制时间维度上的频率分布（按小时分组）
@@ -188,16 +192,16 @@ crime_data = pd.read_csv(file_path)
 crime_data['time'] = pd.to_datetime(crime_data['time'], format="%m/%d/%Y %I:%M:%S %p")
 crime_data['time'] = crime_data['time'].dt.strftime("%Y-%m-%d %H:%M:%S")
 
-# # 创建Folium热力图   出行起始点
-# crime_m = folium.Map(location=[crime_data['lat'].mean(), crime_data['lng'].mean()], zoom_start=10, tiles="cartodbpositron")
-#
-# HeatMap(crime_data[['lat', 'lng']].values).add_to(crime_m)
-#
-# # 保存热力图
-# crime_m.save('crime_m.html')
-#
-#
-# # 提取时间信息并格式化
+# 创建Folium热力图   出行起始点
+crime_m = folium.Map(location=[crime_data['lat'].mean(), crime_data['lng'].mean()], zoom_start=10, tiles="cartodbpositron")
+
+HeatMap(crime_data[['lat', 'lng']].values).add_to(crime_m)
+
+# 保存热力图
+crime_m.save('crime_m.html')
+
+
+# 提取时间信息并格式化
 date_format = "%Y-%m-%d %H:%M:%S"
 crime_data['time'] = pd.to_datetime(crime_data['time'], format=date_format)
 
@@ -239,15 +243,15 @@ plt.savefig('time_crime_distribution.png')
 file_path = '../Processed_data/CHI/CHI_311_service.csv'
 service_data = pd.read_csv(file_path)
 
-# # 创建Folium热力图   出行起始点
-# service_m = folium.Map(location=[service_data['lat'].mean(), service_data['lng'].mean()], zoom_start=10, tiles="cartodbpositron")
-#
-# HeatMap(service_data[['lat', 'lng']].values).add_to(service_m)
-#
-# # 保存热力图
-# service_m.save('service_m.html')
-#
-#
+# 创建Folium热力图   出行起始点
+service_m = folium.Map(location=[service_data['lat'].mean(), service_data['lng'].mean()], zoom_start=10, tiles="cartodbpositron")
+
+HeatMap(service_data[['lat', 'lng']].values).add_to(service_m)
+
+# 保存热力图
+service_m.save('service_m.html')
+
+
 # 提取时间信息并格式化
 date_format = "%Y-%m-%d %H:%M:%S"
 service_data['time'] = pd.to_datetime(service_data['time'], format=date_format)
