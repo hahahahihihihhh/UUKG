@@ -2,10 +2,8 @@
 
 import os
 import pickle as pkl
-
 import numpy as np
 import torch
-
 
 class KGDataset(object):
     """Knowledge Graph dataset class."""
@@ -56,7 +54,7 @@ class KGDataset(object):
             examples = examples[:1000]
         return torch.from_numpy(examples.astype("int64"))
 
-    def get_filters(self, ):
+    def get_filters(self):
         """Return filter dict to compute ranking metrics in the filtered setting."""
         return self.to_skip
 
