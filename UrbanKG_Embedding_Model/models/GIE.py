@@ -1,4 +1,3 @@
-
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -19,7 +18,7 @@ class BaseH(KGModel):
         self.entity.weight.data = self.init_size * torch.randn((self.sizes[0], self.rank), dtype=self.data_type)
         self.rel.weight.data = self.init_size * torch.randn((self.sizes[1], 2 * self.rank), dtype=self.data_type)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0      # [-1, 1] 均匀分布
         self.multi_c = args.multi_c
         if self.multi_c:
             c_init = torch.ones((self.sizes[1], 1), dtype=self.data_type)
@@ -50,9 +49,9 @@ class GIE(BaseH):
     def __init__(self, args):
         super(GIE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], 2 * self.rank)
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], 2 * self.rank), dtype=self.data_type) - 1.0
         self.rel_diag1 = nn.Embedding(self.sizes[1], self.rank)
         self.rel_diag2 = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], 2 * self.rank), dtype=self.data_type) - 1.0
         self.context_vec = nn.Embedding(self.sizes[1], self.rank)
         self.context_vec.weight.data = self.init_size * torch.randn((self.sizes[1], self.rank), dtype=self.data_type)
         self.act = nn.Softmax(dim=1)
@@ -62,7 +61,6 @@ class GIE(BaseH):
             self.scale = torch.Tensor([1. / np.sqrt(self.rank)]).cuda()
 
     def get_queries(self, queries):
-
         c1 = F.softplus(self.c1[queries[:, 1]])
         head1 = expmap0(self.entity(queries[:, 0]), c1)
         rel1, rel2 = torch.chunk(self.rel(queries[:, 1]), 2, dim=1)

@@ -157,7 +157,7 @@ def init_parser():
         "--init_size", default=1e-3, type=float, help="Initial embeddings' scale"
     )
     parser.add_argument(
-        "--multi_c", action="store_true", help="Multiple curvatures per relation"   # default = true
+        "--multi_c", action="store_true", help="Multiple curvatures per relation", default = False   # default = False
     )
     parser.add_argument(
         "--regularizer", choices=["N3", "F2"], default="N3", help="Regularizer"

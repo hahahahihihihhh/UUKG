@@ -1,7 +1,6 @@
 """
 训练并评估单一模型的脚本
 """
-
 import argparse
 import os
 # os.environ['CUDA_VISIBLE_DEVICES'] = '3'
@@ -11,7 +10,7 @@ import random
 import pandas as pd
 import numpy as np
 
-log = './log/'
+log = './logs/'
 cache = './libcity/cache/'
 
 if __name__ == '__main__':

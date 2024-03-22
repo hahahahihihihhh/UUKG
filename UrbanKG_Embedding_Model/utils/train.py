@@ -8,7 +8,7 @@ def get_savedir(model, dataset):
     dt = datetime.datetime.now()
     date = dt.strftime("%m_%d")
     save_dir = os.path.join(
-        LOG_DIR, date, dataset,
+        LOG_DIR, dataset, date,
         model + dt.strftime('_%H_%M_%S')
     )
     os.makedirs(save_dir)
