@@ -958,10 +958,10 @@ class TrafficStateDataset(AbstractDataset):
         x_train, y_train, x_val, y_val, x_test, y_test = [], [], [], [], [], []
         if self.data is None:
             self.data = {}
-            # if self.cache_dataset and os.path.exists(self.cache_file_name):
-            #     x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
-            # else:
-            x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
+            if self.cache_dataset and os.path.exists(self.cache_file_name):
+                x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
+            else:
+                x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
         # 数据归一化
         self.feature_dim = x_train.shape[-1]
         self.ext_dim = self.feature_dim - self.output_dim

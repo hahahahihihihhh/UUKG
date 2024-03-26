@@ -1,0 +1,12 @@
+{
+    "task": "traffic_state_pred",
+    "model": "AGCRN",
+    "dataset": "CHITaxi20190406",
+    "saved_model": true,
+    "train": true,
+    "load_external": false,
+
+    "max_epoch": 2,
+    "metrics": ["MAE", "RMSE"],
+    "cache_dataset": false
+}
