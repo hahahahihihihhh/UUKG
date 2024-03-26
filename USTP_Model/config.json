@@ -6,7 +6,7 @@
     "train": true,
     "load_external": false,
 
-    "max_epoch": 2,
+    "max_epoch": 100,
     "metrics": ["MAE", "RMSE"],
     "cache_dataset": false
 }

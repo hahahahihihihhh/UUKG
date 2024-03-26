@@ -39,7 +39,7 @@ def init_parser(config):
     add_general_args(parser)
     return parser
 
-def train(config, total = 2):
+def train(config, total = 5):
     modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
     predict_steps = 12
     save_dir = log + datasetName[0:3] + '/' + modelName + '/' + datasetName + ('_KGE' if KGE else '') + '/'

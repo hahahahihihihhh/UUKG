@@ -14,6 +14,78 @@ from optimizers.kg_optimizer import KGOptimizer
 from utils.train import get_savedir, avg_both, format_metrics, count_params
 
 DATA_PATH = './data'
+config = './config.json'
+
+def init_parser(config):
+    parser = argparse.ArgumentParser(
+        description="Urban Knowledge Graph Embedding"
+    )
+    parser.add_argument(
+        "--dataset", default=config['dataset'], choices=["NYC", "CHI"],
+        help="Urban Knowledge Graph dataset"
+    )
+    parser.add_argument(
+        "--model", default=config['model'], choices=all_models, help='Model name'
+    )
+    parser.add_argument(
+        "--optimizer", choices=["Adagrad", "Adam", "SparseAdam"], default=config['optimizer'],
+        help="Optimizer"
+    )
+    parser.add_argument(
+        "--max_epochs", default=config['max_epochs'], type=int, help="Maximum number of epochs to train for"
+    )
+    parser.add_argument(
+        "--patience", default=config['patience'], type=int, help="Number of epochs before early stopping"
+    )
+    parser.add_argument(
+        "--valid", default=config['valid'], type=float, help="Number of epochs before validation"
+    )
+    parser.add_argument(
+        "--rank", default=config['rank'], type=int, help="Embedding dimension"
+    )
+    parser.add_argument(
+        "--batch_size", default=config['batch_size'], type=int, help="Batch size"   # 4120
+    )
+    parser.add_argument(
+        "--learning_rate", default=config['learning_rate'], type=float, help="Learning rate"
+    )
+    parser.add_argument(
+        "--neg_sample_size", default=config['neg_sample_size'], type=int, help="Negative sample size, -1 to not use negative sampling"
+    )
+    parser.add_argument(
+        "--init_size", default=config['init_size'], type=float, help="Initial embeddings' scale"
+    )
+    parser.add_argument(
+        "--multi_c", action="store_true", default = config['multi_c'], help="Multiple curvatures per relation"    # default = False
+    )
+    parser.add_argument(
+        "--regularizer", choices=["N3", "F2"], default=config['regularizer'], help="Regularizer"
+    )
+    parser.add_argument(
+        "--reg", default=config['reg'], type=float, help="Regularization weight"
+    )
+    parser.add_argument(
+        "--dropout", default=config['dropout'], type=float, help="Dropout rate"
+    )
+    parser.add_argument(
+        "--gamma", default=config['gamma'], type=float, help="Margin for distance-based losses"
+    )
+    parser.add_argument(
+        "--bias", default=config['bias'], type=str, choices=["constant", "learn", "none"],
+        help="Bias type (none for no bias)"
+    )
+    parser.add_argument(
+        "--dtype", default=config['dtype'], type=str, choices=["single", "double"], help="Machine precision"
+    )
+    parser.add_argument(
+        "--double_neg", action="store_true", default=config['double_neg'],
+        help="Whether to negative sample both head and tail entities"
+    )   # default = false
+    parser.add_argument(
+        "--debug", action="store_true", default=config['debug'],
+        help="Only use 1000 examples for debugging"
+    )   # default = false
+    return parser
 
 def train(args):
     save_dir = get_savedir(args.model, args.dataset)
@@ -117,77 +189,8 @@ def train(args):
     test_metrics = avg_both(*model.compute_metrics(test_examples, filters))
     logging.info(format_metrics(test_metrics, split="test"))
 
-def init_parser():
-    parser = argparse.ArgumentParser(
-        description="Urban Knowledge Graph Embedding"
-    )
-    parser.add_argument(
-        "--dataset", default="CHI", choices=["NYC", "CHI"],
-        help="Urban Knowledge Graph dataset"
-    )
-    parser.add_argument(
-        "--model", default="TransE", choices=all_models, help='Model name'
-    )
-    parser.add_argument(
-        "--optimizer", choices=["Adagrad", "Adam", "SparseAdam"], default="Adam",
-        help="Optimizer"
-    )
-    parser.add_argument(
-        "--max_epochs", default=150, type=int, help="Maximum number of epochs to train for"
-    )
-    parser.add_argument(
-        "--patience", default=10, type=int, help="Number of epochs before early stopping"
-    )
-    parser.add_argument(
-        "--valid", default=3, type=float, help="Number of epochs before validation"
-    )
-    parser.add_argument(
-        "--rank", default=32, type=int, help="Embedding dimension"
-    )
-    parser.add_argument(
-        "--batch_size", default=4096, type=int, help="Batch size"   # 4120
-    )
-    parser.add_argument(
-        "--learning_rate", default=1e-3, type=float, help="Learning rate"
-    )
-    parser.add_argument(
-        "--neg_sample_size", default=50, type=int, help="Negative sample size, -1 to not use negative sampling"
-    )
-    parser.add_argument(
-        "--init_size", default=1e-3, type=float, help="Initial embeddings' scale"
-    )
-    parser.add_argument(
-        "--multi_c", action="store_true", help="Multiple curvatures per relation", default = False   # default = False
-    )
-    parser.add_argument(
-        "--regularizer", choices=["N3", "F2"], default="N3", help="Regularizer"
-    )
-    parser.add_argument(
-        "--reg", default=0, type=float, help="Regularization weight"
-    )
-    parser.add_argument(
-        "--dropout", default=0, type=float, help="Dropout rate"
-    )
-    parser.add_argument(
-        "--gamma", default=0, type=float, help="Margin for distance-based losses"
-    )
-    parser.add_argument(
-        "--bias", default="constant", type=str, choices=["constant", "learn", "none"],
-        help="Bias type (none for no bias)"
-    )
-    parser.add_argument(
-        "--dtype", default="double", type=str, choices=["single", "double"], help="Machine precision"
-    )
-    parser.add_argument(
-        "--double_neg", action="store_true",
-        help="Whether to negative sample both head and tail entities"
-    )
-    parser.add_argument(
-        "--debug", action="store_true",
-        help="Only use 1000 examples for debugging"
-    )   # default = false
-    return parser
-
 if __name__ == "__main__":
-    parser = init_parser()
-    train(parser.parse_args())
+    with open(config) as config:
+        config = json.load(config)
+        parser = init_parser(config)
+        train(parser.parse_args())
