@@ -23,7 +23,7 @@ def init_parser():
         help="Urban Knowledge Graph dataset"
     )
     parser.add_argument(
-        "--model", default="TransE", choices=all_models, help='"TransE", "CP", "MurE", "RotE", "RefE", "AttE",'
+        "--model", default="TransE", choices=all_models, help='"TransE", "CP", "MuRE", "RotE", "RefE", "AttE",'
                                                            '"ComplEx", "RotatE",'
                                                            '"RotH", "RefH", "AttH"'
                                                            '"GIE'

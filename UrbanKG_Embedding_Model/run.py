@@ -14,7 +14,7 @@ from optimizers.kg_optimizer import KGOptimizer
 from utils.train import get_savedir, avg_both, format_metrics, count_params
 
 DATA_PATH = './data'
-config = './config.json'
+config = './config/config_CP.json'
 
 def init_parser(config):
     parser = argparse.ArgumentParser(
@@ -147,7 +147,6 @@ def train(args):
         model.train()
         train_loss = optimizer.epoch(train_examples)
         logging.info("\t Epoch {} | average train loss: {:.4f}".format(_step, train_loss))
-
         # Valid step
         model.eval()
         valid_loss = optimizer.calculate_valid_loss(valid_examples)
@@ -192,5 +191,6 @@ def train(args):
 if __name__ == "__main__":
     with open(config) as config:
         config = json.load(config)
+        print(config)
         parser = init_parser(config)
         train(parser.parse_args())

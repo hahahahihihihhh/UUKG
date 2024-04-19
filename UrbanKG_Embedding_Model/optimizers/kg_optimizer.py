@@ -178,7 +178,6 @@ class KGOptimizer(object):
                 self.optimizer.zero_grad()
                 l.backward()
                 self.optimizer.step()
-
                 b_begin += self.batch_size
                 total_loss += l
                 counter += 1

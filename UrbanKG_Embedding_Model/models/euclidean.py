@@ -7,7 +7,7 @@ from models.base import KGModel
 from utils.euclidean import euc_sqdistance, givens_rotations, givens_reflection
 import os
 
-EUC_MODELS = ["TransE", "CP", "MurE", "RotE", "RefE", "AttE"]
+EUC_MODELS = ["TransE", "CP", "MuRE", "RotE", "RefE", "AttE"]
 
 class BaseE(KGModel):
     """Euclidean Knowledge Graph Embedding models.
@@ -20,7 +20,7 @@ class BaseE(KGModel):
         super(BaseE, self).__init__(args.sizes, args.rank, args.dropout, args.gamma, args.dtype, args.bias,
                                     args.init_size)
         #   self.sizes:(14602, 26, 14602)
-        self.entity.weight.data = self.init_size * torch.randn((self.sizes[0], self.rank), dtype=self.data_type)
+        self.entity.weight.data = self.init_size * torch.randn((self.sizes[0], self.rank), dtype=self.data_type)    # (0, 1) 标准正态分布
         self.rel.weight.data = self.init_size * torch.randn((self.sizes[1], self.rank), dtype=self.data_type)
 
     def get_rhs(self, queries, eval_mode):
@@ -35,8 +35,10 @@ class BaseE(KGModel):
         if self.sim == "dot":
             if eval_mode:
                 score = lhs_e @ rhs_e.transpose(0, 1)
+                # print(lhs_e.shape, rhs_e.shape, rhs_e.transpose(0, 1).shape, score.shape)
             else:
                 score = torch.sum(lhs_e * rhs_e, dim=-1, keepdim=True)
+                # print(lhs_e.shape, rhs_e.shape, (lhs_e * rhs_e).shape, score.shape)
         else:
             score = - euc_sqdistance(lhs_e, rhs_e, eval_mode) # lhs_e:(4120,32)   rhs_e:(4120,32)   score:(4120,1) 距离越小，得分越大，越优
         return score
@@ -58,7 +60,9 @@ class TransE(BaseE):
 
 
 class CP(BaseE):
-    """Canonical tensor decomposition https://arxiv.org/pdf/1806.07297.pdf"""
+    """Canonical tensor decomposition https://arxiv.org/pdf/1806.07297.pdf
+        DistMult (a special version of CP)
+    """
 
     def __init__(self, args):
         super(CP, self).__init__(args)
@@ -66,21 +70,23 @@ class CP(BaseE):
 
     def get_queries(self, queries: torch.Tensor):
         """Compute embedding and biases of queries."""
+        # Hadamard product
         return self.entity(queries[:, 0]) * self.rel(queries[:, 1]), self.bh(queries[:, 0])
 
 
-class MurE(BaseE):
+class MuRE(BaseE):
     """Diagonal scaling https://arxiv.org/pdf/1905.09791.pdf"""
 
     def __init__(self, args):
-        super(MurE, self).__init__(args)
+        super(MuRE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
         self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0 # (-1, 1) 均匀分布
         self.sim = "dist"
 
     def get_queries(self, queries: torch.Tensor):
         """Compute embedding and biases of queries."""
-        lhs_e = self.rel_diag(queries[:, 1]) * self.entity(queries[:, 0]) + self.rel(queries[:, 1])
+        # d(R * e_s - r, e_o) ^ 2
+        lhs_e = self.rel_diag(queries[:, 1]) * self.entity(queries[:, 0]) - self.rel(queries[:, 1])
         lhs_biases = self.bh(queries[:, 0])
         return lhs_e, lhs_biases
 

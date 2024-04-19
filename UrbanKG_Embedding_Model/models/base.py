@@ -145,12 +145,11 @@ class KGModel(nn.Module, ABC):
         rhs_e, rhs_biases = self.get_rhs(queries, eval_mode)    #   rhs_e:(206000, 32), rhs_biases:(206000, 1)
         # candidates = F.dropout(candidates, self.dropout, training=self.training)
         predictions = self.score((lhs_e, lhs_biases), (rhs_e, rhs_biases), eval_mode)
-        # print(predictions.shape, predictions)
         # get factors for regularization
         factors = self.get_factors(queries) #   factors:(206000, 32),(206000, 32),(206000, 32)
         return predictions, factors
 
-    def get_ranking(self, queries, filters, batch_size=1000):
+    def get_ranking(self, queries, filters, batch_size=500):
         """Compute filtered ranking of correct entity for evaluation.
 
         Args:
@@ -164,7 +163,7 @@ class KGModel(nn.Module, ABC):
         ranks = torch.ones(len(queries))
         with torch.no_grad():
             b_begin = 0
-            candidates = self.get_rhs(queries, eval_mode=True)  #   candidates:([140602, 3],[140602, 1])
+            candidates = self.get_rhs(queries, eval_mode=True)  #   candidates:([140602, 32],[140602, 1])
             while b_begin < len(queries):
                 these_queries = queries[b_begin:b_begin + batch_size].cuda()
 
@@ -199,7 +198,6 @@ class KGModel(nn.Module, ABC):
         mean_rank = {}
         mean_reciprocal_rank = {}
         hits_at = {}
-
         for m in ["rhs", "lhs"]:
             q = examples.clone()    #   q:[28220, 3]
             if m == "lhs":

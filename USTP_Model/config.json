@@ -4,7 +4,7 @@
     "dataset": "CHITaxi20190406",
     "saved_model": true,
     "train": true,
-    "load_external": false,
+    "load_external": true,
 
     "max_epoch": 100,
     "metrics": ["MAE", "RMSE"],

@@ -13,6 +13,8 @@ from datasets.kg_dataset import KGDataset
 from models import all_models
 
 DATA_PATH = '../data'
+config = '../config/config_CP.json'
+model_path = "/CHI/01_31/TransE_12_05_03/"
 
 def init_parser():
     parser = argparse.ArgumentParser(
@@ -23,7 +25,7 @@ def init_parser():
         help="Urban Knowledge Graph dataset"
     )
     parser.add_argument(
-        "--model", default="TransE", choices=all_models, help='"TransE", "CP", "MurE", "RotE", "RefE", "AttE",'
+        "--model", default="TransE", choices=all_models, help='"TransE", "CP", "MuRE", "RotE", "RefE", "AttE",'
                                                            '"ComplEx", "RotatE",'
                                                            '"RotH", "RefH", "AttH"'
                                                            '"GIE'
@@ -93,12 +95,12 @@ def get_embeddings(args, model_path):
     dataset_path = os.path.join(DATA_PATH, args.dataset)
     dataset = KGDataset(dataset_path, args.debug)
     args.sizes = dataset.get_shape()
-    model = getattr(models, args.model)(args)
+    model = getattr(models, args.model)(args)   # model initial
     model.load_state_dict(torch.load(
         # os.path.join("../logs/XXX/",
         #              "model.pt")))
         os.path.join("../logs/" + model_path,
-                     "model.pt")))
+                     "model.pt")))   # fill parameters
     # get embeddings
     entity_embeddings = model.entity.weight.detach().numpy()
     idx = pd.read_csv(DATA_PATH + '/' + args.dataset + "/entities_idx.csv", header=None)
@@ -134,10 +136,10 @@ def get_POI_embeddings(POI_id2KG_id_path, entity_final_embedddings, save_path):
     np.save(save_path, np.array(POI_embeddings))
 
 if __name__ == "__main__":
-    parser, model_path = init_parser(), "01_31/CHI/TransE_12_05_03/"
+    parser = init_parser()
     # entity_final_embedddings, pca_final_embeddings, tsne_dim2_embeddings = get_embeddings(parser.parse_args())
     entity_final_embedddings = get_embeddings(parser.parse_args(), model_path)
-
+    exit(0)
     KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id/", "xxx_embeddings/"
     get_area_embeddings(KG_id_path_prefix + "CHI_used_area_id2KG_id.csv", entity_final_embedddings,
                           save_path_prefix + "CHI_area_embeddings.npy")

@@ -81,11 +81,23 @@ import torch.nn as nn
 # x2 = torch.sum(x * x, dim=-1)
 # print(x, x2)
 
-a = np.random.randint(
-            2,
-            size = 4)
-print(type(a))
+# a = np.random.randint(
+#             2,
+#             size = 4)
+# print(type(a))
 # print(bh(torch.LongTensor([1, 1])))
 
 # print(bh.weight)
 # print(bh(torch.tensor([1, 2])))
+
+# these_queries = torch.tensor([[1, 2, 3],
+#                         [2, 3, 4]], dtype=torch.int32)
+# scores = torch.LongTensor(([1, 2, 3, 4]))
+# scores2 = torch.LongTensor([1, 2, 3, 4])
+# print(scores, scores2, scores == scores2)
+# a形状(2,3)
+a = torch.tensor([[1, 2, 3],
+                  [1, 2, 3]])
+# repeat参数比维度多，在扩展前先讲a的形状扩展为(1,2,3)然后复制
+b = a.repeat(2, 2, 2)
+print(b)  # 得到结果torch.Size([1, 4, 3])
