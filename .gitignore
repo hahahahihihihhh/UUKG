@@ -6,10 +6,8 @@
 /USTP_data/Meta_data/
 /USTP_data/Processed_data/
 /USTP_data/USTP/
-/USTP_Model/logs/
 /USTP_Model/.pytest_cache/
 /USTP_Model/.idea/
 /USTP_Model/libcity/cache/
-/USTP_Model/libcity/log/
 /USTP_Model/libcity_bak/
 /USTP_Model/raw_data/
