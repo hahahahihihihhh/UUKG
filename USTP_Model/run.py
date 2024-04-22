@@ -39,7 +39,7 @@ config_file = 'config/CHI/AGCRN/config_TransE.json'
 #     add_general_args(parser)
 #     return parser
 
-def train(config, total = 2):
+def train(config, total = 5):
     modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
     predict_steps = 12
     save_dir = os.path.join(log, datasetName[:3], modelName,

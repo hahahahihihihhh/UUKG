@@ -9,7 +9,7 @@
     "seed": 0,
     "exp_id": 0,
 
-    "max_epoch": 5,
+    "max_epoch": 100,
     "metrics": ["MAE", "RMSE"],
     "cache_dataset": false
 }
