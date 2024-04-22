@@ -14,7 +14,7 @@ from optimizers.kg_optimizer import KGOptimizer
 from utils.train import get_savedir, avg_both, format_metrics, count_params
 
 DATA_PATH = './data'
-config = './config/config_CP.json'
+config_file = 'config/CHI/config_DisMult.json'
 
 def init_parser(config):
     parser = argparse.ArgumentParser(
@@ -25,10 +25,11 @@ def init_parser(config):
         help="Urban Knowledge Graph dataset"
     )
     parser.add_argument(
-        "--model", default=config['model'], choices=all_models, help='Model name'
+        "--model", default=config['model'], choices=all_models,
+        help='Model name: "TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE", "ComplEx", "RotatE", "RotH", "RefH", "AttH", "GIE"'
     )
     parser.add_argument(
-        "--optimizer", choices=["Adagrad", "Adam", "SparseAdam"], default=config['optimizer'],
+        "--optimizer", default=config['optimizer'], choices=["Adagrad", "Adam", "SparseAdam"],
         help="Optimizer"
     )
     parser.add_argument(
@@ -50,13 +51,14 @@ def init_parser(config):
         "--learning_rate", default=config['learning_rate'], type=float, help="Learning rate"
     )
     parser.add_argument(
-        "--neg_sample_size", default=config['neg_sample_size'], type=int, help="Negative sample size, -1 to not use negative sampling"
+        "--neg_sample_size", default=config['neg_sample_size'], type=int,
+        help="Negative sample size, -1 to not use negative sampling"
     )
     parser.add_argument(
         "--init_size", default=config['init_size'], type=float, help="Initial embeddings' scale"
     )
     parser.add_argument(
-        "--multi_c", action="store_true", default = config['multi_c'], help="Multiple curvatures per relation"    # default = False
+        "--multi_c", action="store_true", default=config['multi_c'], help="Multiple curvatures per relation"    # default = False
     )
     parser.add_argument(
         "--regularizer", choices=["N3", "F2"], default=config['regularizer'], help="Regularizer"
@@ -80,11 +82,11 @@ def init_parser(config):
     parser.add_argument(
         "--double_neg", action="store_true", default=config['double_neg'],
         help="Whether to negative sample both head and tail entities"
-    )   # default = false
+    )   # default = False
     parser.add_argument(
         "--debug", action="store_true", default=config['debug'],
         help="Only use 1000 examples for debugging"
-    )   # default = false
+    )   # default = False
     return parser
 
 def train(args):
@@ -189,7 +191,7 @@ def train(args):
     logging.info(format_metrics(test_metrics, split="test"))
 
 if __name__ == "__main__":
-    with open(config) as config:
+    with open(config_file) as config:
         config = json.load(config)
         print(config)
         parser = init_parser(config)

@@ -7,7 +7,7 @@ from models.base import KGModel
 from utils.euclidean import euc_sqdistance, givens_rotations, givens_reflection
 import os
 
-EUC_MODELS = ["TransE", "CP", "MuRE", "RotE", "RefE", "AttE"]
+EUC_MODELS = ["TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE"]
 
 class BaseE(KGModel):
     """Euclidean Knowledge Graph Embedding models.
@@ -59,13 +59,13 @@ class TransE(BaseE):
         return lhs_e, lhs_biases
 
 
-class CP(BaseE):
+class DisMult(BaseE):
     """Canonical tensor decomposition https://arxiv.org/pdf/1806.07297.pdf
         DistMult (a special version of CP)
     """
 
     def __init__(self, args):
-        super(CP, self).__init__(args)
+        super(DisMult, self).__init__(args)
         self.sim = "dot"
 
     def get_queries(self, queries: torch.Tensor):

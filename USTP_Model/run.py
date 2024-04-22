@@ -14,7 +14,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = './config/config_AGCRN_TransE.json'
+config_file = 'config/CHI/config_AGCRN_TransE.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -39,7 +39,7 @@ config_file = './config/config_AGCRN_TransE.json'
 #     add_general_args(parser)
 #     return parser
 
-def train(config, total = 5):
+def train(config, total = 2):
     modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
     predict_steps = 12
     save_dir = log + datasetName[0:3] + '/' + modelName + '/' + datasetName + ('_KGE' if KGE else '') + '/'
@@ -56,13 +56,15 @@ def train(config, total = 5):
         filename=os.path.join(save_dir, "train.log"),
         filemode='w'
     )
-    original_seed = config['seed']
+    original_exp = config['exp_id']
     for _i in range(total):
         # 解析参数
         # parser = init_parser(config)
         # args = parser.parse_args()
         # dict_args = vars(args)
-        config['seed'] = config['exp_id'] = original_seed + _i
+        config['exp_id'] = original_exp + _i
+        config['seed'] = random.randint(0, 0x3f3f3f3f)
+        print(config)
         # exp_id = dict_args['exp_id']
         exp_ids.append(config['exp_id'])
         logging.info('----------------------------------------------------------------------------')
@@ -116,5 +118,4 @@ def train(config, total = 5):
 if __name__ == '__main__':
     with open(config_file) as config:
         config = json.load(config)
-        print(config)
         train(config)

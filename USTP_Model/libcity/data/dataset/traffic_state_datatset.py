@@ -629,17 +629,15 @@ class TrafficStateDataset(AbstractDataset):
                         data_ind = select_data[:, i]
                         data_ind = np.tile(data_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
                         data_list.append(data_ind)
-        data = np.concatenate(data_list, axis=-1)   # [4368, 77, 3]
+        data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
         # ---Concat
-        region_embeddings = np.load("KG/xxx_embeddings/CHI_area_embeddings.npy")
-        region_embeddings_plus = np.zeros([77, 32])
-        for i in range(region_embeddings.shape[0]):
-            region_embeddings_plus[i] = region_embeddings[i]
-
-        new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + region_embeddings_plus.shape[1]])   # [77, 2 + 32]
+        area_embeddings = np.load("KG/xxx_embeddings/CHI/TransE/area_embeddings.npy")   # [77, 32]
+        # area_embeddings_plus = np.zeros([77, 32])
+        # for i in range(area_embeddings.shape[0]):
+        #     area_embeddings_plus[i] = area_embeddings[i]
+        new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + area_embeddings.shape[1]])   # [4368, 77, 2 + 32]
         for k in range(data.shape[0]):
-            new_data[k] = np.concatenate([data[k], region_embeddings_plus], axis=1)
-        print(new_data.shape)
+            new_data[k] = np.concatenate([data[k], area_embeddings], axis=1)
         return new_data
         # ---Concat
         # return data

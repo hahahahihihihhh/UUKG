@@ -96,8 +96,9 @@ import torch.nn as nn
 # scores2 = torch.LongTensor([1, 2, 3, 4])
 # print(scores, scores2, scores == scores2)
 # a形状(2,3)
-a = torch.tensor([[1, 2, 3],
-                  [1, 2, 3]])
-# repeat参数比维度多，在扩展前先讲a的形状扩展为(1,2,3)然后复制
-b = a.repeat(2, 2, 2)
-print(b)  # 得到结果torch.Size([1, 4, 3])
+# a = torch.tensor([[1, 2, 3],
+#                   [1, 2, 3]])
+# # repeat参数比维度多，在扩展前先讲a的形状扩展为(1,2,3)然后复制
+# b = a.repeat(2, 2, 2)
+# print(b)  # 得到结果torch.Size([1, 4, 3])
+seed = 1
