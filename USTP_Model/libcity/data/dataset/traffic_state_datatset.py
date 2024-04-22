@@ -21,6 +21,11 @@ class TrafficStateDataset(AbstractDataset):
     def __init__(self, config):
         self.config = config
         self.dataset = self.config.get('dataset', '')
+        # !!!
+        self.embedding_model = config.get('embedding_model', '')
+        self.embedding_type = self.config.get('embedding_type', '')
+        print(self.embedding_type, self.embedding_model)
+        # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
         self.num_workers = self.config.get('num_workers', 0)
@@ -630,16 +635,20 @@ class TrafficStateDataset(AbstractDataset):
                         data_ind = np.tile(data_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
                         data_list.append(data_ind)
         data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
-        # ---Concat
-        area_embeddings = np.load("KG/xxx_embeddings/CHI/TransE/area_embeddings.npy")   # [77, 32]
-        # area_embeddings_plus = np.zeros([77, 32])
-        # for i in range(area_embeddings.shape[0]):
-        #     area_embeddings_plus[i] = area_embeddings[i]
+        # !!! ---Concat
+        # os.path.join("KG/xxx_embeddings", self.dataset, self.embeddingModel, s)
+        assert self.load_external == True
+        # "KG/xxx_embeddings/CHI/TransE/area_embeddings.npy"
+        area_embeddings = np.load(os.path.join("KG/xxx_embeddings",
+                                               self.dataset[:3],
+                                               self.embedding_model,
+                                               "{}_embeddings.npy".format(self.embedding_type))
+        )   # [77, 32]
         new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + area_embeddings.shape[1]])   # [4368, 77, 2 + 32]
         for k in range(data.shape[0]):
             new_data[k] = np.concatenate([data[k], area_embeddings], axis=1)
         return new_data
-        # ---Concat
+        # !!! ---Concat
         # return data
 
     def _add_external_information_4d(self, df, ext_data=None):

@@ -14,7 +14,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHI/config_AGCRN_TransE.json'
+config_file = 'config/CHI/AGCRN/config_TransE.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -42,7 +42,9 @@ config_file = 'config/CHI/config_AGCRN_TransE.json'
 def train(config, total = 2):
     modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
     predict_steps = 12
-    save_dir = log + datasetName[0:3] + '/' + modelName + '/' + datasetName + ('_KGE' if KGE else '') + '/'
+    save_dir = os.path.join(log, datasetName[:3], modelName,
+                            datasetName, config['embedding_model'] if KGE else '')
+    # save_dir = log + datasetName + '/' + modelName + '/' + datasetName + ('_KGE' if KGE else '') + '/'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     exp_ids, eval_metrics = [], config["metrics"]    # ['MAE', 'RMSE']
@@ -98,8 +100,8 @@ def train(config, total = 2):
     # 保存各预测步指标均值和标准差
     df_avg_results = pd.DataFrame(avg_results, columns=eval_metrics)
     df_std_results = pd.DataFrame(std_results, columns=eval_metrics)
-    df_avg_results.to_csv(save_dir + 'avg_result.csv', index=False)
-    df_std_results.to_csv(save_dir + 'std_result.csv', index=False)
+    df_avg_results.to_csv(os.path.join(save_dir, 'avg_result.csv'), index=False)
+    df_std_results.to_csv(os.path.join(save_dir, 'std_result.csv'), index=False)
     logging.info('----------------------------------------------------------------------------')
     logging.info('Average: \n{} '.format(df_avg_results))
     logging.info('Standard deviation: \n{}'.format( df_std_results))
@@ -109,8 +111,8 @@ def train(config, total = 2):
     std_steps_results = np.mean(std_results, axis=0)
     df_avg_steps_results = pd.DataFrame(np.array(avg_steps_results).reshape(1, 2), columns=eval_metrics)
     df_std_steps_results = pd.DataFrame(np.array(std_steps_results).reshape(1, 2), columns=eval_metrics)
-    df_avg_steps_results.to_csv(save_dir + 'avg_steps_result.csv', index=False)
-    df_std_steps_results.to_csv(save_dir + 'std_steps_result.csv', index=False)
+    df_avg_steps_results.to_csv(os.path.join(save_dir, 'avg_steps_result.csv'), index=False)
+    df_std_steps_results.to_csv(os.path.join(save_dir, 'std_steps_result.csv'), index=False)
     logging.info('----------------------------------------------------------------------------')
     logging.info('{} steps Average: \n{}'.format(predict_steps, df_avg_steps_results))
     logging.info('{} steps Standard deviation: \n{}'.format(predict_steps, df_std_steps_results))

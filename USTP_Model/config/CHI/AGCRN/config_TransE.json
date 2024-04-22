@@ -1,10 +1,11 @@
 {
     "task": "traffic_state_pred",
     "model": "AGCRN",
+    "embedding_model": "TransE",
     "dataset": "CHITaxi20190406",
     "saved_model": true,
     "train": true,
-    "load_external": true,
+    "load_external": false,
     "seed": 0,
     "exp_id": 0,
 
