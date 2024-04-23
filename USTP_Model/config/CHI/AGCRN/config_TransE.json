@@ -3,13 +3,13 @@
     "model": "AGCRN",
     "embedding_model": "TransE",
     "dataset": "CHITaxi20190406",
-    "saved_model": true,
-    "train": true,
-    "load_external": false,
     "seed": 0,
-    "exp_id": 0,
 
-    "max_epoch": 100,
+    "exp_id": 5,
+    "max_epoch": 200,
+    "patience": 15,
+    "output_window": 12,
+    "load_external": true,
     "metrics": ["MAE", "RMSE"],
     "cache_dataset": false
 }

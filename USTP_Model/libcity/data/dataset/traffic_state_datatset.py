@@ -24,7 +24,6 @@ class TrafficStateDataset(AbstractDataset):
         # !!!
         self.embedding_model = config.get('embedding_model', '')
         self.embedding_type = self.config.get('embedding_type', '')
-        print(self.embedding_type, self.embedding_model)
         # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)

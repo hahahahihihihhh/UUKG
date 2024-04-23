@@ -3,7 +3,7 @@
   "model": "DisMult",
   "optimizer": "Adam",
 
-  "max_epochs": 150,
+  "max_epochs": 300,
   "patience": 10,
   "valid": 3,
 

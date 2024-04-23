@@ -41,13 +41,12 @@ config_file = 'config/CHI/AGCRN/config_TransE.json'
 
 def train(config, total = 5):
     modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
-    predict_steps = 12
+    predict_steps, eval_metrics = config['output_window'], config["metrics"]
     save_dir = os.path.join(log, datasetName[:3], modelName,
                             datasetName, config['embedding_model'] if KGE else '')
-    # save_dir = log + datasetName + '/' + modelName + '/' + datasetName + ('_KGE' if KGE else '') + '/'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    exp_ids, eval_metrics = [], config["metrics"]    # ['MAE', 'RMSE']
+    exp_ids = []    # ['MAE', 'RMSE']
     final_results_five_train = np.zeros([predict_steps, len(eval_metrics), total])
 
     # file logger
@@ -70,7 +69,8 @@ def train(config, total = 5):
         # exp_id = dict_args['exp_id']
         exp_ids.append(config['exp_id'])
         logging.info('----------------------------------------------------------------------------')
-        logging.info("# {}, Kownledge Graph Embedding: {}, Experiment ids: {}".format(_i, KGE, config['exp_id']))
+        logging.info("# {}, Kownledge Graph Embedding: {}, Experiment ids: {}".
+                     format(_i, config['embedding_model'] if KGE else 'None', config['exp_id']))
         logging.info('----------------------------------------------------------------------------')
         other_args = {key: val for key, val in config.items() if key not in [
             'task', 'model', 'dataset', 'config_file', 'saved_model', 'train'] and
