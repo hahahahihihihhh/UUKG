@@ -14,7 +14,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHI/AGCRN/config_TransE.json'
+config_file = 'config/CHI/AGCRN/config.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -40,7 +40,7 @@ config_file = 'config/CHI/AGCRN/config_TransE.json'
 #     return parser
 
 def train(config, total = 5):
-    modelName, datasetName, KGE = config['model'], config['dataset'], config['load_external']
+    modelName, datasetName, KGE = config['model'], config['dataset'], 'load_external' in config
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
     save_dir = os.path.join(log, datasetName[:3], modelName,
                             datasetName, config['embedding_model'] if KGE else '')
@@ -83,7 +83,8 @@ def train(config, total = 5):
         temp = result[eval_metrics].values
         final_results_five_train[:, :, _i] = temp
     logging.info('----------------------------------------------------------------------------')
-    logging.info("Kownledge Graph Embedding: {}, Experiment ids: {}".format(KGE, exp_ids))
+    logging.info("Kownledge Graph Embedding: {}, Experiment ids: {}"
+                 .format(config['embedding_model'] if KGE else 'None', exp_ids))
 
     # 计算指标均值和标准差
     avg_results = np.zeros([predict_steps, len(eval_metrics)])

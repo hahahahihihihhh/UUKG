@@ -101,4 +101,9 @@ import torch.nn as nn
 # # repeat参数比维度多，在扩展前先讲a的形状扩展为(1,2,3)然后复制
 # b = a.repeat(2, 2, 2)
 # print(b)  # 得到结果torch.Size([1, 4, 3])
-seed = 1
+# 生成一个字典
+dict = {'name': '','age': '','sex': ''}
+# 打印返回值
+print(dict.has_key('name'))  # 结果返回True
+print(dict.has_key('id'))  # 结果返回False
+

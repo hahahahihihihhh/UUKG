@@ -4,8 +4,8 @@
     "dataset": "CHITaxi20190406",
     "seed": 0,
 
-    "exp_id": 5,
-    "load_external": false,
+    "exp_id": 10,
+    "load_external": true,
     "embedding_model": "MuRE",
 
     "max_epoch": 200,
@@ -13,5 +13,4 @@
     "cache_dataset": false,
     "output_window": 12,
     "metrics": ["MAE", "RMSE"],
-
 }

@@ -4,9 +4,7 @@
     "dataset": "CHITaxi20190406",
     "seed": 0,
 
-    "exp_id": 5,
-    "load_external": false,
-    "embedding_model": "MuRE",
+    "exp_id": 0,
 
     "max_epoch": 200,
     "patience": 15,
