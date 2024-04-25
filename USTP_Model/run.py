@@ -42,8 +42,7 @@ config_file = 'config/CHI/AGCRN/config.json'
 def train(config, total = 5):
     modelName, datasetName, KGE = config['model'], config['dataset'], 'load_external' in config
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
-    save_dir = os.path.join(log, datasetName[:3], modelName,
-                            datasetName, config['embedding_model'] if KGE else '')
+    save_dir = os.path.join(log, datasetName, modelName, config['embedding_model'] if KGE else '')
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     exp_ids = []    # ['MAE', 'RMSE']
