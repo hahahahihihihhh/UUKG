@@ -11,7 +11,6 @@ conda create -n uukg python==3.11.5
 conda activate uukg
 conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-conda install numpy-base==1.23.5
 ```
 
 ## Datasets

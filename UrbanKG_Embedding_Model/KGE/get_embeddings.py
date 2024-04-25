@@ -14,9 +14,10 @@ from datasets.kg_dataset import KGDataset
 from models import all_models
 
 DATA_PATH = '../data'
-model_path = "embedding_model/CHI/TransE"
+# model_path = "embedding_model/CHI/TransE"
 # model_path = "embedding_model/CHI/DisMult"
 # model_path = "embedding_model/CHI/MuRE"
+model_path = "embedding_model/CHI/GIE"
 
 KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id", "xxx_embeddings"
 args = None
