@@ -3,7 +3,7 @@
   "model": "MuRE",
   "optimizer": "Adam",
 
-  "max_epochs": 150,
+  "max_epochs": 500,
   "patience": 10,
   "valid": 3,
 
