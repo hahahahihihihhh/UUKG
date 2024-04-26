@@ -4,7 +4,7 @@
     "dataset": "CHITaxi20190406",
     "seed": 0,
 
-    "exp_id": 10,
+    "exp_id": 20,
     "load_external": true,
     "embedding_model": "DisMult",
 

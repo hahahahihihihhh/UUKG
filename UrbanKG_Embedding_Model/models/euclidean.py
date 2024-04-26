@@ -97,7 +97,7 @@ class RotE(BaseE):
     def __init__(self, args):
         super(RotE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0  # (-1, 1) 均匀分布
         self.sim = "dist"
 
     def get_queries(self, queries: torch.Tensor):
@@ -113,7 +113,7 @@ class RefE(BaseE):
     def __init__(self, args):
         super(RefE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0  # (-1, 1) 均匀分布
         self.sim = "dist"
 
     def get_queries(self, queries):
@@ -125,7 +125,9 @@ class RefE(BaseE):
 
 
 class AttE(BaseE):
-    """Euclidean attention model combining translations, reflections and rotations"""
+    """Euclidean attention model combining translations, reflections and rotations
+        https://arxiv.org/abs/2005.00545
+    """
 
     def __init__(self, args):
         super(AttE, self).__init__(args)
@@ -133,11 +135,11 @@ class AttE(BaseE):
 
         # reflection
         self.ref = nn.Embedding(self.sizes[1], self.rank)
-        self.ref.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.ref.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0   # (-1, 1) 均匀分布
 
         # rotation
         self.rot = nn.Embedding(self.sizes[1], self.rank)
-        self.rot.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
+        self.rot.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0   # (-1, 1) 均匀分布
 
         # attention
         self.context_vec = nn.Embedding(self.sizes[1], self.rank)

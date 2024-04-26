@@ -102,8 +102,26 @@ import torch.nn as nn
 # b = a.repeat(2, 2, 2)
 # print(b)  # 得到结果torch.Size([1, 4, 3])
 # 生成一个字典
-dict = {'name': '','age': '','sex': ''}
-# 打印返回值
-print(dict.has_key('name'))  # 结果返回True
-print(dict.has_key('id'))  # 结果返回False
+# dict = {'name': '','age': '','sex': ''}
+# # 打印返回值
+# print(dict.has_key('name'))  # 结果返回True
+# print(dict.has_key('id'))  # 结果返回False
 
+# t = torch.tensor([[1, 2],
+#               [3, 4]], dtype=torch.float32)
+# inputs1 = torch.norm(t, p=2, dim=1, keepdim=True)
+# print(inputs1)
+
+a = torch.tensor([
+    [[1],
+     [3]],
+    [[1],
+     [3]]
+                  ])
+b = torch.tensor([
+                    [[1, 2],
+                     [3, 4]],
+                    [[1, 2],
+                     [3, 4]],
+                  ])
+print(a * b)
