@@ -6,7 +6,7 @@ from torch import nn
 import os
 from models.base import KGModel
 from utils.euclidean import givens_rotations, givens_reflection
-from utils.hyperbolic import mobius_add, expmap0, project, hyp_distance_multi_c
+from utils.hyperbolic import mobius_add, expmap0, project, hyp_distance_multi_c, hyp_distance
 
 HYP_MODELS = ["RotH", "RefH", "AttH"]
 
@@ -17,7 +17,7 @@ class BaseH(KGModel):
         super(BaseH, self).__init__(args.sizes, args.rank, args.dropout, args.gamma, args.dtype, args.bias,
                                     args.init_size)
         self.entity.weight.data = self.init_size * torch.randn((self.sizes[0], self.rank), dtype=self.data_type)
-        self.rel.weight.data = self.init_size * torch.randn((self.sizes[1], 2 * self.rank), dtype=self.data_type)
+        self.rel.weight.data = self.init_size * torch.randn((self.sizes[1], self.rank), dtype=self.data_type)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
         self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
         self.multi_c = args.multi_c
@@ -37,23 +37,28 @@ class BaseH(KGModel):
     def similarity_score(self, lhs_e, rhs_e, eval_mode):
         """Compute similarity scores or queries against targets in embedding space."""
         lhs_e, c = lhs_e
-        return - hyp_distance_multi_c(lhs_e, rhs_e, c, eval_mode) ** 2
+        return - hyp_distance(lhs_e, rhs_e, c, eval_mode) ** 2
 
 
 class RotH(BaseH):
     """Hyperbolic 2x2 Givens rotations"""
 
+    def __init__(self, args):
+        super(RotH, self).__init__(args)
+        self.rot_trans = nn.Embedding(self.sizes[1], self.rank)
+        self.rot_trans.weight.data = self.init_size * torch.randn((self.sizes[1], self.rank), dtype=self.data_type)
+
     def get_queries(self, queries):
-        """Compute embedding and biases of queries."""
-        c = F.softplus(self.c[queries[:, 1]])
+        """Compute embed    ding and biases of queries."""
+        c = F.softplus(self.c[queries[:, 1]])   # activate
         head = expmap0(self.entity(queries[:, 0]), c)
-        rel1, rel2 = torch.chunk(self.rel(queries[:, 1]), 2, dim=1)
-        rel1 = expmap0(rel1, c)
-        rel2 = expmap0(rel2, c)
-        lhs = project(mobius_add(head, rel1, c), c)
-        res1 = givens_rotations(self.rel_diag(queries[:, 1]), lhs)
-        res2 = mobius_add(res1, rel2, c)
-        return (res2, c), self.bh(queries[:, 0])
+        trans = expmap0(self.rot_trans(queries[:, 1]), c)
+        lhs = mobius_add(head, trans, c)
+        rot = givens_rotations(self.rel_diag(queries[:, 1]), lhs)
+        rot = project(rot, c)
+        rel = expmap0(self.rel(queries[:, 1]), c)
+        res = mobius_add(rot, rel, c)
+        return (res, c), self.bh(queries[:, 0])
 
 
 class RefH(BaseH):
@@ -62,11 +67,11 @@ class RefH(BaseH):
     def get_queries(self, queries):
         """Compute embedding and biases of queries."""
         c = F.softplus(self.c[queries[:, 1]])
-        rel, _ = torch.chunk(self.rel(queries[:, 1]), 2, dim=1)
-        rel = expmap0(rel, c)
-        lhs = givens_reflection(self.rel_diag(queries[:, 1]), self.entity(queries[:, 0]))
-        lhs = expmap0(lhs, c)
-        res = project(mobius_add(lhs, rel, c), c)
+        head = expmap0(self.entity(queries[:, 0]), c)
+        ref = givens_reflection(self.rel_diag(queries[:, 1]), head)
+        lhs = project(ref, c)
+        rel = expmap0(self.rel(queries[:, 1]), c)
+        res = mobius_add(lhs, rel, c)
         return (res, c), self.bh(queries[:, 0])
 
 
@@ -89,18 +94,23 @@ class AttH(BaseH):
         """Compute embedding and biases of queries."""
         c = F.softplus(self.c[queries[:, 1]])
         head = self.entity(queries[:, 0])
+
+        # candidates
         rot_mat, ref_mat = torch.chunk(self.rel_diag(queries[:, 1]), 2, dim=1)
         rot_q = givens_rotations(rot_mat, head).view((-1, 1, self.rank))
         ref_q = givens_reflection(ref_mat, head).view((-1, 1, self.rank))
         cands = torch.cat([ref_q, rot_q], dim=1)
+
+        # self-attention mechanism
         context_vec = self.context_vec(queries[:, 1]).view((-1, 1, self.rank))
         att_weights = torch.sum(context_vec * cands * self.scale, dim=-1, keepdim=True)
         att_weights = self.act(att_weights)
         att_q = torch.sum(att_weights * cands, dim=1)
         lhs = expmap0(att_q, c)
-        rel, _ = torch.chunk(self.rel(queries[:, 1]), 2, dim=1)
-        rel = expmap0(rel, c)
-        res = project(mobius_add(lhs, rel, c), c)
+
+        # hyperbolic translation
+        rel = expmap0(self.rel(queries[:, 1]), c)
+        res = mobius_add(lhs, rel, c)
         return (res, c), self.bh(queries[:, 0])
 
 class Mutiview_RotH(BaseH):

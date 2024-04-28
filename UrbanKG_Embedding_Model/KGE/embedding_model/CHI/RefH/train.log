@@ -1,0 +1,231 @@
+2024-04-27 21:28:31 INFO     Saving logs in: ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:28:33 INFO     	 (140602, 26, 140602)
+2024-04-27 21:28:34 INFO     Total number of parameters 4782158
+2024-04-27 21:28:35 INFO     	 Start training
+2024-04-27 21:29:11 INFO     	 Epoch 0 | average train loss: 0.0909
+2024-04-27 21:29:11 INFO     	 Epoch 0 | average valid loss: 0.0545
+2024-04-27 21:29:47 INFO     	 Epoch 1 | average train loss: 0.0666
+2024-04-27 21:29:48 INFO     	 Epoch 1 | average valid loss: 0.0506
+2024-04-27 21:30:24 INFO     	 Epoch 2 | average train loss: 0.0597
+2024-04-27 21:30:24 INFO     	 Epoch 2 | average valid loss: 0.0485
+2024-04-27 21:31:14 INFO     	 valid MR: 22276.49 | MRR: 0.077 | H@1: 0.029 | H@3: 0.086 | H@10: 0.181
+2024-04-27 21:31:14 INFO     	 Saving model at epoch 2 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:31:49 INFO     	 Epoch 3 | average train loss: 0.0556
+2024-04-27 21:31:50 INFO     	 Epoch 3 | average valid loss: 0.0470
+2024-04-27 21:32:26 INFO     	 Epoch 4 | average train loss: 0.0530
+2024-04-27 21:32:26 INFO     	 Epoch 4 | average valid loss: 0.0459
+2024-04-27 21:33:02 INFO     	 Epoch 5 | average train loss: 0.0511
+2024-04-27 21:33:03 INFO     	 Epoch 5 | average valid loss: 0.0451
+2024-04-27 21:33:53 INFO     	 valid MR: 17854.22 | MRR: 0.109 | H@1: 0.050 | H@3: 0.131 | H@10: 0.236
+2024-04-27 21:33:53 INFO     	 Saving model at epoch 5 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:34:29 INFO     	 Epoch 6 | average train loss: 0.0497
+2024-04-27 21:34:30 INFO     	 Epoch 6 | average valid loss: 0.0444
+2024-04-27 21:35:05 INFO     	 Epoch 7 | average train loss: 0.0486
+2024-04-27 21:35:06 INFO     	 Epoch 7 | average valid loss: 0.0438
+2024-04-27 21:35:42 INFO     	 Epoch 8 | average train loss: 0.0476
+2024-04-27 21:35:42 INFO     	 Epoch 8 | average valid loss: 0.0432
+2024-04-27 21:36:39 INFO     	 valid MR: 15884.83 | MRR: 0.135 | H@1: 0.070 | H@3: 0.165 | H@10: 0.268
+2024-04-27 21:36:39 INFO     	 Saving model at epoch 8 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:37:14 INFO     	 Epoch 9 | average train loss: 0.0468
+2024-04-27 21:37:15 INFO     	 Epoch 9 | average valid loss: 0.0428
+2024-04-27 21:37:51 INFO     	 Epoch 10 | average train loss: 0.0460
+2024-04-27 21:37:51 INFO     	 Epoch 10 | average valid loss: 0.0423
+2024-04-27 21:38:27 INFO     	 Epoch 11 | average train loss: 0.0453
+2024-04-27 21:38:28 INFO     	 Epoch 11 | average valid loss: 0.0418
+2024-04-27 21:39:21 INFO     	 valid MR: 12851.63 | MRR: 0.169 | H@1: 0.101 | H@3: 0.207 | H@10: 0.301
+2024-04-27 21:39:21 INFO     	 Saving model at epoch 11 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:39:57 INFO     	 Epoch 12 | average train loss: 0.0445
+2024-04-27 21:39:57 INFO     	 Epoch 12 | average valid loss: 0.0413
+2024-04-27 21:40:33 INFO     	 Epoch 13 | average train loss: 0.0437
+2024-04-27 21:40:33 INFO     	 Epoch 13 | average valid loss: 0.0408
+2024-04-27 21:41:09 INFO     	 Epoch 14 | average train loss: 0.0429
+2024-04-27 21:41:09 INFO     	 Epoch 14 | average valid loss: 0.0402
+2024-04-27 21:42:05 INFO     	 valid MR: 8944.16 | MRR: 0.211 | H@1: 0.143 | H@3: 0.248 | H@10: 0.342
+2024-04-27 21:42:05 INFO     	 Saving model at epoch 14 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:42:40 INFO     	 Epoch 15 | average train loss: 0.0421
+2024-04-27 21:42:41 INFO     	 Epoch 15 | average valid loss: 0.0397
+2024-04-27 21:43:17 INFO     	 Epoch 16 | average train loss: 0.0412
+2024-04-27 21:43:17 INFO     	 Epoch 16 | average valid loss: 0.0391
+2024-04-27 21:43:52 INFO     	 Epoch 17 | average train loss: 0.0403
+2024-04-27 21:43:53 INFO     	 Epoch 17 | average valid loss: 0.0384
+2024-04-27 21:44:51 INFO     	 valid MR: 5805.26 | MRR: 0.250 | H@1: 0.180 | H@3: 0.288 | H@10: 0.389
+2024-04-27 21:44:51 INFO     	 Saving model at epoch 17 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:45:26 INFO     	 Epoch 18 | average train loss: 0.0395
+2024-04-27 21:45:27 INFO     	 Epoch 18 | average valid loss: 0.0377
+2024-04-27 21:46:03 INFO     	 Epoch 19 | average train loss: 0.0387
+2024-04-27 21:46:03 INFO     	 Epoch 19 | average valid loss: 0.0369
+2024-04-27 21:46:39 INFO     	 Epoch 20 | average train loss: 0.0380
+2024-04-27 21:46:39 INFO     	 Epoch 20 | average valid loss: 0.0361
+2024-04-27 21:47:38 INFO     	 valid MR: 4274.92 | MRR: 0.295 | H@1: 0.221 | H@3: 0.334 | H@10: 0.439
+2024-04-27 21:47:38 INFO     	 Saving model at epoch 20 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:48:13 INFO     	 Epoch 21 | average train loss: 0.0373
+2024-04-27 21:48:14 INFO     	 Epoch 21 | average valid loss: 0.0355
+2024-04-27 21:48:49 INFO     	 Epoch 22 | average train loss: 0.0367
+2024-04-27 21:48:50 INFO     	 Epoch 22 | average valid loss: 0.0347
+2024-04-27 21:49:25 INFO     	 Epoch 23 | average train loss: 0.0361
+2024-04-27 21:49:26 INFO     	 Epoch 23 | average valid loss: 0.0340
+2024-04-27 21:50:27 INFO     	 valid MR: 3667.14 | MRR: 0.345 | H@1: 0.267 | H@3: 0.391 | H@10: 0.493
+2024-04-27 21:50:27 INFO     	 Saving model at epoch 23 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:51:02 INFO     	 Epoch 24 | average train loss: 0.0356
+2024-04-27 21:51:03 INFO     	 Epoch 24 | average valid loss: 0.0334
+2024-04-27 21:51:39 INFO     	 Epoch 25 | average train loss: 0.0351
+2024-04-27 21:51:39 INFO     	 Epoch 25 | average valid loss: 0.0328
+2024-04-27 21:52:15 INFO     	 Epoch 26 | average train loss: 0.0347
+2024-04-27 21:52:15 INFO     	 Epoch 26 | average valid loss: 0.0322
+2024-04-27 21:53:23 INFO     	 valid MR: 3279.35 | MRR: 0.389 | H@1: 0.311 | H@3: 0.435 | H@10: 0.538
+2024-04-27 21:53:23 INFO     	 Saving model at epoch 26 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:53:59 INFO     	 Epoch 27 | average train loss: 0.0343
+2024-04-27 21:53:59 INFO     	 Epoch 27 | average valid loss: 0.0317
+2024-04-27 21:54:35 INFO     	 Epoch 28 | average train loss: 0.0340
+2024-04-27 21:54:35 INFO     	 Epoch 28 | average valid loss: 0.0311
+2024-04-27 21:55:11 INFO     	 Epoch 29 | average train loss: 0.0336
+2024-04-27 21:55:12 INFO     	 Epoch 29 | average valid loss: 0.0307
+2024-04-27 21:56:21 INFO     	 valid MR: 3115.89 | MRR: 0.421 | H@1: 0.340 | H@3: 0.470 | H@10: 0.571
+2024-04-27 21:56:21 INFO     	 Saving model at epoch 29 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:56:57 INFO     	 Epoch 30 | average train loss: 0.0333
+2024-04-27 21:56:58 INFO     	 Epoch 30 | average valid loss: 0.0302
+2024-04-27 21:57:33 INFO     	 Epoch 31 | average train loss: 0.0331
+2024-04-27 21:57:34 INFO     	 Epoch 31 | average valid loss: 0.0298
+2024-04-27 21:58:09 INFO     	 Epoch 32 | average train loss: 0.0328
+2024-04-27 21:58:10 INFO     	 Epoch 32 | average valid loss: 0.0294
+2024-04-27 21:59:23 INFO     	 valid MR: 3022.44 | MRR: 0.450 | H@1: 0.370 | H@3: 0.501 | H@10: 0.600
+2024-04-27 21:59:23 INFO     	 Saving model at epoch 32 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 21:59:58 INFO     	 Epoch 33 | average train loss: 0.0326
+2024-04-27 21:59:59 INFO     	 Epoch 33 | average valid loss: 0.0290
+2024-04-27 22:00:35 INFO     	 Epoch 34 | average train loss: 0.0324
+2024-04-27 22:00:35 INFO     	 Epoch 34 | average valid loss: 0.0287
+2024-04-27 22:01:11 INFO     	 Epoch 35 | average train loss: 0.0322
+2024-04-27 22:01:12 INFO     	 Epoch 35 | average valid loss: 0.0283
+2024-04-27 22:02:20 INFO     	 valid MR: 2917.41 | MRR: 0.471 | H@1: 0.393 | H@3: 0.517 | H@10: 0.619
+2024-04-27 22:02:20 INFO     	 Saving model at epoch 35 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:02:56 INFO     	 Epoch 36 | average train loss: 0.0320
+2024-04-27 22:02:56 INFO     	 Epoch 36 | average valid loss: 0.0280
+2024-04-27 22:03:32 INFO     	 Epoch 37 | average train loss: 0.0318
+2024-04-27 22:03:33 INFO     	 Epoch 37 | average valid loss: 0.0277
+2024-04-27 22:04:08 INFO     	 Epoch 38 | average train loss: 0.0317
+2024-04-27 22:04:09 INFO     	 Epoch 38 | average valid loss: 0.0274
+2024-04-27 22:05:21 INFO     	 valid MR: 2846.45 | MRR: 0.495 | H@1: 0.424 | H@3: 0.536 | H@10: 0.636
+2024-04-27 22:05:21 INFO     	 Saving model at epoch 38 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:05:57 INFO     	 Epoch 39 | average train loss: 0.0315
+2024-04-27 22:05:57 INFO     	 Epoch 39 | average valid loss: 0.0271
+2024-04-27 22:06:33 INFO     	 Epoch 40 | average train loss: 0.0314
+2024-04-27 22:06:34 INFO     	 Epoch 40 | average valid loss: 0.0268
+2024-04-27 22:07:09 INFO     	 Epoch 41 | average train loss: 0.0312
+2024-04-27 22:07:10 INFO     	 Epoch 41 | average valid loss: 0.0266
+2024-04-27 22:08:23 INFO     	 valid MR: 2867.94 | MRR: 0.504 | H@1: 0.430 | H@3: 0.548 | H@10: 0.645
+2024-04-27 22:08:23 INFO     	 Saving model at epoch 41 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:08:58 INFO     	 Epoch 42 | average train loss: 0.0311
+2024-04-27 22:08:59 INFO     	 Epoch 42 | average valid loss: 0.0264
+2024-04-27 22:09:35 INFO     	 Epoch 43 | average train loss: 0.0310
+2024-04-27 22:09:35 INFO     	 Epoch 43 | average valid loss: 0.0261
+2024-04-27 22:10:11 INFO     	 Epoch 44 | average train loss: 0.0309
+2024-04-27 22:10:11 INFO     	 Epoch 44 | average valid loss: 0.0259
+2024-04-27 22:11:35 INFO     	 valid MR: 2861.98 | MRR: 0.514 | H@1: 0.444 | H@3: 0.554 | H@10: 0.650
+2024-04-27 22:11:35 INFO     	 Saving model at epoch 44 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:12:10 INFO     	 Epoch 45 | average train loss: 0.0308
+2024-04-27 22:12:11 INFO     	 Epoch 45 | average valid loss: 0.0257
+2024-04-27 22:12:47 INFO     	 Epoch 46 | average train loss: 0.0314
+2024-04-27 22:12:48 INFO     	 Epoch 46 | average valid loss: 0.0256
+2024-04-27 22:13:23 INFO     	 Epoch 47 | average train loss: 0.0308
+2024-04-27 22:13:24 INFO     	 Epoch 47 | average valid loss: 0.0255
+2024-04-27 22:14:54 INFO     	 valid MR: 2776.10 | MRR: 0.515 | H@1: 0.447 | H@3: 0.552 | H@10: 0.651
+2024-04-27 22:14:54 INFO     	 Saving model at epoch 47 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:15:30 INFO     	 Epoch 48 | average train loss: 0.0306
+2024-04-27 22:15:30 INFO     	 Epoch 48 | average valid loss: 0.0254
+2024-04-27 22:16:06 INFO     	 Epoch 49 | average train loss: 0.0305
+2024-04-27 22:16:06 INFO     	 Epoch 49 | average valid loss: 0.0252
+2024-04-27 22:16:41 INFO     	 Epoch 50 | average train loss: 0.0304
+2024-04-27 22:16:42 INFO     	 Epoch 50 | average valid loss: 0.0251
+2024-04-27 22:18:08 INFO     	 valid MR: 2734.82 | MRR: 0.520 | H@1: 0.452 | H@3: 0.558 | H@10: 0.653
+2024-04-27 22:18:08 INFO     	 Saving model at epoch 50 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:18:44 INFO     	 Epoch 51 | average train loss: 0.0304
+2024-04-27 22:18:44 INFO     	 Epoch 51 | average valid loss: 0.0249
+2024-04-27 22:19:20 INFO     	 Epoch 52 | average train loss: 0.0303
+2024-04-27 22:19:20 INFO     	 Epoch 52 | average valid loss: 0.0247
+2024-04-27 22:19:56 INFO     	 Epoch 53 | average train loss: 0.0302
+2024-04-27 22:19:56 INFO     	 Epoch 53 | average valid loss: 0.0246
+2024-04-27 22:21:26 INFO     	 valid MR: 2688.34 | MRR: 0.521 | H@1: 0.455 | H@3: 0.557 | H@10: 0.654
+2024-04-27 22:21:26 INFO     	 Saving model at epoch 53 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:22:02 INFO     	 Epoch 54 | average train loss: 0.0305
+2024-04-27 22:22:02 INFO     	 Epoch 54 | average valid loss: 0.0245
+2024-04-27 22:22:38 INFO     	 Epoch 55 | average train loss: 0.0302
+2024-04-27 22:22:38 INFO     	 Epoch 55 | average valid loss: 0.0244
+2024-04-27 22:23:14 INFO     	 Epoch 56 | average train loss: 0.0301
+2024-04-27 22:23:14 INFO     	 Epoch 56 | average valid loss: 0.0243
+2024-04-27 22:24:48 INFO     	 valid MR: 2703.07 | MRR: 0.523 | H@1: 0.456 | H@3: 0.560 | H@10: 0.653
+2024-04-27 22:24:48 INFO     	 Saving model at epoch 56 in ./logs/CHI/04_27/RefH_21_28_31
+2024-04-27 22:25:24 INFO     	 Epoch 57 | average train loss: 0.0300
+2024-04-27 22:25:24 INFO     	 Epoch 57 | average valid loss: 0.0242
+2024-04-27 22:26:00 INFO     	 Epoch 58 | average train loss: 0.0300
+2024-04-27 22:26:01 INFO     	 Epoch 58 | average valid loss: 0.0241
+2024-04-27 22:26:36 INFO     	 Epoch 59 | average train loss: 0.0299
+2024-04-27 22:26:37 INFO     	 Epoch 59 | average valid loss: 0.0240
+2024-04-27 22:28:17 INFO     	 valid MR: 2592.79 | MRR: 0.515 | H@1: 0.445 | H@3: 0.556 | H@10: 0.653
+2024-04-27 22:28:52 INFO     	 Epoch 60 | average train loss: 0.0299
+2024-04-27 22:28:53 INFO     	 Epoch 60 | average valid loss: 0.0239
+2024-04-27 22:29:28 INFO     	 Epoch 61 | average train loss: 0.0298
+2024-04-27 22:29:29 INFO     	 Epoch 61 | average valid loss: 0.0237
+2024-04-27 22:30:05 INFO     	 Epoch 62 | average train loss: 0.0298
+2024-04-27 22:30:05 INFO     	 Epoch 62 | average valid loss: 0.0236
+2024-04-27 22:31:33 INFO     	 valid MR: 2571.47 | MRR: 0.522 | H@1: 0.457 | H@3: 0.558 | H@10: 0.652
+2024-04-27 22:32:08 INFO     	 Epoch 63 | average train loss: 0.0297
+2024-04-27 22:32:09 INFO     	 Epoch 63 | average valid loss: 0.0235
+2024-04-27 22:32:45 INFO     	 Epoch 64 | average train loss: 0.0313
+2024-04-27 22:32:45 INFO     	 Epoch 64 | average valid loss: 0.0244
+2024-04-27 22:33:21 INFO     	 Epoch 65 | average train loss: 0.0301
+2024-04-27 22:33:21 INFO     	 Epoch 65 | average valid loss: 0.0237
+2024-04-27 22:35:05 INFO     	 valid MR: 2471.54 | MRR: 0.511 | H@1: 0.447 | H@3: 0.542 | H@10: 0.636
+2024-04-27 22:35:41 INFO     	 Epoch 66 | average train loss: 0.0298
+2024-04-27 22:35:41 INFO     	 Epoch 66 | average valid loss: 0.0234
+2024-04-27 22:36:17 INFO     	 Epoch 67 | average train loss: 0.0300
+2024-04-27 22:36:17 INFO     	 Epoch 67 | average valid loss: 0.0233
+2024-04-27 22:36:53 INFO     	 Epoch 68 | average train loss: 0.0297
+2024-04-27 22:36:54 INFO     	 Epoch 68 | average valid loss: 0.0231
+2024-04-27 22:38:41 INFO     	 valid MR: 2507.59 | MRR: 0.516 | H@1: 0.453 | H@3: 0.548 | H@10: 0.643
+2024-04-27 22:39:16 INFO     	 Epoch 69 | average train loss: 0.0296
+2024-04-27 22:39:17 INFO     	 Epoch 69 | average valid loss: 0.0231
+2024-04-27 22:39:52 INFO     	 Epoch 70 | average train loss: 0.0296
+2024-04-27 22:39:53 INFO     	 Epoch 70 | average valid loss: 0.0230
+2024-04-27 22:40:29 INFO     	 Epoch 71 | average train loss: 0.0295
+2024-04-27 22:40:29 INFO     	 Epoch 71 | average valid loss: 0.0229
+2024-04-27 22:42:08 INFO     	 valid MR: 2397.74 | MRR: 0.518 | H@1: 0.456 | H@3: 0.549 | H@10: 0.644
+2024-04-27 22:42:43 INFO     	 Epoch 72 | average train loss: 0.0295
+2024-04-27 22:42:44 INFO     	 Epoch 72 | average valid loss: 0.0228
+2024-04-27 22:43:19 INFO     	 Epoch 73 | average train loss: 0.0295
+2024-04-27 22:43:20 INFO     	 Epoch 73 | average valid loss: 0.0227
+2024-04-27 22:43:55 INFO     	 Epoch 74 | average train loss: 0.0294
+2024-04-27 22:43:56 INFO     	 Epoch 74 | average valid loss: 0.0226
+2024-04-27 22:45:56 INFO     	 valid MR: 2345.77 | MRR: 0.515 | H@1: 0.452 | H@3: 0.545 | H@10: 0.643
+2024-04-27 22:46:32 INFO     	 Epoch 75 | average train loss: 0.0295
+2024-04-27 22:46:33 INFO     	 Epoch 75 | average valid loss: 0.0226
+2024-04-27 22:47:08 INFO     	 Epoch 76 | average train loss: 0.0294
+2024-04-27 22:47:09 INFO     	 Epoch 76 | average valid loss: 0.0225
+2024-04-27 22:47:44 INFO     	 Epoch 77 | average train loss: 0.0293
+2024-04-27 22:47:45 INFO     	 Epoch 77 | average valid loss: 0.0224
+2024-04-27 22:49:27 INFO     	 valid MR: 2383.98 | MRR: 0.515 | H@1: 0.453 | H@3: 0.544 | H@10: 0.640
+2024-04-27 22:50:03 INFO     	 Epoch 78 | average train loss: 0.0300
+2024-04-27 22:50:04 INFO     	 Epoch 78 | average valid loss: 0.0224
+2024-04-27 22:50:39 INFO     	 Epoch 79 | average train loss: 0.0296
+2024-04-27 22:50:40 INFO     	 Epoch 79 | average valid loss: 0.0223
+2024-04-27 22:51:15 INFO     	 Epoch 80 | average train loss: 0.0294
+2024-04-27 22:51:15 INFO     	 Epoch 80 | average valid loss: 0.0222
+2024-04-27 22:53:16 INFO     	 valid MR: 2290.99 | MRR: 0.517 | H@1: 0.458 | H@3: 0.544 | H@10: 0.634
+2024-04-27 22:53:52 INFO     	 Epoch 81 | average train loss: 0.0293
+2024-04-27 22:53:53 INFO     	 Epoch 81 | average valid loss: 0.0222
+2024-04-27 22:54:28 INFO     	 Epoch 82 | average train loss: 0.0292
+2024-04-27 22:54:29 INFO     	 Epoch 82 | average valid loss: 0.0221
+2024-04-27 22:55:04 INFO     	 Epoch 83 | average train loss: 0.0292
+2024-04-27 22:55:05 INFO     	 Epoch 83 | average valid loss: 0.0220
+2024-04-27 22:57:15 INFO     	 valid MR: 2251.06 | MRR: 0.513 | H@1: 0.453 | H@3: 0.540 | H@10: 0.633
+2024-04-27 22:57:51 INFO     	 Epoch 84 | average train loss: 0.0292
+2024-04-27 22:57:51 INFO     	 Epoch 84 | average valid loss: 0.0220
+2024-04-27 22:58:27 INFO     	 Epoch 85 | average train loss: 0.0292
+2024-04-27 22:58:27 INFO     	 Epoch 85 | average valid loss: 0.0219
+2024-04-27 22:59:03 INFO     	 Epoch 86 | average train loss: 0.0297
+2024-04-27 22:59:04 INFO     	 Epoch 86 | average valid loss: 0.0226
+2024-04-27 23:00:53 INFO     	 valid MR: 2219.43 | MRR: 0.507 | H@1: 0.451 | H@3: 0.531 | H@10: 0.621
+2024-04-27 23:00:53 INFO     	 Early stopping
+2024-04-27 23:00:53 INFO     	 Optimization finished
+2024-04-27 23:00:53 INFO     	 Loading best model saved at epoch 56
+2024-04-27 23:02:44 INFO     	 valid MR: 2703.07 | MRR: 0.523 | H@1: 0.456 | H@3: 0.560 | H@10: 0.653
+2024-04-27 23:04:35 INFO     	 test MR: 2717.95 | MRR: 0.518 | H@1: 0.451 | H@3: 0.555 | H@10: 0.649

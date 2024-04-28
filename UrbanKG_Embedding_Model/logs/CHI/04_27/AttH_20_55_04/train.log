@@ -1,0 +1,6 @@
+2024-04-27 20:55:04 INFO     Saving logs in: ./logs\CHI\04_27\AttH_20_55_04
+2024-04-27 20:55:07 INFO     	 (140602, 26, 140602)
+2024-04-27 20:55:08 INFO     Total number of parameters 4783822
+2024-04-27 20:55:08 INFO     	 Start training
+2024-04-27 21:01:32 INFO     	 Epoch 0 | average train loss: 0.1519
+2024-04-27 21:01:34 INFO     	 Epoch 0 | average valid loss: 0.0544

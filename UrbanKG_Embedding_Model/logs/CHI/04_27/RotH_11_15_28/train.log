@@ -1,0 +1,6 @@
+2024-04-27 11:15:28 INFO     Saving logs in: ./logs\CHI\04_27\RotH_11_15_28
+2024-04-27 11:15:29 INFO     	 (140602, 26, 140602)
+2024-04-27 11:15:29 INFO     Total number of parameters 4782990
+2024-04-27 11:15:30 INFO     	 Start training
+2024-04-27 11:19:31 INFO     	 Epoch 0 | average train loss: 0.1246
+2024-04-27 11:19:33 INFO     	 Epoch 0 | average valid loss: 0.0504

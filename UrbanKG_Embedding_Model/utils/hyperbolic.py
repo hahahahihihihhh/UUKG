@@ -41,7 +41,7 @@ def expmap0(u, c):
         c: torch.Tensor of size 1 or B x 1 with absolute hyperbolic curvatures
 
     Returns:
-        torch.Tensor with tangent points.
+        torch.Tensor with B x d in Poincare ball.
     """
     sqrt_c = c ** 0.5
     u_norm = u.norm(dim=-1, p=2, keepdim=True).clamp_min(MIN_NORM)
@@ -57,7 +57,7 @@ def logmap0(y, c):
         c: torch.Tensor of size 1 or B x 1 with absolute hyperbolic curvatures
 
     Returns:
-        torch.Tensor with hyperbolic points.
+        torch.Tensor with B x d in tangent space.
     """
     sqrt_c = c ** 0.5
     y_norm = y.norm(dim=-1, p=2, keepdim=True).clamp_min(MIN_NORM)

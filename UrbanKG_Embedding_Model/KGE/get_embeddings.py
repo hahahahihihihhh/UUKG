@@ -16,7 +16,13 @@ from models import all_models
 DATA_PATH = '../data'
 # model_path = "embedding_model/CHI/TransE"
 # model_path = "embedding_model/CHI/DisMult"
-model_path = "embedding_model/CHI/MuRE"
+# model_path = "embedding_model/CHI/MuRE"
+# model_path = "embedding_model/CHI/RotE"
+# model_path = "embedding_model/CHI/AttE"
+model_path = "embedding_model/CHI/RefE"
+# model_path = "embedding_model/CHI/RotH"
+# model_path = "embedding_model/CHI/AttH"
+# model_path = "embedding_model/CHI/RefH"
 # model_path = "embedding_model/CHI/GIE"
 
 KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id", "xxx_embeddings"

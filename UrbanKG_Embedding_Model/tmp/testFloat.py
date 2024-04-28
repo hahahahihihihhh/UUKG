@@ -112,16 +112,12 @@ import torch.nn as nn
 # inputs1 = torch.norm(t, p=2, dim=1, keepdim=True)
 # print(inputs1)
 
-a = torch.tensor([
-    [[1],
-     [3]],
-    [[1],
-     [3]]
-                  ])
-b = torch.tensor([
-                    [[1, 2],
-                     [3, 4]],
-                    [[1, 2],
-                     [3, 4]],
-                  ])
-print(a * b)
+
+# a = torch.ones((1, 1))
+# print(a)
+# print(a[torch.tensor([0, 0, 0, 1, 2, 3, 4, 5, 6, 7])])
+
+a = torch.tensor([[1., 2.],
+                  [2., 3.]])
+b = torch.tensor([2., 3.])
+print(a / b)
