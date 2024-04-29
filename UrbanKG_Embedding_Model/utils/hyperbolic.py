@@ -3,6 +3,7 @@
 import torch
 
 MIN_NORM = 1e-15
+MAX_TANH_ARG = 15.0
 BALL_EPS = {torch.float32: 4e-3, torch.float64: 1e-5}
 
 
@@ -28,8 +29,7 @@ def artanh(x):
 
 
 def tanh(x):
-    return x.clamp(-15, 15).tanh()
-
+    return x.clamp(-MAX_TANH_ARG, MAX_TANH_ARG).tanh()
 
 
 class Artan(torch.autograd.Function):
@@ -131,7 +131,7 @@ def mobius_add(x, y, c):
     xy = torch.sum(x * y, dim=-1, keepdim=True)
     num = (1 + 2 * c * xy + c * y2) * x + (1 - c * x2) * y
     denom = 1 + 2 * c * xy + c ** 2 * x2 * y2
-    return num / denom.clamp_min(MIN_NORM)
+    return project(num / denom.clamp_min(MIN_NORM), c)
 
 
 # ################# HYP DISTANCES ########################

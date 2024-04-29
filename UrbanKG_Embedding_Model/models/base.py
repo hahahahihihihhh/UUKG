@@ -17,9 +17,9 @@ class KGModel(nn.Module, ABC):
         bias: string for whether to learn or fix bias (none for no bias)
         init_size: float for embeddings' initialization scale
         entity: torch.nn.Embedding with entity embeddings
-        rel: torch.nn.Embedding with relation embeddings            // relation
-        bh: torch.nn.Embedding with head entity bias embeddings     // bias head
-        bt: torch.nn.Embedding with tail entity bias embeddings     // bias tail
+        rel: torch.nn.Embedding with relation embeddings
+        bh: torch.nn.Embedding with head entity bias embeddings
+        bt: torch.nn.Embedding with tail entity bias embeddings
     """
 
     def __init__(self, sizes, rank, dropout, gamma, data_type, bias, init_size):
@@ -149,7 +149,7 @@ class KGModel(nn.Module, ABC):
         factors = self.get_factors(queries) #   factors:(206000, 32),(206000, 32),(206000, 32)
         return predictions, factors
 
-    def get_ranking(self, queries, filters, batch_size=500):
+    def get_ranking(self, queries, filters, batch_size=1000):
         """Compute filtered ranking of correct entity for evaluation.
 
         Args:
@@ -174,7 +174,6 @@ class KGModel(nn.Module, ABC):
                 # set filtered and true scores to -1e6 to be ignored
                 for i, query in enumerate(these_queries):
                     filter_out = filters[(query[0].item(), query[1].item())]
-                    assert filter_out.count(queries[b_begin + i, 2].item())
                     filter_out += [queries[b_begin + i, 2].item()]
                     scores[i, torch.LongTensor(filter_out)] = -1e6
                 # print((scores >= targets).shape)        # (scores >= targets):[500, 140602]

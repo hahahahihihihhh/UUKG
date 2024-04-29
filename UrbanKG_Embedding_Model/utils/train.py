@@ -54,7 +54,6 @@ def write_metrics(writer, step, metrics, split):
 def count_params(model):
     """Count total number of trainable parameters in model"""
     total = 0
-    # print(list(model.parameters())
     for x in model.parameters():
         if x.requires_grad:
             res = 1

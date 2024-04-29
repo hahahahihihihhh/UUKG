@@ -5,7 +5,6 @@ from torch import nn
 
 from models.base import KGModel
 from utils.euclidean import euc_sqdistance, givens_rotations, givens_reflection
-import os
 
 EUC_MODELS = ["TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE"]
 
@@ -99,7 +98,7 @@ class RotE(BaseE):
     def __init__(self, args):
         super(RotE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0  # (-1, 1) 均匀分布
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
         self.sim = "dist"
 
     def get_queries(self, queries: torch.Tensor):
@@ -115,7 +114,7 @@ class RefE(BaseE):
     def __init__(self, args):
         super(RefE, self).__init__(args)
         self.rel_diag = nn.Embedding(self.sizes[1], self.rank)
-        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0  # (-1, 1) 均匀分布
+        self.rel_diag.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
         self.sim = "dist"
 
     def get_queries(self, queries):
@@ -136,11 +135,11 @@ class AttE(BaseE):
 
         # reflection
         self.ref = nn.Embedding(self.sizes[1], self.rank)
-        self.ref.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0   # (-1, 1) 均匀分布
+        self.ref.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
 
         # rotation
         self.rot = nn.Embedding(self.sizes[1], self.rank)
-        self.rot.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0   # (-1, 1) 均匀分布
+        self.rot.weight.data = 2 * torch.rand((self.sizes[1], self.rank), dtype=self.data_type) - 1.0
 
         # attention
         self.context_vec = nn.Embedding(self.sizes[1], self.rank)
