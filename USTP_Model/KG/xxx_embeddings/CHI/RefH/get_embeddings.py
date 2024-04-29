@@ -36,7 +36,7 @@ def init_parser(config):
     )
     parser.add_argument(
         "--model", default=config['model'], choices=all_models,
-        help='Model name: "TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE", "ComplEx", "RotatE", "RotH", "RefH", "AttH", "GIE"'
+        help='Model name: "TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE", "ComplEx", "RotatE", "RotH", "RefH", "AttH", "TransH", "GIE"'
     )
     parser.add_argument(
         "--optimizer", default=config['optimizer'], choices=["Adagrad", "Adam", "SparseAdam"],

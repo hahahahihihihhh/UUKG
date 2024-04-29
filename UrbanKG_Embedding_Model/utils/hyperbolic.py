@@ -31,6 +31,27 @@ def tanh(x):
     return x.clamp(-15, 15).tanh()
 
 
+
+class Artan(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, x):
+        x = x.clamp(-1 + 1e-5, 1 - 1e-5)
+        ctx.save_for_backward(x)
+        dtype = x.dtype
+        x = x.double()
+        return x.atan().to(dtype)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        input, = ctx.saved_tensors
+        return grad_output / (1 + input ** 2)
+
+def artan(x):
+    return Artan.apply(x)
+
+def tan(x):
+    return x.clamp(-15, 15).tan()
+
 # ################# HYP OPS ########################
 
 def expmap0(u, c):
@@ -62,6 +83,18 @@ def logmap0(y, c):
     sqrt_c = c ** 0.5
     y_norm = y.norm(dim=-1, p=2, keepdim=True).clamp_min(MIN_NORM)
     return y / y_norm / sqrt_c * artanh(sqrt_c * y_norm)
+
+def expmap1(u, c):
+    sqrt_c = c ** 0.5
+    u_norm = u.norm(dim=-1, p=2, keepdim=True).clamp_min(MIN_NORM)
+    gamma_1 = tan(sqrt_c * u_norm) * u / (sqrt_c * u_norm)
+    return project(gamma_1, c)
+
+
+def logmap1(y, c):
+    sqrt_c = c ** 0.5
+    y_norm = y.norm(dim=-1, p=2, keepdim=True).clamp_min(MIN_NORM)
+    return y / y_norm / sqrt_c * artan(sqrt_c * y_norm)
 
 
 def project(x, c):

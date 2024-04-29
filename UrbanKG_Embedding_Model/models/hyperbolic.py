@@ -8,7 +8,7 @@ from models.base import KGModel
 from utils.euclidean import givens_rotations, givens_reflection
 from utils.hyperbolic import mobius_add, expmap0, project, hyp_distance_multi_c, hyp_distance
 
-HYP_MODELS = ["RotH", "RefH", "AttH"]
+HYP_MODELS = ["RotH", "RefH", "AttH", "TransH"]
 
 class BaseH(KGModel):
     """Trainable curvature for each relationship."""
@@ -30,15 +30,28 @@ class BaseH(KGModel):
     def get_rhs(self, queries, eval_mode):
         """Get embeddings and biases of target entities."""
         if eval_mode:
-            return self.entity.weight, self.bt.weight
+            rhs_e = self.entity.weight
+            return rhs_e, self.bt.weight
         else:
-            return self.entity(queries[:, 2]), self.bt(queries[:, 2])
+            # c = F.softplus(self.c[queries[:, 1]])
+            # rhs_e = expmap0(self.entity(queries[:, 2]), c)
+            rhs_e = self.entity(queries[:, 2])
+            return rhs_e, self.bt(queries[:, 2])
 
     def similarity_score(self, lhs_e, rhs_e, eval_mode):
         """Compute similarity scores or queries against targets in embedding space."""
         lhs_e, c = lhs_e
         return - hyp_distance(lhs_e, rhs_e, c, eval_mode) ** 2
 
+class TransH(BaseH):
+  """Hyperbolic translation with parameters defined in tangent space."""
+
+  def get_queries(self, queries):
+    c = F.softplus(self.c[queries[:, 1]])
+    lhs = expmap0(self.entity(queries[:, 0]), c)
+    rel = expmap0(self.rel(queries[:, 1]), c)
+    res = mobius_add(lhs, rel, c)
+    return (res, c), self.bh(queries[:, 0])
 
 class RotH(BaseH):
     """Hyperbolic 2x2 Givens rotations"""

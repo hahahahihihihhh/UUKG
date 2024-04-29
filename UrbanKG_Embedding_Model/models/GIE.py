@@ -5,7 +5,7 @@ from torch import nn
 
 from models.base import KGModel
 from utils.euclidean import givens_rotations, givens_reflection
-from utils.hyperbolic import mobius_add, expmap0, project, hyp_distance_multi_c
+from utils.hyperbolic import mobius_add, expmap0, logmap0, project, hyp_distance_multi_c, expmap1, logmap1
 
 GIE_MODELS = ["GIE"]
 
@@ -69,12 +69,14 @@ class GIE(BaseH):
         lhs = project(mobius_add(head1, rel1, c1), c1)
         res1 = givens_rotations(self.rel_diag1(queries[:, 1]), lhs)
         c2 = F.softplus(self.c2[queries[:, 1]])
-        head2 = expmap0(self.entity(queries[:, 0]), c2)
+        head2 = expmap1(self.entity(queries[:, 0]), c2)
         rel1, rel2 = torch.chunk(self.rel(queries[:, 1]), 2, dim=1)
-        rel11 = expmap0(rel1, c2)
-        rel21= expmap0(rel2, c2)
+        rel11 = expmap1(rel1, c2)
+        rel21= expmap1(rel2, c2)
         lhss = project(mobius_add(head2, rel11, c2), c2)
         res11 = givens_rotations(self.rel_diag2(queries[:, 1]), lhss)
+        res1 = logmap1(res1, c1)
+        res11 = logmap1(res11, c2)
         c = F.softplus(self.c[queries[:, 1]])
         head = self.entity(queries[:, 0])
         rot_mat, _ = torch.chunk(self.rel_diag(queries[:, 1]), 2, dim=1)
@@ -89,4 +91,3 @@ class GIE(BaseH):
         rel = expmap0(rel, c)
         res = project(mobius_add(lhs, rel, c), c)
         return (res, c), self.bh(queries[:, 0])
-

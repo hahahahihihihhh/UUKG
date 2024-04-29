@@ -71,7 +71,9 @@ class DisMult(BaseE):
     def get_queries(self, queries: torch.Tensor):
         """Compute embedding and biases of queries."""
         # Hadamard product
-        return self.entity(queries[:, 0]) * self.rel(queries[:, 1]), self.bh(queries[:, 0])
+        lhs_e = self.entity(queries[:, 0]) * self.rel(queries[:, 1])
+        lhs_biases = self.bh(queries[:, 0])
+        return lhs_e, lhs_biases
 
 
 class MuRE(BaseE):
@@ -85,8 +87,8 @@ class MuRE(BaseE):
 
     def get_queries(self, queries: torch.Tensor):
         """Compute embedding and biases of queries."""
-        # d(R * e_s - r, e_o) ^ 2
-        lhs_e = self.rel_diag(queries[:, 1]) * self.entity(queries[:, 0]) - self.rel(queries[:, 1])
+        # d(R * e_s + r, e_o) ^ 2
+        lhs_e = self.rel_diag(queries[:, 1]) * self.entity(queries[:, 0]) + self.rel(queries[:, 1])
         lhs_biases = self.bh(queries[:, 0])
         return lhs_e, lhs_biases
 
@@ -118,10 +120,9 @@ class RefE(BaseE):
 
     def get_queries(self, queries):
         """Compute embedding and biases of queries."""
-        lhs = givens_reflection(self.rel_diag(queries[:, 1]), self.entity(queries[:, 0]))
-        rel = self.rel(queries[:, 1])
+        lhs_e = givens_reflection(self.rel_diag(queries[:, 1]), self.entity(queries[:, 0])) + self.rel(queries[:, 1])
         lhs_biases = self.bh(queries[:, 0])
-        return lhs + rel, lhs_biases
+        return lhs_e, lhs_biases
 
 
 class AttE(BaseE):
@@ -169,4 +170,5 @@ class AttE(BaseE):
         # print((context_vec * cands * self.scale).shape, att_weights.shape)
         att_weights = self.act(att_weights) #   att_weights:(206000, 2, 1)
         lhs_e = torch.sum(att_weights * cands, dim=1) + self.rel(queries[:, 1])     #   lhs_e:(206000, 32)
-        return lhs_e, self.bh(queries[:, 0])    #   lhs_e:(206000, 32)  self.bh():(206000, 1)
+        lhs_biases = self.bh(queries[:, 0])
+        return lhs_e, lhs_biases    #   lhs_e:(206000, 32)  self.bh():(206000, 1)

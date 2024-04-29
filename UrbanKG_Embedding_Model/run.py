@@ -14,7 +14,7 @@ from optimizers.kg_optimizer import KGOptimizer
 from utils.train import get_savedir, avg_both, format_metrics, count_params
 
 DATA_PATH = './data'
-config_file = 'config/CHI/config_AttH.json'
+config_file = 'config/CHI/config_TransH.json'
 
 def init_parser(config):
     parser = argparse.ArgumentParser(
@@ -26,7 +26,7 @@ def init_parser(config):
     )
     parser.add_argument(
         "--model", default=config['model'], choices=all_models,
-        help='Model name: "TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE", "ComplEx", "RotatE", "RotH", "RefH", "AttH", "GIE"'
+        help='Model name: "TransE", "DisMult", "MuRE", "RotE", "RefE", "AttE", "ComplEx", "RotatE", "RotH", "RefH", "AttH", "TransH", "GIE"'
     )
     parser.add_argument(
         "--optimizer", default=config['optimizer'], choices=["Adagrad", "Adam", "SparseAdam"],
