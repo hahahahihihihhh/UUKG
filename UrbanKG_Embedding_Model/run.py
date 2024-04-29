@@ -14,7 +14,7 @@ from optimizers.kg_optimizer import KGOptimizer
 from utils.train import get_savedir, avg_both, format_metrics, count_params
 
 DATA_PATH = './data'
-config_file = 'config/CHI/config_TransH.json'
+config_file = 'config/CHI/config_RandomE.json'
 
 def init_parser(config):
     parser = argparse.ArgumentParser(
