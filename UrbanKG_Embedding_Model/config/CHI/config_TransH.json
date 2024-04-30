@@ -8,7 +8,7 @@
   "valid": 3,
 
   "rank": 32,
-  "batch_size": 2048,
+  "batch_size": 4096,
   "learning_rate": 0.001,
 
   "neg_sample_size": 50,
