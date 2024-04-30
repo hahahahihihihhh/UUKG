@@ -3,7 +3,7 @@
   "model": "RandomE",
   "optimizer": "Adam",
 
-  "max_epochs": 1,
+  "max_epochs": 0,
   "patience": 10,
   "valid": 3,
 

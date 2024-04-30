@@ -14,7 +14,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHI/AGCRN/config.json'
+config_file = 'config/CHI/AGCRN/config_RefH.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
