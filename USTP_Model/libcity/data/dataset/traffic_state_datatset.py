@@ -265,6 +265,7 @@ class TrafficStateDataset(AbstractDataset):
         else:  # 不指定则加载所有列
             dynafile = dynafile[dynafile.columns[2:]]  # 从time列开始所有列
         # 求时间序列
+        assert(self.time_intervals == int(dynafile.shape[0] / len(self.geo_ids)))
         self.timesolts = list(dynafile['time'][:int(dynafile.shape[0] / len(self.geo_ids))])
         self.idx_of_timesolts = dict()
         if not dynafile['time'].isna().any():  # 时间没有空值
@@ -635,17 +636,17 @@ class TrafficStateDataset(AbstractDataset):
                         data_list.append(data_ind)
         data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
         # !!! ---Concat
-        # os.path.join("KG/xxx_embeddings", self.dataset, self.embeddingModel, s)
         assert self.load_external == True
-        # "KG/xxx_embeddings/CHI/TransE/area_embeddings.npy"
-        area_embeddings = np.load(os.path.join("KG/xxx_embeddings",
+        entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
                                                self.dataset[:3],
                                                self.embedding_model,
                                                "{}_embeddings.npy".format(self.embedding_type))
         )   # [77, 32]
-        new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + area_embeddings.shape[1]])   # [4368, 77, 2 + 32]
-        for k in range(data.shape[0]):
-            new_data[k] = np.concatenate([data[k], area_embeddings], axis=1)
+        ext_feature_dim = entity_embeddings.shape[1]
+        new_data = np.zeros([num_samples, num_nodes, feature_dim + ext_feature_dim])   # [4368, 77, 2 + 32]
+        for _ in range(num_samples):
+            new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
+        # print(new_data.shape, new_data)
         return new_data
         # !!! ---Concat
         # return data
