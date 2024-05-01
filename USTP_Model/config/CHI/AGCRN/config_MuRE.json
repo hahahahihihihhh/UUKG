@@ -2,7 +2,6 @@
     "task": "traffic_state_pred",
     "model": "AGCRN",
     "dataset": "CHITaxi20190406",
-    "seed": 0,
 
     "exp_id": 10,
     "load_external": true,
