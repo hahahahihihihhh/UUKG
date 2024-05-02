@@ -38,6 +38,7 @@
     "init_weight_inf_or_zero": "inf",
     "set_weight_link_or_dist": "dist",
     "calculate_weight_adj": true,
-    "weight_adj_epsilon": 0.1
+    "weight_adj_epsilon": 0.1,
+    "embedding_type": "area"
   }
 }
