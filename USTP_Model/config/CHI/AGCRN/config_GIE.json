@@ -7,7 +7,9 @@
     "load_external": true,
     "embedding_model": "GIE",
     "normal_external": true,
-    "ext_scaler": "normal",
+    "ext_scaler": "minmax01",
+    "add_time_in_day": true,
+    "add_day_in_week": true,
 
     "max_epoch": 200,
     "patience": 15,

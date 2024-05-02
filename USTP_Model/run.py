@@ -40,10 +40,38 @@ config_file = 'config/CHI/AGCRN/config_GIE.json'
 
 def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
-    # save_dir = os.path.join(log, config['dataset'], config['model'],
-    #                         'Scaler/' + config['ext_scaler'] if config['normal_external'] else '',
-    #                         config.get('embedding_model', 'Normal'))
-    save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
+    extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
+    extSpace = config.get('load_external', False) and config.get('embedding_model', None)
+    if extTime and extSpace:
+        ext = "ExtTime&Space"
+    elif extTime:
+        ext = 'ExtTime'
+    elif extSpace:
+        ext = 'ExtSpace'
+    else:
+        ext = 'ExtNone'
+
+    if extSpace:
+        scl = 'Scaler/'
+        if config.get('normal_external', False):
+            scl += config.get('ext_scaler', 'none')
+        else:
+            scl += 'none'
+    else:
+        scl = ''
+
+    if extSpace:
+        emb = config.get('embedding_model', 'NoneE')
+    else:
+        emb = ''
+
+    save_dir = os.path.join(log, config['dataset'], config['model'],
+                            ext,
+                            scl,
+                            emb)
+    print(save_dir)
+
+    # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
     ensure_dir(save_dir)
 
     # file logger

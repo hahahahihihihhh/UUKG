@@ -142,3 +142,6 @@ mask = torch.tensor([[0, 0, 0],
                      [0, 0, 0]])
 mask = mask.float()
 print(mask / torch.mean(mask))
+a = True
+b = True
+print(a + b)

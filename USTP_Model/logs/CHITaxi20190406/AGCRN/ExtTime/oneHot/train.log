@@ -1,0 +1,1457 @@
+2024-05-02 09:25:33 INFO     Saving logs in: ./logs/CHITaxi20190406/AGCRN/ExtTime/Scaler/none/GIE
+2024-05-02 09:25:33 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:25:33 INFO     # 0, Kownledge Graph Embedding: GIE, Experiment ids: 15
+2024-05-02 09:25:33 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:25:33 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-05-02 09:25:33 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'load_external': True, 'embedding_model': 'GIE', 'normal_external': True, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 0, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
+2024-05-02 09:25:33 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-05-02 09:25:33 INFO     set_weight_link_or_dist: dist
+2024-05-02 09:25:33 INFO     init_weight_inf_or_zero: inf
+2024-05-02 09:25:33 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-05-02 09:25:33 INFO     Start Calculate the weight by Gauss kernel!
+2024-05-02 09:25:33 INFO     Loading file CHITaxi20190406.dyna
+2024-05-02 09:25:33 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-05-02 09:25:34 INFO     Dataset created
+2024-05-02 09:25:34 INFO     x shape: (4345, 12, 77, 10), y shape: (4345, 12, 77, 10)
+2024-05-02 09:25:34 INFO     train	x: (3042, 12, 77, 10), y: (3042, 12, 77, 10)
+2024-05-02 09:25:34 INFO     eval	x: (434, 12, 77, 10), y: (434, 12, 77, 10)
+2024-05-02 09:25:34 INFO     test	x: (869, 12, 77, 10), y: (869, 12, 77, 10)
+2024-05-02 09:25:34 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-05-02 09:25:34 INFO     NoneScaler
+2024-05-02 09:25:38 INFO     AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+      (1): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
+)
+2024-05-02 09:25:38 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 74, 128])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 74, 64])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-05-02 09:25:38 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:25:38 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-05-02 09:25:38 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-05-02 09:25:38 INFO     Total parameter numbers: 781850
+2024-05-02 09:25:38 INFO     You select `adam` optimizer.
+2024-05-02 09:25:38 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-05-02 09:25:38 INFO     Start training ...
+2024-05-02 09:25:38 INFO     num_batches:48
+2024-05-02 09:25:45 INFO     epoch complete!
+2024-05-02 09:25:45 INFO     evaluating now!
+2024-05-02 09:25:45 INFO     Epoch [0/200] train_loss: 23.9269, val_loss: 17.2748, lr: 0.003000, 6.37s
+2024-05-02 09:25:45 INFO     Saved model at 0
+2024-05-02 09:25:45 INFO     Val loss decrease from inf to 17.2748, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-05-02 09:25:50 INFO     epoch complete!
+2024-05-02 09:25:50 INFO     evaluating now!
+2024-05-02 09:25:51 INFO     Epoch [1/200] train_loss: 13.3053, val_loss: 12.2174, lr: 0.003000, 5.87s
+2024-05-02 09:25:51 INFO     Saved model at 1
+2024-05-02 09:25:51 INFO     Val loss decrease from 17.2748 to 12.2174, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-05-02 09:25:57 INFO     epoch complete!
+2024-05-02 09:25:57 INFO     evaluating now!
+2024-05-02 09:25:57 INFO     Epoch [2/200] train_loss: 9.6952, val_loss: 8.7145, lr: 0.003000, 6.17s
+2024-05-02 09:25:57 INFO     Saved model at 2
+2024-05-02 09:25:57 INFO     Val loss decrease from 12.2174 to 8.7145, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-05-02 09:26:03 INFO     epoch complete!
+2024-05-02 09:26:03 INFO     evaluating now!
+2024-05-02 09:26:03 INFO     Epoch [3/200] train_loss: 7.6485, val_loss: 7.2244, lr: 0.003000, 5.87s
+2024-05-02 09:26:03 INFO     Saved model at 3
+2024-05-02 09:26:03 INFO     Val loss decrease from 8.7145 to 7.2244, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar
+2024-05-02 09:26:09 INFO     epoch complete!
+2024-05-02 09:26:09 INFO     evaluating now!
+2024-05-02 09:26:09 INFO     Epoch [4/200] train_loss: 6.7489, val_loss: 6.5790, lr: 0.003000, 6.10s
+2024-05-02 09:26:09 INFO     Saved model at 4
+2024-05-02 09:26:09 INFO     Val loss decrease from 7.2244 to 6.5790, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch4.tar
+2024-05-02 09:26:15 INFO     epoch complete!
+2024-05-02 09:26:15 INFO     evaluating now!
+2024-05-02 09:26:15 INFO     Epoch [5/200] train_loss: 6.1681, val_loss: 6.2094, lr: 0.003000, 5.88s
+2024-05-02 09:26:15 INFO     Saved model at 5
+2024-05-02 09:26:15 INFO     Val loss decrease from 6.5790 to 6.2094, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch5.tar
+2024-05-02 09:26:21 INFO     epoch complete!
+2024-05-02 09:26:21 INFO     evaluating now!
+2024-05-02 09:26:21 INFO     Epoch [6/200] train_loss: 5.7584, val_loss: 5.7584, lr: 0.003000, 6.44s
+2024-05-02 09:26:22 INFO     Saved model at 6
+2024-05-02 09:26:22 INFO     Val loss decrease from 6.2094 to 5.7584, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch6.tar
+2024-05-02 09:26:27 INFO     epoch complete!
+2024-05-02 09:26:27 INFO     evaluating now!
+2024-05-02 09:26:28 INFO     Epoch [7/200] train_loss: 5.5470, val_loss: 5.8114, lr: 0.003000, 6.05s
+2024-05-02 09:26:33 INFO     epoch complete!
+2024-05-02 09:26:33 INFO     evaluating now!
+2024-05-02 09:26:34 INFO     Epoch [8/200] train_loss: 5.3063, val_loss: 5.6223, lr: 0.003000, 6.05s
+2024-05-02 09:26:34 INFO     Saved model at 8
+2024-05-02 09:26:34 INFO     Val loss decrease from 5.7584 to 5.6223, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch8.tar
+2024-05-02 09:26:39 INFO     epoch complete!
+2024-05-02 09:26:39 INFO     evaluating now!
+2024-05-02 09:26:40 INFO     Epoch [9/200] train_loss: 5.1731, val_loss: 5.3609, lr: 0.003000, 6.00s
+2024-05-02 09:26:40 INFO     Saved model at 9
+2024-05-02 09:26:40 INFO     Val loss decrease from 5.6223 to 5.3609, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch9.tar
+2024-05-02 09:26:46 INFO     epoch complete!
+2024-05-02 09:26:46 INFO     evaluating now!
+2024-05-02 09:26:46 INFO     Epoch [10/200] train_loss: 4.9516, val_loss: 5.2165, lr: 0.003000, 6.50s
+2024-05-02 09:26:46 INFO     Saved model at 10
+2024-05-02 09:26:46 INFO     Val loss decrease from 5.3609 to 5.2165, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch10.tar
+2024-05-02 09:26:52 INFO     epoch complete!
+2024-05-02 09:26:52 INFO     evaluating now!
+2024-05-02 09:26:52 INFO     Epoch [11/200] train_loss: 4.8503, val_loss: 5.0481, lr: 0.003000, 6.02s
+2024-05-02 09:26:52 INFO     Saved model at 11
+2024-05-02 09:26:52 INFO     Val loss decrease from 5.2165 to 5.0481, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch11.tar
+2024-05-02 09:26:58 INFO     epoch complete!
+2024-05-02 09:26:58 INFO     evaluating now!
+2024-05-02 09:26:58 INFO     Epoch [12/200] train_loss: 4.7603, val_loss: 5.2143, lr: 0.003000, 6.05s
+2024-05-02 09:27:04 INFO     epoch complete!
+2024-05-02 09:27:04 INFO     evaluating now!
+2024-05-02 09:27:05 INFO     Epoch [13/200] train_loss: 4.6708, val_loss: 4.9468, lr: 0.003000, 6.44s
+2024-05-02 09:27:05 INFO     Saved model at 13
+2024-05-02 09:27:05 INFO     Val loss decrease from 5.0481 to 4.9468, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch13.tar
+2024-05-02 09:27:10 INFO     epoch complete!
+2024-05-02 09:27:10 INFO     evaluating now!
+2024-05-02 09:27:11 INFO     Epoch [14/200] train_loss: 4.5567, val_loss: 5.0103, lr: 0.003000, 6.01s
+2024-05-02 09:27:17 INFO     epoch complete!
+2024-05-02 09:27:17 INFO     evaluating now!
+2024-05-02 09:27:17 INFO     Epoch [15/200] train_loss: 4.5551, val_loss: 4.8931, lr: 0.003000, 6.11s
+2024-05-02 09:27:17 INFO     Saved model at 15
+2024-05-02 09:27:17 INFO     Val loss decrease from 4.9468 to 4.8931, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch15.tar
+2024-05-02 09:27:23 INFO     epoch complete!
+2024-05-02 09:27:23 INFO     evaluating now!
+2024-05-02 09:27:24 INFO     Epoch [16/200] train_loss: 4.4797, val_loss: 4.9573, lr: 0.003000, 6.58s
+2024-05-02 09:27:29 INFO     epoch complete!
+2024-05-02 09:27:29 INFO     evaluating now!
+2024-05-02 09:27:30 INFO     Epoch [17/200] train_loss: 4.4015, val_loss: 5.0202, lr: 0.003000, 6.05s
+2024-05-02 09:27:35 INFO     epoch complete!
+2024-05-02 09:27:35 INFO     evaluating now!
+2024-05-02 09:27:35 INFO     Epoch [18/200] train_loss: 4.3559, val_loss: 4.8183, lr: 0.003000, 5.37s
+2024-05-02 09:27:35 INFO     Saved model at 18
+2024-05-02 09:27:35 INFO     Val loss decrease from 4.8931 to 4.8183, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch18.tar
+2024-05-02 09:27:40 INFO     epoch complete!
+2024-05-02 09:27:40 INFO     evaluating now!
+2024-05-02 09:27:40 INFO     Epoch [19/200] train_loss: 4.2722, val_loss: 4.7077, lr: 0.003000, 5.42s
+2024-05-02 09:27:40 INFO     Saved model at 19
+2024-05-02 09:27:40 INFO     Val loss decrease from 4.8183 to 4.7077, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch19.tar
+2024-05-02 09:27:46 INFO     epoch complete!
+2024-05-02 09:27:46 INFO     evaluating now!
+2024-05-02 09:27:46 INFO     Epoch [20/200] train_loss: 4.2102, val_loss: 4.6597, lr: 0.003000, 5.57s
+2024-05-02 09:27:46 INFO     Saved model at 20
+2024-05-02 09:27:46 INFO     Val loss decrease from 4.7077 to 4.6597, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch20.tar
+2024-05-02 09:27:51 INFO     epoch complete!
+2024-05-02 09:27:51 INFO     evaluating now!
+2024-05-02 09:27:52 INFO     Epoch [21/200] train_loss: 4.2000, val_loss: 4.9567, lr: 0.003000, 5.62s
+2024-05-02 09:27:57 INFO     epoch complete!
+2024-05-02 09:27:57 INFO     evaluating now!
+2024-05-02 09:27:57 INFO     Epoch [22/200] train_loss: 4.1070, val_loss: 4.7275, lr: 0.003000, 5.42s
+2024-05-02 09:28:02 INFO     epoch complete!
+2024-05-02 09:28:02 INFO     evaluating now!
+2024-05-02 09:28:03 INFO     Epoch [23/200] train_loss: 4.0895, val_loss: 4.7073, lr: 0.003000, 5.49s
+2024-05-02 09:28:08 INFO     epoch complete!
+2024-05-02 09:28:08 INFO     evaluating now!
+2024-05-02 09:28:08 INFO     Epoch [24/200] train_loss: 4.0327, val_loss: 4.8332, lr: 0.003000, 5.47s
+2024-05-02 09:28:14 INFO     epoch complete!
+2024-05-02 09:28:14 INFO     evaluating now!
+2024-05-02 09:28:14 INFO     Epoch [25/200] train_loss: 3.9739, val_loss: 4.8782, lr: 0.003000, 6.22s
+2024-05-02 09:28:20 INFO     epoch complete!
+2024-05-02 09:28:20 INFO     evaluating now!
+2024-05-02 09:28:20 INFO     Epoch [26/200] train_loss: 3.9747, val_loss: 4.6791, lr: 0.003000, 6.14s
+2024-05-02 09:28:26 INFO     epoch complete!
+2024-05-02 09:28:26 INFO     evaluating now!
+2024-05-02 09:28:27 INFO     Epoch [27/200] train_loss: 3.9950, val_loss: 4.8325, lr: 0.003000, 6.05s
+2024-05-02 09:28:32 INFO     epoch complete!
+2024-05-02 09:28:32 INFO     evaluating now!
+2024-05-02 09:28:33 INFO     Epoch [28/200] train_loss: 3.8797, val_loss: 4.6468, lr: 0.003000, 6.08s
+2024-05-02 09:28:33 INFO     Saved model at 28
+2024-05-02 09:28:33 INFO     Val loss decrease from 4.6597 to 4.6468, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch28.tar
+2024-05-02 09:28:38 INFO     epoch complete!
+2024-05-02 09:28:38 INFO     evaluating now!
+2024-05-02 09:28:39 INFO     Epoch [29/200] train_loss: 3.8627, val_loss: 4.6991, lr: 0.003000, 6.07s
+2024-05-02 09:28:45 INFO     epoch complete!
+2024-05-02 09:28:45 INFO     evaluating now!
+2024-05-02 09:28:45 INFO     Epoch [30/200] train_loss: 3.8466, val_loss: 4.6511, lr: 0.003000, 6.16s
+2024-05-02 09:28:51 INFO     epoch complete!
+2024-05-02 09:28:51 INFO     evaluating now!
+2024-05-02 09:28:52 INFO     Epoch [31/200] train_loss: 3.7940, val_loss: 4.7201, lr: 0.003000, 6.68s
+2024-05-02 09:28:58 INFO     epoch complete!
+2024-05-02 09:28:58 INFO     evaluating now!
+2024-05-02 09:28:58 INFO     Epoch [32/200] train_loss: 3.7374, val_loss: 4.7650, lr: 0.003000, 6.66s
+2024-05-02 09:29:04 INFO     epoch complete!
+2024-05-02 09:29:04 INFO     evaluating now!
+2024-05-02 09:29:04 INFO     Epoch [33/200] train_loss: 3.7048, val_loss: 4.6137, lr: 0.003000, 6.13s
+2024-05-02 09:29:04 INFO     Saved model at 33
+2024-05-02 09:29:04 INFO     Val loss decrease from 4.6468 to 4.6137, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch33.tar
+2024-05-02 09:29:10 INFO     epoch complete!
+2024-05-02 09:29:10 INFO     evaluating now!
+2024-05-02 09:29:11 INFO     Epoch [34/200] train_loss: 3.7157, val_loss: 4.6596, lr: 0.003000, 6.18s
+2024-05-02 09:29:17 INFO     epoch complete!
+2024-05-02 09:29:17 INFO     evaluating now!
+2024-05-02 09:29:17 INFO     Epoch [35/200] train_loss: 3.6821, val_loss: 4.6475, lr: 0.003000, 6.32s
+2024-05-02 09:29:23 INFO     epoch complete!
+2024-05-02 09:29:23 INFO     evaluating now!
+2024-05-02 09:29:23 INFO     Epoch [36/200] train_loss: 3.6520, val_loss: 4.7975, lr: 0.003000, 6.00s
+2024-05-02 09:29:29 INFO     epoch complete!
+2024-05-02 09:29:29 INFO     evaluating now!
+2024-05-02 09:29:29 INFO     Epoch [37/200] train_loss: 3.6320, val_loss: 4.6498, lr: 0.003000, 6.05s
+2024-05-02 09:29:35 INFO     epoch complete!
+2024-05-02 09:29:35 INFO     evaluating now!
+2024-05-02 09:29:35 INFO     Epoch [38/200] train_loss: 3.6136, val_loss: 4.6677, lr: 0.003000, 6.03s
+2024-05-02 09:29:41 INFO     epoch complete!
+2024-05-02 09:29:41 INFO     evaluating now!
+2024-05-02 09:29:41 INFO     Epoch [39/200] train_loss: 3.6107, val_loss: 4.6790, lr: 0.003000, 5.99s
+2024-05-02 09:29:47 INFO     epoch complete!
+2024-05-02 09:29:47 INFO     evaluating now!
+2024-05-02 09:29:47 INFO     Epoch [40/200] train_loss: 3.5842, val_loss: 4.6146, lr: 0.003000, 5.89s
+2024-05-02 09:29:52 INFO     epoch complete!
+2024-05-02 09:29:52 INFO     evaluating now!
+2024-05-02 09:29:53 INFO     Epoch [41/200] train_loss: 3.6364, val_loss: 4.7692, lr: 0.003000, 5.83s
+2024-05-02 09:29:58 INFO     epoch complete!
+2024-05-02 09:29:58 INFO     evaluating now!
+2024-05-02 09:29:59 INFO     Epoch [42/200] train_loss: 3.5691, val_loss: 4.6918, lr: 0.003000, 6.08s
+2024-05-02 09:30:04 INFO     epoch complete!
+2024-05-02 09:30:04 INFO     evaluating now!
+2024-05-02 09:30:05 INFO     Epoch [43/200] train_loss: 3.5519, val_loss: 4.8056, lr: 0.003000, 5.94s
+2024-05-02 09:30:10 INFO     epoch complete!
+2024-05-02 09:30:10 INFO     evaluating now!
+2024-05-02 09:30:11 INFO     Epoch [44/200] train_loss: 3.4775, val_loss: 4.6527, lr: 0.003000, 6.01s
+2024-05-02 09:30:17 INFO     epoch complete!
+2024-05-02 09:30:17 INFO     evaluating now!
+2024-05-02 09:30:17 INFO     Epoch [45/200] train_loss: 3.4751, val_loss: 4.6079, lr: 0.003000, 6.22s
+2024-05-02 09:30:17 INFO     Saved model at 45
+2024-05-02 09:30:17 INFO     Val loss decrease from 4.6137 to 4.6079, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch45.tar
+2024-05-02 09:30:23 INFO     epoch complete!
+2024-05-02 09:30:23 INFO     evaluating now!
+2024-05-02 09:30:23 INFO     Epoch [46/200] train_loss: 3.4425, val_loss: 4.6774, lr: 0.003000, 6.21s
+2024-05-02 09:30:29 INFO     epoch complete!
+2024-05-02 09:30:29 INFO     evaluating now!
+2024-05-02 09:30:29 INFO     Epoch [47/200] train_loss: 3.4476, val_loss: 4.8464, lr: 0.003000, 6.24s
+2024-05-02 09:30:35 INFO     epoch complete!
+2024-05-02 09:30:35 INFO     evaluating now!
+2024-05-02 09:30:36 INFO     Epoch [48/200] train_loss: 3.4916, val_loss: 4.7838, lr: 0.003000, 6.26s
+2024-05-02 09:30:42 INFO     epoch complete!
+2024-05-02 09:30:42 INFO     evaluating now!
+2024-05-02 09:30:42 INFO     Epoch [49/200] train_loss: 3.4363, val_loss: 4.8077, lr: 0.003000, 6.46s
+2024-05-02 09:30:48 INFO     epoch complete!
+2024-05-02 09:30:48 INFO     evaluating now!
+2024-05-02 09:30:49 INFO     Epoch [50/200] train_loss: 3.4283, val_loss: 4.7636, lr: 0.003000, 6.36s
+2024-05-02 09:30:55 INFO     epoch complete!
+2024-05-02 09:30:55 INFO     evaluating now!
+2024-05-02 09:30:55 INFO     Epoch [51/200] train_loss: 3.4094, val_loss: 4.6630, lr: 0.003000, 6.60s
+2024-05-02 09:31:01 INFO     epoch complete!
+2024-05-02 09:31:01 INFO     evaluating now!
+2024-05-02 09:31:01 INFO     Epoch [52/200] train_loss: 3.3839, val_loss: 4.7276, lr: 0.003000, 6.23s
+2024-05-02 09:31:07 INFO     epoch complete!
+2024-05-02 09:31:07 INFO     evaluating now!
+2024-05-02 09:31:08 INFO     Epoch [53/200] train_loss: 3.3770, val_loss: 4.8173, lr: 0.003000, 6.40s
+2024-05-02 09:31:13 INFO     epoch complete!
+2024-05-02 09:31:13 INFO     evaluating now!
+2024-05-02 09:31:14 INFO     Epoch [54/200] train_loss: 3.3618, val_loss: 4.7088, lr: 0.003000, 5.92s
+2024-05-02 09:31:19 INFO     epoch complete!
+2024-05-02 09:31:19 INFO     evaluating now!
+2024-05-02 09:31:20 INFO     Epoch [55/200] train_loss: 3.3538, val_loss: 4.8668, lr: 0.003000, 6.05s
+2024-05-02 09:31:26 INFO     epoch complete!
+2024-05-02 09:31:26 INFO     evaluating now!
+2024-05-02 09:31:26 INFO     Epoch [56/200] train_loss: 3.3248, val_loss: 4.7020, lr: 0.003000, 6.22s
+2024-05-02 09:31:32 INFO     epoch complete!
+2024-05-02 09:31:32 INFO     evaluating now!
+2024-05-02 09:31:32 INFO     Epoch [57/200] train_loss: 3.3060, val_loss: 4.8286, lr: 0.003000, 6.15s
+2024-05-02 09:31:38 INFO     epoch complete!
+2024-05-02 09:31:38 INFO     evaluating now!
+2024-05-02 09:31:38 INFO     Epoch [58/200] train_loss: 3.3087, val_loss: 4.7688, lr: 0.003000, 6.27s
+2024-05-02 09:31:44 INFO     epoch complete!
+2024-05-02 09:31:44 INFO     evaluating now!
+2024-05-02 09:31:45 INFO     Epoch [59/200] train_loss: 3.3039, val_loss: 4.6542, lr: 0.003000, 6.22s
+2024-05-02 09:31:51 INFO     epoch complete!
+2024-05-02 09:31:51 INFO     evaluating now!
+2024-05-02 09:31:51 INFO     Epoch [60/200] train_loss: 3.2705, val_loss: 4.7279, lr: 0.003000, 6.51s
+2024-05-02 09:31:51 WARNING  Early stopping at epoch: 60
+2024-05-02 09:31:51 INFO     Trained totally 61 epochs, average train time is 5.737s, average eval time is 0.355s
+2024-05-02 09:31:51 INFO     Loaded model at 45
+2024-05-02 09:31:51 INFO     Saved model at ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406.m
+2024-05-02 09:31:51 INFO     Start evaluating ...
+2024-05-02 09:31:53 INFO     Note that you select the single mode to evaluate!
+2024-05-02 09:31:53 INFO     Evaluate result is saved at ./libcity/cache/15/evaluate_cache/2024_05_02_09_31_53_AGCRN_CHITaxi20190406.csv
+2024-05-02 09:31:53 INFO     
+         MAE       RMSE
+1   2.259101   6.805500
+2   2.330820   7.306538
+3   2.505539   8.141347
+4   2.609789   8.564896
+5   2.711193   8.821953
+6   2.801494   9.030157
+7   2.774936   9.210087
+8   2.784085   9.492680
+9   2.789314   9.593434
+10  2.775913   9.706327
+11  2.822662   9.795620
+12  2.843709  10.033780
+2024-05-02 09:31:53 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:31:53 INFO     # 1, Kownledge Graph Embedding: GIE, Experiment ids: 16
+2024-05-02 09:31:53 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:31:53 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-05-02 09:31:53 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'load_external': True, 'embedding_model': 'GIE', 'normal_external': True, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 1, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
+2024-05-02 09:31:53 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-05-02 09:31:53 INFO     set_weight_link_or_dist: dist
+2024-05-02 09:31:53 INFO     init_weight_inf_or_zero: inf
+2024-05-02 09:31:53 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-05-02 09:31:53 INFO     Start Calculate the weight by Gauss kernel!
+2024-05-02 09:31:53 INFO     Loading file CHITaxi20190406.dyna
+2024-05-02 09:31:53 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-05-02 09:31:54 INFO     Dataset created
+2024-05-02 09:31:54 INFO     x shape: (4345, 12, 77, 10), y shape: (4345, 12, 77, 10)
+2024-05-02 09:31:54 INFO     train	x: (3042, 12, 77, 10), y: (3042, 12, 77, 10)
+2024-05-02 09:31:54 INFO     eval	x: (434, 12, 77, 10), y: (434, 12, 77, 10)
+2024-05-02 09:31:54 INFO     test	x: (869, 12, 77, 10), y: (869, 12, 77, 10)
+2024-05-02 09:31:54 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-05-02 09:31:54 INFO     NoneScaler
+2024-05-02 09:31:55 INFO     AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+      (1): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
+)
+2024-05-02 09:31:55 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 74, 128])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 74, 64])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-05-02 09:31:55 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:31:55 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-05-02 09:31:55 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-05-02 09:31:55 INFO     Total parameter numbers: 781850
+2024-05-02 09:31:55 INFO     You select `adam` optimizer.
+2024-05-02 09:31:55 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-05-02 09:31:55 INFO     Start training ...
+2024-05-02 09:31:55 INFO     num_batches:48
+2024-05-02 09:32:01 INFO     epoch complete!
+2024-05-02 09:32:01 INFO     evaluating now!
+2024-05-02 09:32:01 INFO     Epoch [0/200] train_loss: 24.2008, val_loss: 17.0761, lr: 0.003000, 6.46s
+2024-05-02 09:32:01 INFO     Saved model at 0
+2024-05-02 09:32:01 INFO     Val loss decrease from inf to 17.0761, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-05-02 09:32:08 INFO     epoch complete!
+2024-05-02 09:32:08 INFO     evaluating now!
+2024-05-02 09:32:08 INFO     Epoch [1/200] train_loss: 13.3254, val_loss: 12.3240, lr: 0.003000, 6.69s
+2024-05-02 09:32:08 INFO     Saved model at 1
+2024-05-02 09:32:08 INFO     Val loss decrease from 17.0761 to 12.3240, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-05-02 09:32:15 INFO     epoch complete!
+2024-05-02 09:32:15 INFO     evaluating now!
+2024-05-02 09:32:15 INFO     Epoch [2/200] train_loss: 10.3024, val_loss: 9.6053, lr: 0.003000, 7.05s
+2024-05-02 09:32:15 INFO     Saved model at 2
+2024-05-02 09:32:15 INFO     Val loss decrease from 12.3240 to 9.6053, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-05-02 09:32:21 INFO     epoch complete!
+2024-05-02 09:32:21 INFO     evaluating now!
+2024-05-02 09:32:21 INFO     Epoch [3/200] train_loss: 8.4939, val_loss: 8.1773, lr: 0.003000, 6.15s
+2024-05-02 09:32:21 INFO     Saved model at 3
+2024-05-02 09:32:21 INFO     Val loss decrease from 9.6053 to 8.1773, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar
+2024-05-02 09:32:27 INFO     epoch complete!
+2024-05-02 09:32:27 INFO     evaluating now!
+2024-05-02 09:32:28 INFO     Epoch [4/200] train_loss: 7.4976, val_loss: 7.3773, lr: 0.003000, 6.15s
+2024-05-02 09:32:28 INFO     Saved model at 4
+2024-05-02 09:32:28 INFO     Val loss decrease from 8.1773 to 7.3773, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch4.tar
+2024-05-02 09:32:34 INFO     epoch complete!
+2024-05-02 09:32:34 INFO     evaluating now!
+2024-05-02 09:32:34 INFO     Epoch [5/200] train_loss: 6.6185, val_loss: 6.5343, lr: 0.003000, 6.39s
+2024-05-02 09:32:34 INFO     Saved model at 5
+2024-05-02 09:32:34 INFO     Val loss decrease from 7.3773 to 6.5343, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch5.tar
+2024-05-02 09:32:40 INFO     epoch complete!
+2024-05-02 09:32:40 INFO     evaluating now!
+2024-05-02 09:32:41 INFO     Epoch [6/200] train_loss: 6.0479, val_loss: 6.0911, lr: 0.003000, 6.39s
+2024-05-02 09:32:41 INFO     Saved model at 6
+2024-05-02 09:32:41 INFO     Val loss decrease from 6.5343 to 6.0911, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch6.tar
+2024-05-02 09:32:46 INFO     epoch complete!
+2024-05-02 09:32:46 INFO     evaluating now!
+2024-05-02 09:32:47 INFO     Epoch [7/200] train_loss: 5.8041, val_loss: 5.8870, lr: 0.003000, 6.15s
+2024-05-02 09:32:47 INFO     Saved model at 7
+2024-05-02 09:32:47 INFO     Val loss decrease from 6.0911 to 5.8870, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch7.tar
+2024-05-02 09:32:53 INFO     epoch complete!
+2024-05-02 09:32:53 INFO     evaluating now!
+2024-05-02 09:32:53 INFO     Epoch [8/200] train_loss: 5.5132, val_loss: 5.6500, lr: 0.003000, 6.12s
+2024-05-02 09:32:53 INFO     Saved model at 8
+2024-05-02 09:32:53 INFO     Val loss decrease from 5.8870 to 5.6500, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch8.tar
+2024-05-02 09:32:59 INFO     epoch complete!
+2024-05-02 09:32:59 INFO     evaluating now!
+2024-05-02 09:32:59 INFO     Epoch [9/200] train_loss: 5.2895, val_loss: 5.4386, lr: 0.003000, 6.35s
+2024-05-02 09:32:59 INFO     Saved model at 9
+2024-05-02 09:32:59 INFO     Val loss decrease from 5.6500 to 5.4386, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch9.tar
+2024-05-02 09:33:05 INFO     epoch complete!
+2024-05-02 09:33:05 INFO     evaluating now!
+2024-05-02 09:33:05 INFO     Epoch [10/200] train_loss: 5.1323, val_loss: 5.2265, lr: 0.003000, 6.03s
+2024-05-02 09:33:05 INFO     Saved model at 10
+2024-05-02 09:33:05 INFO     Val loss decrease from 5.4386 to 5.2265, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch10.tar
+2024-05-02 09:33:11 INFO     epoch complete!
+2024-05-02 09:33:11 INFO     evaluating now!
+2024-05-02 09:33:11 INFO     Epoch [11/200] train_loss: 4.9264, val_loss: 5.1213, lr: 0.003000, 5.84s
+2024-05-02 09:33:11 INFO     Saved model at 11
+2024-05-02 09:33:11 INFO     Val loss decrease from 5.2265 to 5.1213, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch11.tar
+2024-05-02 09:33:17 INFO     epoch complete!
+2024-05-02 09:33:17 INFO     evaluating now!
+2024-05-02 09:33:17 INFO     Epoch [12/200] train_loss: 4.8498, val_loss: 5.2826, lr: 0.003000, 5.75s
+2024-05-02 09:33:22 INFO     epoch complete!
+2024-05-02 09:33:22 INFO     evaluating now!
+2024-05-02 09:33:23 INFO     Epoch [13/200] train_loss: 4.7097, val_loss: 5.0604, lr: 0.003000, 5.81s
+2024-05-02 09:33:23 INFO     Saved model at 13
+2024-05-02 09:33:23 INFO     Val loss decrease from 5.1213 to 5.0604, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch13.tar
+2024-05-02 09:33:28 INFO     epoch complete!
+2024-05-02 09:33:28 INFO     evaluating now!
+2024-05-02 09:33:29 INFO     Epoch [14/200] train_loss: 4.6624, val_loss: 5.0326, lr: 0.003000, 5.91s
+2024-05-02 09:33:29 INFO     Saved model at 14
+2024-05-02 09:33:29 INFO     Val loss decrease from 5.0604 to 5.0326, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch14.tar
+2024-05-02 09:33:34 INFO     epoch complete!
+2024-05-02 09:33:34 INFO     evaluating now!
+2024-05-02 09:33:35 INFO     Epoch [15/200] train_loss: 4.5701, val_loss: 4.9764, lr: 0.003000, 5.76s
+2024-05-02 09:33:35 INFO     Saved model at 15
+2024-05-02 09:33:35 INFO     Val loss decrease from 5.0326 to 4.9764, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch15.tar
+2024-05-02 09:33:40 INFO     epoch complete!
+2024-05-02 09:33:40 INFO     evaluating now!
+2024-05-02 09:33:40 INFO     Epoch [16/200] train_loss: 4.4644, val_loss: 5.0491, lr: 0.003000, 5.32s
+2024-05-02 09:33:45 INFO     epoch complete!
+2024-05-02 09:33:45 INFO     evaluating now!
+2024-05-02 09:33:46 INFO     Epoch [17/200] train_loss: 4.4135, val_loss: 5.0398, lr: 0.003000, 5.56s
+2024-05-02 09:33:52 INFO     epoch complete!
+2024-05-02 09:33:52 INFO     evaluating now!
+2024-05-02 09:33:52 INFO     Epoch [18/200] train_loss: 4.3620, val_loss: 4.8082, lr: 0.003000, 6.34s
+2024-05-02 09:34:01 INFO     Saved model at 18
+2024-05-02 09:34:01 INFO     Val loss decrease from 4.9764 to 4.8082, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch18.tar
+2024-05-02 09:34:07 INFO     epoch complete!
+2024-05-02 09:34:07 INFO     evaluating now!
+2024-05-02 09:34:08 INFO     Epoch [19/200] train_loss: 4.3804, val_loss: 4.9344, lr: 0.003000, 6.79s
+2024-05-02 09:34:14 INFO     epoch complete!
+2024-05-02 09:34:14 INFO     evaluating now!
+2024-05-02 09:34:14 INFO     Epoch [20/200] train_loss: 4.2818, val_loss: 4.8775, lr: 0.003000, 6.40s
+2024-05-02 09:34:20 INFO     epoch complete!
+2024-05-02 09:34:20 INFO     evaluating now!
+2024-05-02 09:34:20 INFO     Epoch [21/200] train_loss: 4.2160, val_loss: 4.9707, lr: 0.003000, 6.17s
+2024-05-02 09:34:26 INFO     epoch complete!
+2024-05-02 09:34:26 INFO     evaluating now!
+2024-05-02 09:34:27 INFO     Epoch [22/200] train_loss: 4.1765, val_loss: 4.8320, lr: 0.003000, 6.25s
+2024-05-02 09:34:33 INFO     epoch complete!
+2024-05-02 09:34:33 INFO     evaluating now!
+2024-05-02 09:34:33 INFO     Epoch [23/200] train_loss: 4.1252, val_loss: 4.8329, lr: 0.003000, 6.31s
+2024-05-02 09:34:39 INFO     epoch complete!
+2024-05-02 09:34:39 INFO     evaluating now!
+2024-05-02 09:34:39 INFO     Epoch [24/200] train_loss: 4.0392, val_loss: 4.8593, lr: 0.003000, 6.23s
+2024-05-02 09:34:45 INFO     epoch complete!
+2024-05-02 09:34:45 INFO     evaluating now!
+2024-05-02 09:34:45 INFO     Epoch [25/200] train_loss: 4.0566, val_loss: 4.7810, lr: 0.003000, 6.13s
+2024-05-02 09:34:45 INFO     Saved model at 25
+2024-05-02 09:34:45 INFO     Val loss decrease from 4.8082 to 4.7810, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch25.tar
+2024-05-02 09:34:51 INFO     epoch complete!
+2024-05-02 09:34:51 INFO     evaluating now!
+2024-05-02 09:34:52 INFO     Epoch [26/200] train_loss: 3.9566, val_loss: 4.7949, lr: 0.003000, 6.24s
+2024-05-02 09:34:58 INFO     epoch complete!
+2024-05-02 09:34:58 INFO     evaluating now!
+2024-05-02 09:34:58 INFO     Epoch [27/200] train_loss: 3.9037, val_loss: 4.6611, lr: 0.003000, 6.34s
+2024-05-02 09:34:58 INFO     Saved model at 27
+2024-05-02 09:34:58 INFO     Val loss decrease from 4.7810 to 4.6611, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch27.tar
+2024-05-02 09:35:04 INFO     epoch complete!
+2024-05-02 09:35:04 INFO     evaluating now!
+2024-05-02 09:35:04 INFO     Epoch [28/200] train_loss: 3.8947, val_loss: 4.7111, lr: 0.003000, 6.44s
+2024-05-02 09:35:10 INFO     epoch complete!
+2024-05-02 09:35:10 INFO     evaluating now!
+2024-05-02 09:35:11 INFO     Epoch [29/200] train_loss: 3.8705, val_loss: 4.7426, lr: 0.003000, 6.22s
+2024-05-02 09:35:16 INFO     epoch complete!
+2024-05-02 09:35:16 INFO     evaluating now!
+2024-05-02 09:35:17 INFO     Epoch [30/200] train_loss: 3.9328, val_loss: 4.6900, lr: 0.003000, 6.15s
+2024-05-02 09:35:23 INFO     epoch complete!
+2024-05-02 09:35:23 INFO     evaluating now!
+2024-05-02 09:35:23 INFO     Epoch [31/200] train_loss: 3.8169, val_loss: 4.6942, lr: 0.003000, 6.13s
+2024-05-02 09:35:29 INFO     epoch complete!
+2024-05-02 09:35:29 INFO     evaluating now!
+2024-05-02 09:35:29 INFO     Epoch [32/200] train_loss: 3.7807, val_loss: 4.6474, lr: 0.003000, 6.18s
+2024-05-02 09:35:29 INFO     Saved model at 32
+2024-05-02 09:35:29 INFO     Val loss decrease from 4.6611 to 4.6474, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch32.tar
+2024-05-02 09:35:35 INFO     epoch complete!
+2024-05-02 09:35:35 INFO     evaluating now!
+2024-05-02 09:35:35 INFO     Epoch [33/200] train_loss: 3.7325, val_loss: 4.7451, lr: 0.003000, 6.26s
+2024-05-02 09:35:41 INFO     epoch complete!
+2024-05-02 09:35:41 INFO     evaluating now!
+2024-05-02 09:35:42 INFO     Epoch [34/200] train_loss: 3.7113, val_loss: 4.6413, lr: 0.003000, 6.29s
+2024-05-02 09:35:42 INFO     Saved model at 34
+2024-05-02 09:35:42 INFO     Val loss decrease from 4.6474 to 4.6413, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch34.tar
+2024-05-02 09:35:48 INFO     epoch complete!
+2024-05-02 09:35:48 INFO     evaluating now!
+2024-05-02 09:35:48 INFO     Epoch [35/200] train_loss: 3.6915, val_loss: 4.7010, lr: 0.003000, 6.43s
+2024-05-02 09:35:54 INFO     epoch complete!
+2024-05-02 09:35:54 INFO     evaluating now!
+2024-05-02 09:35:54 INFO     Epoch [36/200] train_loss: 3.6683, val_loss: 4.6917, lr: 0.003000, 6.12s
+2024-05-02 09:36:00 INFO     epoch complete!
+2024-05-02 09:36:00 INFO     evaluating now!
+2024-05-02 09:36:01 INFO     Epoch [37/200] train_loss: 3.6548, val_loss: 4.6814, lr: 0.003000, 6.16s
+2024-05-02 09:36:06 INFO     epoch complete!
+2024-05-02 09:36:06 INFO     evaluating now!
+2024-05-02 09:36:07 INFO     Epoch [38/200] train_loss: 3.6543, val_loss: 4.6420, lr: 0.003000, 6.16s
+2024-05-02 09:36:12 INFO     epoch complete!
+2024-05-02 09:36:12 INFO     evaluating now!
+2024-05-02 09:36:13 INFO     Epoch [39/200] train_loss: 3.5836, val_loss: 4.5959, lr: 0.003000, 6.09s
+2024-05-02 09:36:13 INFO     Saved model at 39
+2024-05-02 09:36:13 INFO     Val loss decrease from 4.6413 to 4.5959, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch39.tar
+2024-05-02 09:36:19 INFO     epoch complete!
+2024-05-02 09:36:19 INFO     evaluating now!
+2024-05-02 09:36:19 INFO     Epoch [40/200] train_loss: 3.6724, val_loss: 4.6119, lr: 0.003000, 6.11s
+2024-05-02 09:36:25 INFO     epoch complete!
+2024-05-02 09:36:25 INFO     evaluating now!
+2024-05-02 09:36:25 INFO     Epoch [41/200] train_loss: 3.5701, val_loss: 4.7460, lr: 0.003000, 6.09s
+2024-05-02 09:36:31 INFO     epoch complete!
+2024-05-02 09:36:31 INFO     evaluating now!
+2024-05-02 09:36:31 INFO     Epoch [42/200] train_loss: 3.5854, val_loss: 4.8107, lr: 0.003000, 6.15s
+2024-05-02 09:36:37 INFO     epoch complete!
+2024-05-02 09:36:37 INFO     evaluating now!
+2024-05-02 09:36:37 INFO     Epoch [43/200] train_loss: 3.5395, val_loss: 4.6835, lr: 0.003000, 6.19s
+2024-05-02 09:36:43 INFO     epoch complete!
+2024-05-02 09:36:43 INFO     evaluating now!
+2024-05-02 09:36:44 INFO     Epoch [44/200] train_loss: 3.4870, val_loss: 4.7115, lr: 0.003000, 6.34s
+2024-05-02 09:36:49 INFO     epoch complete!
+2024-05-02 09:36:49 INFO     evaluating now!
+2024-05-02 09:36:50 INFO     Epoch [45/200] train_loss: 3.5067, val_loss: 4.6574, lr: 0.003000, 6.01s
+2024-05-02 09:36:55 INFO     epoch complete!
+2024-05-02 09:36:55 INFO     evaluating now!
+2024-05-02 09:36:56 INFO     Epoch [46/200] train_loss: 3.4700, val_loss: 4.7741, lr: 0.003000, 5.95s
+2024-05-02 09:37:01 INFO     epoch complete!
+2024-05-02 09:37:01 INFO     evaluating now!
+2024-05-02 09:37:02 INFO     Epoch [47/200] train_loss: 3.4368, val_loss: 4.6801, lr: 0.003000, 5.90s
+2024-05-02 09:37:08 INFO     epoch complete!
+2024-05-02 09:37:08 INFO     evaluating now!
+2024-05-02 09:37:08 INFO     Epoch [48/200] train_loss: 3.4329, val_loss: 4.7087, lr: 0.003000, 6.43s
+2024-05-02 09:37:14 INFO     epoch complete!
+2024-05-02 09:37:14 INFO     evaluating now!
+2024-05-02 09:37:14 INFO     Epoch [49/200] train_loss: 3.4190, val_loss: 4.6959, lr: 0.003000, 6.46s
+2024-05-02 09:37:21 INFO     epoch complete!
+2024-05-02 09:37:21 INFO     evaluating now!
+2024-05-02 09:37:21 INFO     Epoch [50/200] train_loss: 3.4417, val_loss: 4.7603, lr: 0.003000, 6.45s
+2024-05-02 09:37:27 INFO     epoch complete!
+2024-05-02 09:37:27 INFO     evaluating now!
+2024-05-02 09:37:27 INFO     Epoch [51/200] train_loss: 3.4132, val_loss: 4.7339, lr: 0.003000, 6.29s
+2024-05-02 09:37:33 INFO     epoch complete!
+2024-05-02 09:37:33 INFO     evaluating now!
+2024-05-02 09:37:34 INFO     Epoch [52/200] train_loss: 3.3897, val_loss: 4.7136, lr: 0.003000, 6.57s
+2024-05-02 09:37:40 INFO     epoch complete!
+2024-05-02 09:37:40 INFO     evaluating now!
+2024-05-02 09:37:40 INFO     Epoch [53/200] train_loss: 3.3512, val_loss: 4.6567, lr: 0.003000, 6.24s
+2024-05-02 09:37:46 INFO     epoch complete!
+2024-05-02 09:37:46 INFO     evaluating now!
+2024-05-02 09:37:46 INFO     Epoch [54/200] train_loss: 3.3515, val_loss: 4.8744, lr: 0.003000, 5.97s
+2024-05-02 09:37:46 WARNING  Early stopping at epoch: 54
+2024-05-02 09:37:46 INFO     Trained totally 55 epochs, average train time is 5.843s, average eval time is 0.353s
+2024-05-02 09:37:46 INFO     Loaded model at 39
+2024-05-02 09:37:46 INFO     Saved model at ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406.m
+2024-05-02 09:37:46 INFO     Start evaluating ...
+2024-05-02 09:37:47 INFO     Note that you select the single mode to evaluate!
+2024-05-02 09:37:47 INFO     Evaluate result is saved at ./libcity/cache/15/evaluate_cache/2024_05_02_09_37_47_AGCRN_CHITaxi20190406.csv
+2024-05-02 09:37:47 INFO     
+         MAE       RMSE
+1   2.288686   7.246120
+2   2.419621   7.981467
+3   2.538935   8.792674
+4   2.603763   9.106260
+5   2.627017   9.209031
+6   2.654217   9.265491
+7   2.708625   9.478153
+8   2.730051   9.676318
+9   2.766826   9.786298
+10  2.763697   9.925350
+11  2.804571  10.109726
+12  2.842646  10.319724
+2024-05-02 09:37:48 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:37:48 INFO     # 2, Kownledge Graph Embedding: GIE, Experiment ids: 17
+2024-05-02 09:37:48 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:37:48 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-05-02 09:37:48 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'load_external': True, 'embedding_model': 'GIE', 'normal_external': True, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 2, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
+2024-05-02 09:37:48 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-05-02 09:37:48 INFO     set_weight_link_or_dist: dist
+2024-05-02 09:37:48 INFO     init_weight_inf_or_zero: inf
+2024-05-02 09:37:48 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-05-02 09:37:48 INFO     Start Calculate the weight by Gauss kernel!
+2024-05-02 09:37:48 INFO     Loading file CHITaxi20190406.dyna
+2024-05-02 09:37:48 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-05-02 09:37:49 INFO     Dataset created
+2024-05-02 09:37:49 INFO     x shape: (4345, 12, 77, 10), y shape: (4345, 12, 77, 10)
+2024-05-02 09:37:49 INFO     train	x: (3042, 12, 77, 10), y: (3042, 12, 77, 10)
+2024-05-02 09:37:49 INFO     eval	x: (434, 12, 77, 10), y: (434, 12, 77, 10)
+2024-05-02 09:37:49 INFO     test	x: (869, 12, 77, 10), y: (869, 12, 77, 10)
+2024-05-02 09:37:49 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-05-02 09:37:49 INFO     NoneScaler
+2024-05-02 09:37:50 INFO     AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+      (1): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
+)
+2024-05-02 09:37:50 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 74, 128])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 74, 64])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-05-02 09:37:50 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:37:50 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-05-02 09:37:50 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-05-02 09:37:50 INFO     Total parameter numbers: 781850
+2024-05-02 09:37:50 INFO     You select `adam` optimizer.
+2024-05-02 09:37:50 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-05-02 09:37:50 INFO     Start training ...
+2024-05-02 09:37:50 INFO     num_batches:48
+2024-05-02 09:37:56 INFO     epoch complete!
+2024-05-02 09:37:56 INFO     evaluating now!
+2024-05-02 09:37:56 INFO     Epoch [0/200] train_loss: 24.5595, val_loss: 17.5768, lr: 0.003000, 6.27s
+2024-05-02 09:37:56 INFO     Saved model at 0
+2024-05-02 09:37:56 INFO     Val loss decrease from inf to 17.5768, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-05-02 09:38:02 INFO     epoch complete!
+2024-05-02 09:38:02 INFO     evaluating now!
+2024-05-02 09:38:02 INFO     Epoch [1/200] train_loss: 13.7469, val_loss: 12.6217, lr: 0.003000, 6.47s
+2024-05-02 09:38:03 INFO     Saved model at 1
+2024-05-02 09:38:03 INFO     Val loss decrease from 17.5768 to 12.6217, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-05-02 09:38:08 INFO     epoch complete!
+2024-05-02 09:38:08 INFO     evaluating now!
+2024-05-02 09:38:09 INFO     Epoch [2/200] train_loss: 10.2380, val_loss: 9.6681, lr: 0.003000, 6.36s
+2024-05-02 09:38:09 INFO     Saved model at 2
+2024-05-02 09:38:09 INFO     Val loss decrease from 12.6217 to 9.6681, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-05-02 09:38:15 INFO     epoch complete!
+2024-05-02 09:38:15 INFO     evaluating now!
+2024-05-02 09:38:16 INFO     Epoch [3/200] train_loss: 8.2352, val_loss: 7.8058, lr: 0.003000, 6.82s
+2024-05-02 09:38:16 INFO     Saved model at 3
+2024-05-02 09:38:16 INFO     Val loss decrease from 9.6681 to 7.8058, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar
+2024-05-02 09:38:22 INFO     epoch complete!
+2024-05-02 09:38:22 INFO     evaluating now!
+2024-05-02 09:38:22 INFO     Epoch [4/200] train_loss: 7.1194, val_loss: 6.9056, lr: 0.003000, 6.70s
+2024-05-02 09:38:23 INFO     Saved model at 4
+2024-05-02 09:38:23 INFO     Val loss decrease from 7.8058 to 6.9056, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch4.tar
+2024-05-02 09:38:29 INFO     epoch complete!
+2024-05-02 09:38:29 INFO     evaluating now!
+2024-05-02 09:38:29 INFO     Epoch [5/200] train_loss: 6.4555, val_loss: 6.3701, lr: 0.003000, 6.62s
+2024-05-02 09:38:29 INFO     Saved model at 5
+2024-05-02 09:38:29 INFO     Val loss decrease from 6.9056 to 6.3701, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch5.tar
+2024-05-02 09:38:35 INFO     epoch complete!
+2024-05-02 09:38:35 INFO     evaluating now!
+2024-05-02 09:38:36 INFO     Epoch [6/200] train_loss: 6.0222, val_loss: 5.9322, lr: 0.003000, 6.46s
+2024-05-02 09:38:36 INFO     Saved model at 6
+2024-05-02 09:38:36 INFO     Val loss decrease from 6.3701 to 5.9322, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch6.tar
+2024-05-02 09:38:42 INFO     epoch complete!
+2024-05-02 09:38:42 INFO     evaluating now!
+2024-05-02 09:38:42 INFO     Epoch [7/200] train_loss: 5.6818, val_loss: 5.8659, lr: 0.003000, 6.75s
+2024-05-02 09:38:42 INFO     Saved model at 7
+2024-05-02 09:38:42 INFO     Val loss decrease from 5.9322 to 5.8659, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch7.tar
+2024-05-02 09:38:49 INFO     epoch complete!
+2024-05-02 09:38:49 INFO     evaluating now!
+2024-05-02 09:38:49 INFO     Epoch [8/200] train_loss: 5.5031, val_loss: 5.6109, lr: 0.003000, 6.43s
+2024-05-02 09:38:49 INFO     Saved model at 8
+2024-05-02 09:38:49 INFO     Val loss decrease from 5.8659 to 5.6109, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch8.tar
+2024-05-02 09:38:55 INFO     epoch complete!
+2024-05-02 09:38:55 INFO     evaluating now!
+2024-05-02 09:38:55 INFO     Epoch [9/200] train_loss: 5.3120, val_loss: 5.6873, lr: 0.003000, 5.93s
+2024-05-02 09:39:00 INFO     epoch complete!
+2024-05-02 09:39:00 INFO     evaluating now!
+2024-05-02 09:39:01 INFO     Epoch [10/200] train_loss: 5.1530, val_loss: 5.4670, lr: 0.003000, 5.94s
+2024-05-02 09:39:01 INFO     Saved model at 10
+2024-05-02 09:39:01 INFO     Val loss decrease from 5.6109 to 5.4670, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch10.tar
+2024-05-02 09:39:07 INFO     epoch complete!
+2024-05-02 09:39:07 INFO     evaluating now!
+2024-05-02 09:39:07 INFO     Epoch [11/200] train_loss: 5.0111, val_loss: 5.2219, lr: 0.003000, 6.06s
+2024-05-02 09:39:07 INFO     Saved model at 11
+2024-05-02 09:39:07 INFO     Val loss decrease from 5.4670 to 5.2219, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch11.tar
+2024-05-02 09:39:13 INFO     epoch complete!
+2024-05-02 09:39:13 INFO     evaluating now!
+2024-05-02 09:39:13 INFO     Epoch [12/200] train_loss: 4.8916, val_loss: 5.2875, lr: 0.003000, 5.94s
+2024-05-02 09:39:18 INFO     epoch complete!
+2024-05-02 09:39:18 INFO     evaluating now!
+2024-05-02 09:39:19 INFO     Epoch [13/200] train_loss: 4.7577, val_loss: 5.1639, lr: 0.003000, 5.81s
+2024-05-02 09:39:19 INFO     Saved model at 13
+2024-05-02 09:39:19 INFO     Val loss decrease from 5.2219 to 5.1639, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch13.tar
+2024-05-02 09:39:24 INFO     epoch complete!
+2024-05-02 09:39:24 INFO     evaluating now!
+2024-05-02 09:39:25 INFO     Epoch [14/200] train_loss: 4.6953, val_loss: 5.0092, lr: 0.003000, 5.94s
+2024-05-02 09:39:25 INFO     Saved model at 14
+2024-05-02 09:39:25 INFO     Val loss decrease from 5.1639 to 5.0092, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch14.tar
+2024-05-02 09:39:30 INFO     epoch complete!
+2024-05-02 09:39:30 INFO     evaluating now!
+2024-05-02 09:39:31 INFO     Epoch [15/200] train_loss: 4.5340, val_loss: 4.8589, lr: 0.003000, 5.95s
+2024-05-02 09:39:31 INFO     Saved model at 15
+2024-05-02 09:39:31 INFO     Val loss decrease from 5.0092 to 4.8589, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch15.tar
+2024-05-02 09:39:37 INFO     epoch complete!
+2024-05-02 09:39:37 INFO     evaluating now!
+2024-05-02 09:39:37 INFO     Epoch [16/200] train_loss: 4.4774, val_loss: 5.0456, lr: 0.003000, 6.68s
+2024-05-02 09:39:43 INFO     epoch complete!
+2024-05-02 09:39:43 INFO     evaluating now!
+2024-05-02 09:39:44 INFO     Epoch [17/200] train_loss: 4.4362, val_loss: 4.9350, lr: 0.003000, 6.24s
+2024-05-02 09:39:50 INFO     epoch complete!
+2024-05-02 09:39:50 INFO     evaluating now!
+2024-05-02 09:39:50 INFO     Epoch [18/200] train_loss: 4.3850, val_loss: 5.0403, lr: 0.003000, 6.79s
+2024-05-02 09:39:56 INFO     epoch complete!
+2024-05-02 09:39:56 INFO     evaluating now!
+2024-05-02 09:39:57 INFO     Epoch [19/200] train_loss: 4.3301, val_loss: 4.7646, lr: 0.003000, 6.41s
+2024-05-02 09:39:57 INFO     Saved model at 19
+2024-05-02 09:39:57 INFO     Val loss decrease from 4.8589 to 4.7646, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch19.tar
+2024-05-02 09:40:03 INFO     epoch complete!
+2024-05-02 09:40:03 INFO     evaluating now!
+2024-05-02 09:40:03 INFO     Epoch [20/200] train_loss: 4.2265, val_loss: 4.7693, lr: 0.003000, 6.51s
+2024-05-02 09:40:09 INFO     epoch complete!
+2024-05-02 09:40:09 INFO     evaluating now!
+2024-05-02 09:40:10 INFO     Epoch [21/200] train_loss: 4.1990, val_loss: 4.8193, lr: 0.003000, 6.15s
+2024-05-02 09:40:15 INFO     epoch complete!
+2024-05-02 09:40:15 INFO     evaluating now!
+2024-05-02 09:40:16 INFO     Epoch [22/200] train_loss: 4.1378, val_loss: 4.7765, lr: 0.003000, 6.27s
+2024-05-02 09:40:22 INFO     epoch complete!
+2024-05-02 09:40:22 INFO     evaluating now!
+2024-05-02 09:40:22 INFO     Epoch [23/200] train_loss: 4.1187, val_loss: 4.9415, lr: 0.003000, 6.24s
+2024-05-02 09:40:28 INFO     epoch complete!
+2024-05-02 09:40:28 INFO     evaluating now!
+2024-05-02 09:40:28 INFO     Epoch [24/200] train_loss: 4.0845, val_loss: 4.9055, lr: 0.003000, 6.24s
+2024-05-02 09:40:34 INFO     epoch complete!
+2024-05-02 09:40:34 INFO     evaluating now!
+2024-05-02 09:40:35 INFO     Epoch [25/200] train_loss: 4.0573, val_loss: 4.7300, lr: 0.003000, 6.29s
+2024-05-02 09:40:35 INFO     Saved model at 25
+2024-05-02 09:40:35 INFO     Val loss decrease from 4.7646 to 4.7300, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch25.tar
+2024-05-02 09:40:41 INFO     epoch complete!
+2024-05-02 09:40:41 INFO     evaluating now!
+2024-05-02 09:40:41 INFO     Epoch [26/200] train_loss: 3.9999, val_loss: 4.7033, lr: 0.003000, 6.27s
+2024-05-02 09:40:41 INFO     Saved model at 26
+2024-05-02 09:40:41 INFO     Val loss decrease from 4.7300 to 4.7033, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch26.tar
+2024-05-02 09:40:47 INFO     epoch complete!
+2024-05-02 09:40:47 INFO     evaluating now!
+2024-05-02 09:40:47 INFO     Epoch [27/200] train_loss: 3.9564, val_loss: 4.7579, lr: 0.003000, 6.29s
+2024-05-02 09:40:53 INFO     epoch complete!
+2024-05-02 09:40:53 INFO     evaluating now!
+2024-05-02 09:40:53 INFO     Epoch [28/200] train_loss: 3.9566, val_loss: 4.7612, lr: 0.003000, 6.21s
+2024-05-02 09:40:59 INFO     epoch complete!
+2024-05-02 09:40:59 INFO     evaluating now!
+2024-05-02 09:41:00 INFO     Epoch [29/200] train_loss: 3.9065, val_loss: 4.6507, lr: 0.003000, 6.20s
+2024-05-02 09:41:00 INFO     Saved model at 29
+2024-05-02 09:41:00 INFO     Val loss decrease from 4.7033 to 4.6507, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch29.tar
+2024-05-02 09:41:06 INFO     epoch complete!
+2024-05-02 09:41:06 INFO     evaluating now!
+2024-05-02 09:41:06 INFO     Epoch [30/200] train_loss: 3.8962, val_loss: 4.7037, lr: 0.003000, 6.35s
+2024-05-02 09:41:12 INFO     epoch complete!
+2024-05-02 09:41:12 INFO     evaluating now!
+2024-05-02 09:41:12 INFO     Epoch [31/200] train_loss: 3.8706, val_loss: 4.8157, lr: 0.003000, 6.30s
+2024-05-02 09:41:18 INFO     epoch complete!
+2024-05-02 09:41:18 INFO     evaluating now!
+2024-05-02 09:41:19 INFO     Epoch [32/200] train_loss: 3.8112, val_loss: 4.6536, lr: 0.003000, 6.25s
+2024-05-02 09:41:24 INFO     epoch complete!
+2024-05-02 09:41:24 INFO     evaluating now!
+2024-05-02 09:41:25 INFO     Epoch [33/200] train_loss: 3.7689, val_loss: 4.7492, lr: 0.003000, 6.21s
+2024-05-02 09:41:31 INFO     epoch complete!
+2024-05-02 09:41:31 INFO     evaluating now!
+2024-05-02 09:41:31 INFO     Epoch [34/200] train_loss: 3.7346, val_loss: 4.7322, lr: 0.003000, 6.14s
+2024-05-02 09:41:37 INFO     epoch complete!
+2024-05-02 09:41:37 INFO     evaluating now!
+2024-05-02 09:41:37 INFO     Epoch [35/200] train_loss: 3.7201, val_loss: 4.8089, lr: 0.003000, 6.17s
+2024-05-02 09:41:43 INFO     epoch complete!
+2024-05-02 09:41:43 INFO     evaluating now!
+2024-05-02 09:41:43 INFO     Epoch [36/200] train_loss: 3.7290, val_loss: 4.7851, lr: 0.003000, 6.21s
+2024-05-02 09:41:49 INFO     epoch complete!
+2024-05-02 09:41:49 INFO     evaluating now!
+2024-05-02 09:41:50 INFO     Epoch [37/200] train_loss: 3.6783, val_loss: 4.7057, lr: 0.003000, 6.18s
+2024-05-02 09:41:55 INFO     epoch complete!
+2024-05-02 09:41:55 INFO     evaluating now!
+2024-05-02 09:41:56 INFO     Epoch [38/200] train_loss: 3.6614, val_loss: 4.7201, lr: 0.003000, 6.20s
+2024-05-02 09:42:02 INFO     epoch complete!
+2024-05-02 09:42:02 INFO     evaluating now!
+2024-05-02 09:42:02 INFO     Epoch [39/200] train_loss: 3.6362, val_loss: 4.7014, lr: 0.003000, 6.23s
+2024-05-02 09:42:08 INFO     epoch complete!
+2024-05-02 09:42:08 INFO     evaluating now!
+2024-05-02 09:42:08 INFO     Epoch [40/200] train_loss: 3.6060, val_loss: 4.6680, lr: 0.003000, 6.22s
+2024-05-02 09:42:14 INFO     epoch complete!
+2024-05-02 09:42:14 INFO     evaluating now!
+2024-05-02 09:42:14 INFO     Epoch [41/200] train_loss: 3.6381, val_loss: 4.6502, lr: 0.003000, 6.22s
+2024-05-02 09:42:14 INFO     Saved model at 41
+2024-05-02 09:42:14 INFO     Val loss decrease from 4.6507 to 4.6502, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch41.tar
+2024-05-02 09:42:20 INFO     epoch complete!
+2024-05-02 09:42:20 INFO     evaluating now!
+2024-05-02 09:42:21 INFO     Epoch [42/200] train_loss: 3.5847, val_loss: 4.6808, lr: 0.003000, 6.17s
+2024-05-02 09:42:26 INFO     epoch complete!
+2024-05-02 09:42:26 INFO     evaluating now!
+2024-05-02 09:42:27 INFO     Epoch [43/200] train_loss: 3.5694, val_loss: 4.6575, lr: 0.003000, 6.18s
+2024-05-02 09:42:33 INFO     epoch complete!
+2024-05-02 09:42:33 INFO     evaluating now!
+2024-05-02 09:42:33 INFO     Epoch [44/200] train_loss: 3.5721, val_loss: 4.7471, lr: 0.003000, 6.24s
+2024-05-02 09:42:39 INFO     epoch complete!
+2024-05-02 09:42:39 INFO     evaluating now!
+2024-05-02 09:42:39 INFO     Epoch [45/200] train_loss: 3.5844, val_loss: 4.6987, lr: 0.003000, 6.16s
+2024-05-02 09:42:45 INFO     epoch complete!
+2024-05-02 09:42:45 INFO     evaluating now!
+2024-05-02 09:42:45 INFO     Epoch [46/200] train_loss: 3.5321, val_loss: 4.7802, lr: 0.003000, 6.28s
+2024-05-02 09:42:51 INFO     epoch complete!
+2024-05-02 09:42:51 INFO     evaluating now!
+2024-05-02 09:42:52 INFO     Epoch [47/200] train_loss: 3.5059, val_loss: 4.6572, lr: 0.003000, 6.30s
+2024-05-02 09:42:58 INFO     epoch complete!
+2024-05-02 09:42:58 INFO     evaluating now!
+2024-05-02 09:42:58 INFO     Epoch [48/200] train_loss: 3.4933, val_loss: 4.7909, lr: 0.003000, 6.30s
+2024-05-02 09:43:04 INFO     epoch complete!
+2024-05-02 09:43:04 INFO     evaluating now!
+2024-05-02 09:43:04 INFO     Epoch [49/200] train_loss: 3.4770, val_loss: 4.7750, lr: 0.003000, 6.19s
+2024-05-02 09:43:10 INFO     epoch complete!
+2024-05-02 09:43:10 INFO     evaluating now!
+2024-05-02 09:43:11 INFO     Epoch [50/200] train_loss: 3.4324, val_loss: 4.6295, lr: 0.003000, 6.26s
+2024-05-02 09:43:11 INFO     Saved model at 50
+2024-05-02 09:43:11 INFO     Val loss decrease from 4.6502 to 4.6295, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch50.tar
+2024-05-02 09:43:16 INFO     epoch complete!
+2024-05-02 09:43:16 INFO     evaluating now!
+2024-05-02 09:43:17 INFO     Epoch [51/200] train_loss: 3.4422, val_loss: 4.6241, lr: 0.003000, 6.17s
+2024-05-02 09:43:17 INFO     Saved model at 51
+2024-05-02 09:43:17 INFO     Val loss decrease from 4.6295 to 4.6241, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch51.tar
+2024-05-02 09:43:23 INFO     epoch complete!
+2024-05-02 09:43:23 INFO     evaluating now!
+2024-05-02 09:43:23 INFO     Epoch [52/200] train_loss: 3.4526, val_loss: 4.7235, lr: 0.003000, 6.16s
+2024-05-02 09:43:29 INFO     epoch complete!
+2024-05-02 09:43:29 INFO     evaluating now!
+2024-05-02 09:43:29 INFO     Epoch [53/200] train_loss: 3.4126, val_loss: 4.7137, lr: 0.003000, 6.12s
+2024-05-02 09:43:35 INFO     epoch complete!
+2024-05-02 09:43:35 INFO     evaluating now!
+2024-05-02 09:43:35 INFO     Epoch [54/200] train_loss: 3.3834, val_loss: 4.6666, lr: 0.003000, 6.20s
+2024-05-02 09:43:41 INFO     epoch complete!
+2024-05-02 09:43:41 INFO     evaluating now!
+2024-05-02 09:43:42 INFO     Epoch [55/200] train_loss: 3.3520, val_loss: 4.7128, lr: 0.003000, 6.18s
+2024-05-02 09:43:47 INFO     epoch complete!
+2024-05-02 09:43:47 INFO     evaluating now!
+2024-05-02 09:43:48 INFO     Epoch [56/200] train_loss: 3.3479, val_loss: 4.6542, lr: 0.003000, 6.20s
+2024-05-02 09:43:54 INFO     epoch complete!
+2024-05-02 09:43:54 INFO     evaluating now!
+2024-05-02 09:43:54 INFO     Epoch [57/200] train_loss: 3.3571, val_loss: 4.6870, lr: 0.003000, 6.21s
+2024-05-02 09:44:00 INFO     epoch complete!
+2024-05-02 09:44:00 INFO     evaluating now!
+2024-05-02 09:44:00 INFO     Epoch [58/200] train_loss: 3.3255, val_loss: 4.7166, lr: 0.003000, 6.36s
+2024-05-02 09:44:06 INFO     epoch complete!
+2024-05-02 09:44:06 INFO     evaluating now!
+2024-05-02 09:44:07 INFO     Epoch [59/200] train_loss: 3.3050, val_loss: 4.6631, lr: 0.003000, 6.32s
+2024-05-02 09:44:13 INFO     epoch complete!
+2024-05-02 09:44:13 INFO     evaluating now!
+2024-05-02 09:44:13 INFO     Epoch [60/200] train_loss: 3.2947, val_loss: 4.7048, lr: 0.003000, 6.27s
+2024-05-02 09:44:19 INFO     epoch complete!
+2024-05-02 09:44:19 INFO     evaluating now!
+2024-05-02 09:44:19 INFO     Epoch [61/200] train_loss: 3.2757, val_loss: 4.7006, lr: 0.003000, 6.30s
+2024-05-02 09:44:25 INFO     epoch complete!
+2024-05-02 09:44:25 INFO     evaluating now!
+2024-05-02 09:44:25 INFO     Epoch [62/200] train_loss: 3.2667, val_loss: 4.7399, lr: 0.003000, 6.28s
+2024-05-02 09:44:31 INFO     epoch complete!
+2024-05-02 09:44:31 INFO     evaluating now!
+2024-05-02 09:44:31 INFO     Epoch [63/200] train_loss: 3.2719, val_loss: 4.7952, lr: 0.003000, 5.78s
+2024-05-02 09:44:37 INFO     epoch complete!
+2024-05-02 09:44:37 INFO     evaluating now!
+2024-05-02 09:44:37 INFO     Epoch [64/200] train_loss: 3.2770, val_loss: 4.8561, lr: 0.003000, 5.81s
+2024-05-02 09:44:43 INFO     epoch complete!
+2024-05-02 09:44:43 INFO     evaluating now!
+2024-05-02 09:44:43 INFO     Epoch [65/200] train_loss: 3.3249, val_loss: 4.7360, lr: 0.003000, 5.83s
+2024-05-02 09:44:48 INFO     epoch complete!
+2024-05-02 09:44:48 INFO     evaluating now!
+2024-05-02 09:44:49 INFO     Epoch [66/200] train_loss: 3.2456, val_loss: 4.7635, lr: 0.003000, 5.96s
+2024-05-02 09:44:49 WARNING  Early stopping at epoch: 66
+2024-05-02 09:44:49 INFO     Trained totally 67 epochs, average train time is 5.881s, average eval time is 0.358s
+2024-05-02 09:44:49 INFO     Loaded model at 51
+2024-05-02 09:44:49 INFO     Saved model at ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406.m
+2024-05-02 09:44:49 INFO     Start evaluating ...
+2024-05-02 09:44:50 INFO     Note that you select the single mode to evaluate!
+2024-05-02 09:44:50 INFO     Evaluate result is saved at ./libcity/cache/15/evaluate_cache/2024_05_02_09_44_50_AGCRN_CHITaxi20190406.csv
+2024-05-02 09:44:50 INFO     
+         MAE       RMSE
+1   2.295152   6.988864
+2   2.395547   7.549329
+3   2.522389   8.418047
+4   2.665087   8.977055
+5   2.689517   9.363544
+6   2.722357   9.654370
+7   2.737580   9.760915
+8   2.743967   9.800353
+9   2.703809   9.700878
+10  2.653530   9.713337
+11  2.675297   9.811222
+12  2.756186  10.092882
+2024-05-02 09:44:50 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:44:50 INFO     # 3, Kownledge Graph Embedding: GIE, Experiment ids: 18
+2024-05-02 09:44:50 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:44:50 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-05-02 09:44:50 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'load_external': True, 'embedding_model': 'GIE', 'normal_external': True, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 3, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
+2024-05-02 09:44:50 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-05-02 09:44:50 INFO     set_weight_link_or_dist: dist
+2024-05-02 09:44:50 INFO     init_weight_inf_or_zero: inf
+2024-05-02 09:44:50 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-05-02 09:44:50 INFO     Start Calculate the weight by Gauss kernel!
+2024-05-02 09:44:50 INFO     Loading file CHITaxi20190406.dyna
+2024-05-02 09:44:51 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-05-02 09:44:52 INFO     Dataset created
+2024-05-02 09:44:52 INFO     x shape: (4345, 12, 77, 10), y shape: (4345, 12, 77, 10)
+2024-05-02 09:44:52 INFO     train	x: (3042, 12, 77, 10), y: (3042, 12, 77, 10)
+2024-05-02 09:44:52 INFO     eval	x: (434, 12, 77, 10), y: (434, 12, 77, 10)
+2024-05-02 09:44:52 INFO     test	x: (869, 12, 77, 10), y: (869, 12, 77, 10)
+2024-05-02 09:44:52 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-05-02 09:44:52 INFO     NoneScaler
+2024-05-02 09:44:53 INFO     AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+      (1): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
+)
+2024-05-02 09:44:53 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 74, 128])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 74, 64])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-05-02 09:44:53 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:44:53 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-05-02 09:44:53 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-05-02 09:44:53 INFO     Total parameter numbers: 781850
+2024-05-02 09:44:53 INFO     You select `adam` optimizer.
+2024-05-02 09:44:53 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-05-02 09:44:53 INFO     Start training ...
+2024-05-02 09:44:53 INFO     num_batches:48
+2024-05-02 09:44:58 INFO     epoch complete!
+2024-05-02 09:44:58 INFO     evaluating now!
+2024-05-02 09:44:58 INFO     Epoch [0/200] train_loss: 24.9937, val_loss: 17.9339, lr: 0.003000, 5.84s
+2024-05-02 09:44:58 INFO     Saved model at 0
+2024-05-02 09:44:58 INFO     Val loss decrease from inf to 17.9339, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-05-02 09:45:04 INFO     epoch complete!
+2024-05-02 09:45:04 INFO     evaluating now!
+2024-05-02 09:45:05 INFO     Epoch [1/200] train_loss: 14.7124, val_loss: 13.8544, lr: 0.003000, 6.09s
+2024-05-02 09:45:05 INFO     Saved model at 1
+2024-05-02 09:45:05 INFO     Val loss decrease from 17.9339 to 13.8544, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-05-02 09:45:11 INFO     epoch complete!
+2024-05-02 09:45:11 INFO     evaluating now!
+2024-05-02 09:45:11 INFO     Epoch [2/200] train_loss: 11.1956, val_loss: 10.6478, lr: 0.003000, 6.38s
+2024-05-02 09:45:11 INFO     Saved model at 2
+2024-05-02 09:45:11 INFO     Val loss decrease from 13.8544 to 10.6478, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-05-02 09:45:17 INFO     epoch complete!
+2024-05-02 09:45:17 INFO     evaluating now!
+2024-05-02 09:45:17 INFO     Epoch [3/200] train_loss: 9.1537, val_loss: 8.6699, lr: 0.003000, 6.21s
+2024-05-02 09:45:17 INFO     Saved model at 3
+2024-05-02 09:45:17 INFO     Val loss decrease from 10.6478 to 8.6699, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar
+2024-05-02 09:45:23 INFO     epoch complete!
+2024-05-02 09:45:23 INFO     evaluating now!
+2024-05-02 09:45:23 INFO     Epoch [4/200] train_loss: 7.8163, val_loss: 7.5078, lr: 0.003000, 6.09s
+2024-05-02 09:45:23 INFO     Saved model at 4
+2024-05-02 09:45:23 INFO     Val loss decrease from 8.6699 to 7.5078, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch4.tar
+2024-05-02 09:45:29 INFO     epoch complete!
+2024-05-02 09:45:29 INFO     evaluating now!
+2024-05-02 09:45:30 INFO     Epoch [5/200] train_loss: 6.9374, val_loss: 6.9059, lr: 0.003000, 6.15s
+2024-05-02 09:45:30 INFO     Saved model at 5
+2024-05-02 09:45:30 INFO     Val loss decrease from 7.5078 to 6.9059, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch5.tar
+2024-05-02 09:45:35 INFO     epoch complete!
+2024-05-02 09:45:35 INFO     evaluating now!
+2024-05-02 09:45:36 INFO     Epoch [6/200] train_loss: 6.4273, val_loss: 6.2045, lr: 0.003000, 6.11s
+2024-05-02 09:45:36 INFO     Saved model at 6
+2024-05-02 09:45:36 INFO     Val loss decrease from 6.9059 to 6.2045, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch6.tar
+2024-05-02 09:45:41 INFO     epoch complete!
+2024-05-02 09:45:41 INFO     evaluating now!
+2024-05-02 09:45:42 INFO     Epoch [7/200] train_loss: 5.9299, val_loss: 6.0425, lr: 0.003000, 6.08s
+2024-05-02 09:45:42 INFO     Saved model at 7
+2024-05-02 09:45:42 INFO     Val loss decrease from 6.2045 to 6.0425, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch7.tar
+2024-05-02 09:45:48 INFO     epoch complete!
+2024-05-02 09:45:48 INFO     evaluating now!
+2024-05-02 09:45:48 INFO     Epoch [8/200] train_loss: 5.7319, val_loss: 5.7119, lr: 0.003000, 6.14s
+2024-05-02 09:45:48 INFO     Saved model at 8
+2024-05-02 09:45:48 INFO     Val loss decrease from 6.0425 to 5.7119, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch8.tar
+2024-05-02 09:45:54 INFO     epoch complete!
+2024-05-02 09:45:54 INFO     evaluating now!
+2024-05-02 09:45:54 INFO     Epoch [9/200] train_loss: 5.4549, val_loss: 5.6296, lr: 0.003000, 6.10s
+2024-05-02 09:45:54 INFO     Saved model at 9
+2024-05-02 09:45:54 INFO     Val loss decrease from 5.7119 to 5.6296, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch9.tar
+2024-05-02 09:46:00 INFO     epoch complete!
+2024-05-02 09:46:00 INFO     evaluating now!
+2024-05-02 09:46:00 INFO     Epoch [10/200] train_loss: 5.2824, val_loss: 5.3238, lr: 0.003000, 6.12s
+2024-05-02 09:46:00 INFO     Saved model at 10
+2024-05-02 09:46:00 INFO     Val loss decrease from 5.6296 to 5.3238, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch10.tar
+2024-05-02 09:46:06 INFO     epoch complete!
+2024-05-02 09:46:06 INFO     evaluating now!
+2024-05-02 09:46:07 INFO     Epoch [11/200] train_loss: 5.1831, val_loss: 5.3696, lr: 0.003000, 6.20s
+2024-05-02 09:46:12 INFO     epoch complete!
+2024-05-02 09:46:12 INFO     evaluating now!
+2024-05-02 09:46:13 INFO     Epoch [12/200] train_loss: 4.9978, val_loss: 5.1439, lr: 0.003000, 6.15s
+2024-05-02 09:46:13 INFO     Saved model at 12
+2024-05-02 09:46:13 INFO     Val loss decrease from 5.3238 to 5.1439, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch12.tar
+2024-05-02 09:46:19 INFO     epoch complete!
+2024-05-02 09:46:19 INFO     evaluating now!
+2024-05-02 09:46:19 INFO     Epoch [13/200] train_loss: 4.8699, val_loss: 5.1653, lr: 0.003000, 6.22s
+2024-05-02 09:46:25 INFO     epoch complete!
+2024-05-02 09:46:25 INFO     evaluating now!
+2024-05-02 09:46:25 INFO     Epoch [14/200] train_loss: 4.8804, val_loss: 5.1462, lr: 0.003000, 6.15s
+2024-05-02 09:46:31 INFO     epoch complete!
+2024-05-02 09:46:31 INFO     evaluating now!
+2024-05-02 09:46:31 INFO     Epoch [15/200] train_loss: 4.7114, val_loss: 4.8951, lr: 0.003000, 6.13s
+2024-05-02 09:46:31 INFO     Saved model at 15
+2024-05-02 09:46:31 INFO     Val loss decrease from 5.1439 to 4.8951, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch15.tar
+2024-05-02 09:46:37 INFO     epoch complete!
+2024-05-02 09:46:37 INFO     evaluating now!
+2024-05-02 09:46:37 INFO     Epoch [16/200] train_loss: 4.6399, val_loss: 5.1645, lr: 0.003000, 6.21s
+2024-05-02 09:46:43 INFO     epoch complete!
+2024-05-02 09:46:43 INFO     evaluating now!
+2024-05-02 09:46:44 INFO     Epoch [17/200] train_loss: 4.6132, val_loss: 5.1875, lr: 0.003000, 6.29s
+2024-05-02 09:46:50 INFO     epoch complete!
+2024-05-02 09:46:50 INFO     evaluating now!
+2024-05-02 09:46:50 INFO     Epoch [18/200] train_loss: 4.5569, val_loss: 4.9594, lr: 0.003000, 6.33s
+2024-05-02 09:46:56 INFO     epoch complete!
+2024-05-02 09:46:56 INFO     evaluating now!
+2024-05-02 09:46:56 INFO     Epoch [19/200] train_loss: 4.4288, val_loss: 4.8588, lr: 0.003000, 6.35s
+2024-05-02 09:46:56 INFO     Saved model at 19
+2024-05-02 09:46:56 INFO     Val loss decrease from 4.8951 to 4.8588, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch19.tar
+2024-05-02 09:47:03 INFO     epoch complete!
+2024-05-02 09:47:03 INFO     evaluating now!
+2024-05-02 09:47:03 INFO     Epoch [20/200] train_loss: 4.3748, val_loss: 4.8769, lr: 0.003000, 6.96s
+2024-05-02 09:47:10 INFO     epoch complete!
+2024-05-02 09:47:10 INFO     evaluating now!
+2024-05-02 09:47:10 INFO     Epoch [21/200] train_loss: 4.3296, val_loss: 4.7488, lr: 0.003000, 7.00s
+2024-05-02 09:47:10 INFO     Saved model at 21
+2024-05-02 09:47:10 INFO     Val loss decrease from 4.8588 to 4.7488, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch21.tar
+2024-05-02 09:47:17 INFO     epoch complete!
+2024-05-02 09:47:17 INFO     evaluating now!
+2024-05-02 09:47:17 INFO     Epoch [22/200] train_loss: 4.2821, val_loss: 5.0119, lr: 0.003000, 6.41s
+2024-05-02 09:47:23 INFO     epoch complete!
+2024-05-02 09:47:23 INFO     evaluating now!
+2024-05-02 09:47:23 INFO     Epoch [23/200] train_loss: 4.2353, val_loss: 4.8856, lr: 0.003000, 6.34s
+2024-05-02 09:47:29 INFO     epoch complete!
+2024-05-02 09:47:29 INFO     evaluating now!
+2024-05-02 09:47:30 INFO     Epoch [24/200] train_loss: 4.1624, val_loss: 4.7591, lr: 0.003000, 6.30s
+2024-05-02 09:47:35 INFO     epoch complete!
+2024-05-02 09:47:35 INFO     evaluating now!
+2024-05-02 09:47:36 INFO     Epoch [25/200] train_loss: 4.1511, val_loss: 4.9718, lr: 0.003000, 6.30s
+2024-05-02 09:47:42 INFO     epoch complete!
+2024-05-02 09:47:42 INFO     evaluating now!
+2024-05-02 09:47:42 INFO     Epoch [26/200] train_loss: 4.1259, val_loss: 4.8993, lr: 0.003000, 6.39s
+2024-05-02 09:47:48 INFO     epoch complete!
+2024-05-02 09:47:48 INFO     evaluating now!
+2024-05-02 09:47:49 INFO     Epoch [27/200] train_loss: 4.0549, val_loss: 4.8198, lr: 0.003000, 6.37s
+2024-05-02 09:47:55 INFO     epoch complete!
+2024-05-02 09:47:55 INFO     evaluating now!
+2024-05-02 09:47:55 INFO     Epoch [28/200] train_loss: 4.0396, val_loss: 4.6742, lr: 0.003000, 6.31s
+2024-05-02 09:47:55 INFO     Saved model at 28
+2024-05-02 09:47:55 INFO     Val loss decrease from 4.7488 to 4.6742, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch28.tar
+2024-05-02 09:48:01 INFO     epoch complete!
+2024-05-02 09:48:01 INFO     evaluating now!
+2024-05-02 09:48:01 INFO     Epoch [29/200] train_loss: 4.0186, val_loss: 4.7452, lr: 0.003000, 6.30s
+2024-05-02 09:48:07 INFO     epoch complete!
+2024-05-02 09:48:07 INFO     evaluating now!
+2024-05-02 09:48:08 INFO     Epoch [30/200] train_loss: 3.9426, val_loss: 4.7050, lr: 0.003000, 6.46s
+2024-05-02 09:48:14 INFO     epoch complete!
+2024-05-02 09:48:14 INFO     evaluating now!
+2024-05-02 09:48:14 INFO     Epoch [31/200] train_loss: 3.9381, val_loss: 4.7141, lr: 0.003000, 6.63s
+2024-05-02 09:48:21 INFO     epoch complete!
+2024-05-02 09:48:21 INFO     evaluating now!
+2024-05-02 09:48:21 INFO     Epoch [32/200] train_loss: 3.9226, val_loss: 4.6884, lr: 0.003000, 6.56s
+2024-05-02 09:48:27 INFO     epoch complete!
+2024-05-02 09:48:27 INFO     evaluating now!
+2024-05-02 09:48:28 INFO     Epoch [33/200] train_loss: 3.8420, val_loss: 4.6363, lr: 0.003000, 6.65s
+2024-05-02 09:48:28 INFO     Saved model at 33
+2024-05-02 09:48:28 INFO     Val loss decrease from 4.6742 to 4.6363, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch33.tar
+2024-05-02 09:48:34 INFO     epoch complete!
+2024-05-02 09:48:34 INFO     evaluating now!
+2024-05-02 09:48:34 INFO     Epoch [34/200] train_loss: 3.8374, val_loss: 4.8075, lr: 0.003000, 6.52s
+2024-05-02 09:48:40 INFO     epoch complete!
+2024-05-02 09:48:40 INFO     evaluating now!
+2024-05-02 09:48:41 INFO     Epoch [35/200] train_loss: 3.8146, val_loss: 4.6674, lr: 0.003000, 6.42s
+2024-05-02 09:48:47 INFO     epoch complete!
+2024-05-02 09:48:47 INFO     evaluating now!
+2024-05-02 09:48:47 INFO     Epoch [36/200] train_loss: 3.8049, val_loss: 4.7272, lr: 0.003000, 6.41s
+2024-05-02 09:48:53 INFO     epoch complete!
+2024-05-02 09:48:53 INFO     evaluating now!
+2024-05-02 09:48:53 INFO     Epoch [37/200] train_loss: 3.7920, val_loss: 4.8599, lr: 0.003000, 6.48s
+2024-05-02 09:49:00 INFO     epoch complete!
+2024-05-02 09:49:00 INFO     evaluating now!
+2024-05-02 09:49:00 INFO     Epoch [38/200] train_loss: 3.7457, val_loss: 4.9767, lr: 0.003000, 6.63s
+2024-05-02 09:49:06 INFO     epoch complete!
+2024-05-02 09:49:06 INFO     evaluating now!
+2024-05-02 09:49:06 INFO     Epoch [39/200] train_loss: 3.7627, val_loss: 4.6156, lr: 0.003000, 6.37s
+2024-05-02 09:49:06 INFO     Saved model at 39
+2024-05-02 09:49:06 INFO     Val loss decrease from 4.6363 to 4.6156, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch39.tar
+2024-05-02 09:49:12 INFO     epoch complete!
+2024-05-02 09:49:12 INFO     evaluating now!
+2024-05-02 09:49:13 INFO     Epoch [40/200] train_loss: 3.6913, val_loss: 4.7082, lr: 0.003000, 6.39s
+2024-05-02 09:49:19 INFO     epoch complete!
+2024-05-02 09:49:19 INFO     evaluating now!
+2024-05-02 09:49:19 INFO     Epoch [41/200] train_loss: 3.6720, val_loss: 4.6857, lr: 0.003000, 6.56s
+2024-05-02 09:49:26 INFO     epoch complete!
+2024-05-02 09:49:26 INFO     evaluating now!
+2024-05-02 09:49:26 INFO     Epoch [42/200] train_loss: 3.6686, val_loss: 4.7419, lr: 0.003000, 6.66s
+2024-05-02 09:49:32 INFO     epoch complete!
+2024-05-02 09:49:32 INFO     evaluating now!
+2024-05-02 09:49:33 INFO     Epoch [43/200] train_loss: 3.6496, val_loss: 4.6684, lr: 0.003000, 6.68s
+2024-05-02 09:49:39 INFO     epoch complete!
+2024-05-02 09:49:39 INFO     evaluating now!
+2024-05-02 09:49:39 INFO     Epoch [44/200] train_loss: 3.5871, val_loss: 4.6922, lr: 0.003000, 6.43s
+2024-05-02 09:49:45 INFO     epoch complete!
+2024-05-02 09:49:45 INFO     evaluating now!
+2024-05-02 09:49:46 INFO     Epoch [45/200] train_loss: 3.6048, val_loss: 4.8006, lr: 0.003000, 6.44s
+2024-05-02 09:49:52 INFO     epoch complete!
+2024-05-02 09:49:52 INFO     evaluating now!
+2024-05-02 09:49:52 INFO     Epoch [46/200] train_loss: 3.5850, val_loss: 4.7326, lr: 0.003000, 6.51s
+2024-05-02 09:49:58 INFO     epoch complete!
+2024-05-02 09:49:58 INFO     evaluating now!
+2024-05-02 09:49:59 INFO     Epoch [47/200] train_loss: 3.5564, val_loss: 4.7736, lr: 0.003000, 6.56s
+2024-05-02 09:50:04 INFO     epoch complete!
+2024-05-02 09:50:04 INFO     evaluating now!
+2024-05-02 09:50:05 INFO     Epoch [48/200] train_loss: 3.5423, val_loss: 4.6724, lr: 0.003000, 5.88s
+2024-05-02 09:50:10 INFO     epoch complete!
+2024-05-02 09:50:10 INFO     evaluating now!
+2024-05-02 09:50:10 INFO     Epoch [49/200] train_loss: 3.5319, val_loss: 4.7908, lr: 0.003000, 5.63s
+2024-05-02 09:50:16 INFO     epoch complete!
+2024-05-02 09:50:16 INFO     evaluating now!
+2024-05-02 09:50:16 INFO     Epoch [50/200] train_loss: 3.5034, val_loss: 4.7201, lr: 0.003000, 5.70s
+2024-05-02 09:50:21 INFO     epoch complete!
+2024-05-02 09:50:21 INFO     evaluating now!
+2024-05-02 09:50:22 INFO     Epoch [51/200] train_loss: 3.4860, val_loss: 4.6753, lr: 0.003000, 5.75s
+2024-05-02 09:50:27 INFO     epoch complete!
+2024-05-02 09:50:27 INFO     evaluating now!
+2024-05-02 09:50:28 INFO     Epoch [52/200] train_loss: 3.4804, val_loss: 4.7511, lr: 0.003000, 5.86s
+2024-05-02 09:50:33 INFO     epoch complete!
+2024-05-02 09:50:33 INFO     evaluating now!
+2024-05-02 09:50:33 INFO     Epoch [53/200] train_loss: 3.4745, val_loss: 4.6170, lr: 0.003000, 5.83s
+2024-05-02 09:50:39 INFO     epoch complete!
+2024-05-02 09:50:39 INFO     evaluating now!
+2024-05-02 09:50:39 INFO     Epoch [54/200] train_loss: 3.4644, val_loss: 4.6899, lr: 0.003000, 5.77s
+2024-05-02 09:50:39 WARNING  Early stopping at epoch: 54
+2024-05-02 09:50:39 INFO     Trained totally 55 epochs, average train time is 5.925s, average eval time is 0.360s
+2024-05-02 09:50:39 INFO     Loaded model at 39
+2024-05-02 09:50:39 INFO     Saved model at ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406.m
+2024-05-02 09:50:39 INFO     Start evaluating ...
+2024-05-02 09:50:41 INFO     Note that you select the single mode to evaluate!
+2024-05-02 09:50:41 INFO     Evaluate result is saved at ./libcity/cache/15/evaluate_cache/2024_05_02_09_50_41_AGCRN_CHITaxi20190406.csv
+2024-05-02 09:50:41 INFO     
+         MAE       RMSE
+1   2.386342   7.468080
+2   2.426778   7.854051
+3   2.587184   8.495704
+4   2.625600   8.849826
+5   2.690076   9.017310
+6   2.727268   9.190624
+7   2.696534   9.347866
+8   2.670168   9.433769
+9   2.703340   9.442883
+10  2.704190   9.571036
+11  2.704676   9.714678
+12  2.840894  10.134744
+2024-05-02 09:50:41 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:50:41 INFO     # 4, Kownledge Graph Embedding: GIE, Experiment ids: 19
+2024-05-02 09:50:41 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:50:41 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-05-02 09:50:41 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'load_external': True, 'embedding_model': 'GIE', 'normal_external': True, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 4, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
+2024-05-02 09:50:41 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-05-02 09:50:41 INFO     set_weight_link_or_dist: dist
+2024-05-02 09:50:41 INFO     init_weight_inf_or_zero: inf
+2024-05-02 09:50:41 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-05-02 09:50:41 INFO     Start Calculate the weight by Gauss kernel!
+2024-05-02 09:50:41 INFO     Loading file CHITaxi20190406.dyna
+2024-05-02 09:50:41 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-05-02 09:50:42 INFO     Dataset created
+2024-05-02 09:50:42 INFO     x shape: (4345, 12, 77, 10), y shape: (4345, 12, 77, 10)
+2024-05-02 09:50:42 INFO     train	x: (3042, 12, 77, 10), y: (3042, 12, 77, 10)
+2024-05-02 09:50:42 INFO     eval	x: (434, 12, 77, 10), y: (434, 12, 77, 10)
+2024-05-02 09:50:42 INFO     test	x: (869, 12, 77, 10), y: (869, 12, 77, 10)
+2024-05-02 09:50:42 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-05-02 09:50:42 INFO     NoneScaler
+2024-05-02 09:50:43 INFO     AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+      (1): AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
+)
+2024-05-02 09:50:43 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 74, 128])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 74, 64])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-05-02 09:50:43 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-05-02 09:50:43 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-05-02 09:50:43 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-05-02 09:50:43 INFO     Total parameter numbers: 781850
+2024-05-02 09:50:43 INFO     You select `adam` optimizer.
+2024-05-02 09:50:43 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-05-02 09:50:43 INFO     Start training ...
+2024-05-02 09:50:43 INFO     num_batches:48
+2024-05-02 09:50:49 INFO     epoch complete!
+2024-05-02 09:50:49 INFO     evaluating now!
+2024-05-02 09:50:49 INFO     Epoch [0/200] train_loss: 24.2055, val_loss: 17.1182, lr: 0.003000, 6.61s
+2024-05-02 09:50:50 INFO     Saved model at 0
+2024-05-02 09:50:50 INFO     Val loss decrease from inf to 17.1182, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-05-02 09:50:56 INFO     epoch complete!
+2024-05-02 09:50:56 INFO     evaluating now!
+2024-05-02 09:50:56 INFO     Epoch [1/200] train_loss: 13.6366, val_loss: 12.4863, lr: 0.003000, 6.68s
+2024-05-02 09:50:56 INFO     Saved model at 1
+2024-05-02 09:50:56 INFO     Val loss decrease from 17.1182 to 12.4863, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-05-02 09:51:02 INFO     epoch complete!
+2024-05-02 09:51:02 INFO     evaluating now!
+2024-05-02 09:51:03 INFO     Epoch [2/200] train_loss: 10.1962, val_loss: 9.4519, lr: 0.003000, 6.47s
+2024-05-02 09:51:03 INFO     Saved model at 2
+2024-05-02 09:51:03 INFO     Val loss decrease from 12.4863 to 9.4519, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-05-02 09:51:09 INFO     epoch complete!
+2024-05-02 09:51:09 INFO     evaluating now!
+2024-05-02 09:51:09 INFO     Epoch [3/200] train_loss: 8.1058, val_loss: 7.4507, lr: 0.003000, 6.46s
+2024-05-02 09:51:09 INFO     Saved model at 3
+2024-05-02 09:51:09 INFO     Val loss decrease from 9.4519 to 7.4507, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar
+2024-05-02 09:51:15 INFO     epoch complete!
+2024-05-02 09:51:15 INFO     evaluating now!
+2024-05-02 09:51:16 INFO     Epoch [4/200] train_loss: 7.0101, val_loss: 6.6947, lr: 0.003000, 6.48s
+2024-05-02 09:51:16 INFO     Saved model at 4
+2024-05-02 09:51:16 INFO     Val loss decrease from 7.4507 to 6.6947, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch4.tar
+2024-05-02 09:51:22 INFO     epoch complete!
+2024-05-02 09:51:22 INFO     evaluating now!
+2024-05-02 09:51:22 INFO     Epoch [5/200] train_loss: 6.3014, val_loss: 6.2110, lr: 0.003000, 6.58s
+2024-05-02 09:51:22 INFO     Saved model at 5
+2024-05-02 09:51:22 INFO     Val loss decrease from 6.6947 to 6.2110, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch5.tar
+2024-05-02 09:51:29 INFO     epoch complete!
+2024-05-02 09:51:29 INFO     evaluating now!
+2024-05-02 09:51:29 INFO     Epoch [6/200] train_loss: 5.9234, val_loss: 5.7580, lr: 0.003000, 6.51s
+2024-05-02 09:51:29 INFO     Saved model at 6
+2024-05-02 09:51:29 INFO     Val loss decrease from 6.2110 to 5.7580, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch6.tar
+2024-05-02 09:51:35 INFO     epoch complete!
+2024-05-02 09:51:35 INFO     evaluating now!
+2024-05-02 09:51:35 INFO     Epoch [7/200] train_loss: 5.6492, val_loss: 5.6060, lr: 0.003000, 6.51s
+2024-05-02 09:51:36 INFO     Saved model at 7
+2024-05-02 09:51:36 INFO     Val loss decrease from 5.7580 to 5.6060, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch7.tar
+2024-05-02 09:51:42 INFO     epoch complete!
+2024-05-02 09:51:42 INFO     evaluating now!
+2024-05-02 09:51:42 INFO     Epoch [8/200] train_loss: 5.4390, val_loss: 5.5117, lr: 0.003000, 6.50s
+2024-05-02 09:51:42 INFO     Saved model at 8
+2024-05-02 09:51:42 INFO     Val loss decrease from 5.6060 to 5.5117, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch8.tar
+2024-05-02 09:51:48 INFO     epoch complete!
+2024-05-02 09:51:48 INFO     evaluating now!
+2024-05-02 09:51:48 INFO     Epoch [9/200] train_loss: 5.2878, val_loss: 5.3080, lr: 0.003000, 6.38s
+2024-05-02 09:51:49 INFO     Saved model at 9
+2024-05-02 09:51:49 INFO     Val loss decrease from 5.5117 to 5.3080, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch9.tar
+2024-05-02 09:51:55 INFO     epoch complete!
+2024-05-02 09:51:55 INFO     evaluating now!
+2024-05-02 09:51:55 INFO     Epoch [10/200] train_loss: 5.1044, val_loss: 5.4641, lr: 0.003000, 6.41s
+2024-05-02 09:52:01 INFO     epoch complete!
+2024-05-02 09:52:01 INFO     evaluating now!
+2024-05-02 09:52:01 INFO     Epoch [11/200] train_loss: 4.9098, val_loss: 5.3105, lr: 0.003000, 6.40s
+2024-05-02 09:52:08 INFO     epoch complete!
+2024-05-02 09:52:08 INFO     evaluating now!
+2024-05-02 09:52:08 INFO     Epoch [12/200] train_loss: 4.7951, val_loss: 5.1310, lr: 0.003000, 6.59s
+2024-05-02 09:52:08 INFO     Saved model at 12
+2024-05-02 09:52:08 INFO     Val loss decrease from 5.3080 to 5.1310, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch12.tar
+2024-05-02 09:52:14 INFO     epoch complete!
+2024-05-02 09:52:14 INFO     evaluating now!
+2024-05-02 09:52:14 INFO     Epoch [13/200] train_loss: 4.7550, val_loss: 5.1245, lr: 0.003000, 6.41s
+2024-05-02 09:52:14 INFO     Saved model at 13
+2024-05-02 09:52:14 INFO     Val loss decrease from 5.1310 to 5.1245, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch13.tar
+2024-05-02 09:52:20 INFO     epoch complete!
+2024-05-02 09:52:20 INFO     evaluating now!
+2024-05-02 09:52:21 INFO     Epoch [14/200] train_loss: 4.6704, val_loss: 5.0490, lr: 0.003000, 6.20s
+2024-05-02 09:52:21 INFO     Saved model at 14
+2024-05-02 09:52:21 INFO     Val loss decrease from 5.1245 to 5.0490, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch14.tar
+2024-05-02 09:52:27 INFO     epoch complete!
+2024-05-02 09:52:27 INFO     evaluating now!
+2024-05-02 09:52:27 INFO     Epoch [15/200] train_loss: 4.5461, val_loss: 5.2210, lr: 0.003000, 6.37s
+2024-05-02 09:52:33 INFO     epoch complete!
+2024-05-02 09:52:33 INFO     evaluating now!
+2024-05-02 09:52:33 INFO     Epoch [16/200] train_loss: 4.4937, val_loss: 4.9589, lr: 0.003000, 6.30s
+2024-05-02 09:52:33 INFO     Saved model at 16
+2024-05-02 09:52:33 INFO     Val loss decrease from 5.0490 to 4.9589, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch16.tar
+2024-05-02 09:52:39 INFO     epoch complete!
+2024-05-02 09:52:39 INFO     evaluating now!
+2024-05-02 09:52:39 INFO     Epoch [17/200] train_loss: 4.4208, val_loss: 4.8524, lr: 0.003000, 6.12s
+2024-05-02 09:52:40 INFO     Saved model at 17
+2024-05-02 09:52:40 INFO     Val loss decrease from 4.9589 to 4.8524, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch17.tar
+2024-05-02 09:52:45 INFO     epoch complete!
+2024-05-02 09:52:45 INFO     evaluating now!
+2024-05-02 09:52:46 INFO     Epoch [18/200] train_loss: 4.3456, val_loss: 4.8521, lr: 0.003000, 6.24s
+2024-05-02 09:52:46 INFO     Saved model at 18
+2024-05-02 09:52:46 INFO     Val loss decrease from 4.8524 to 4.8521, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch18.tar
+2024-05-02 09:52:52 INFO     epoch complete!
+2024-05-02 09:52:52 INFO     evaluating now!
+2024-05-02 09:52:52 INFO     Epoch [19/200] train_loss: 4.3018, val_loss: 4.8891, lr: 0.003000, 6.14s
+2024-05-02 09:52:58 INFO     epoch complete!
+2024-05-02 09:52:58 INFO     evaluating now!
+2024-05-02 09:52:58 INFO     Epoch [20/200] train_loss: 4.2657, val_loss: 4.8419, lr: 0.003000, 6.21s
+2024-05-02 09:52:58 INFO     Saved model at 20
+2024-05-02 09:52:58 INFO     Val loss decrease from 4.8521 to 4.8419, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch20.tar
+2024-05-02 09:53:04 INFO     epoch complete!
+2024-05-02 09:53:04 INFO     evaluating now!
+2024-05-02 09:53:04 INFO     Epoch [21/200] train_loss: 4.2187, val_loss: 4.9747, lr: 0.003000, 6.13s
+2024-05-02 09:53:10 INFO     epoch complete!
+2024-05-02 09:53:10 INFO     evaluating now!
+2024-05-02 09:53:11 INFO     Epoch [22/200] train_loss: 4.1802, val_loss: 4.8780, lr: 0.003000, 6.17s
+2024-05-02 09:53:16 INFO     epoch complete!
+2024-05-02 09:53:16 INFO     evaluating now!
+2024-05-02 09:53:17 INFO     Epoch [23/200] train_loss: 4.1284, val_loss: 4.8036, lr: 0.003000, 6.13s
+2024-05-02 09:53:17 INFO     Saved model at 23
+2024-05-02 09:53:17 INFO     Val loss decrease from 4.8419 to 4.8036, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch23.tar
+2024-05-02 09:53:22 INFO     epoch complete!
+2024-05-02 09:53:22 INFO     evaluating now!
+2024-05-02 09:53:23 INFO     Epoch [24/200] train_loss: 4.0795, val_loss: 4.7597, lr: 0.003000, 6.10s
+2024-05-02 09:53:23 INFO     Saved model at 24
+2024-05-02 09:53:23 INFO     Val loss decrease from 4.8036 to 4.7597, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch24.tar
+2024-05-02 09:53:29 INFO     epoch complete!
+2024-05-02 09:53:29 INFO     evaluating now!
+2024-05-02 09:53:29 INFO     Epoch [25/200] train_loss: 4.0167, val_loss: 4.8679, lr: 0.003000, 6.13s
+2024-05-02 09:53:35 INFO     epoch complete!
+2024-05-02 09:53:35 INFO     evaluating now!
+2024-05-02 09:53:35 INFO     Epoch [26/200] train_loss: 4.0481, val_loss: 4.6733, lr: 0.003000, 6.10s
+2024-05-02 09:53:35 INFO     Saved model at 26
+2024-05-02 09:53:35 INFO     Val loss decrease from 4.7597 to 4.6733, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch26.tar
+2024-05-02 09:53:41 INFO     epoch complete!
+2024-05-02 09:53:41 INFO     evaluating now!
+2024-05-02 09:53:41 INFO     Epoch [27/200] train_loss: 3.9494, val_loss: 4.6863, lr: 0.003000, 6.13s
+2024-05-02 09:53:47 INFO     epoch complete!
+2024-05-02 09:53:47 INFO     evaluating now!
+2024-05-02 09:53:47 INFO     Epoch [28/200] train_loss: 3.9433, val_loss: 4.8807, lr: 0.003000, 6.18s
+2024-05-02 09:53:53 INFO     epoch complete!
+2024-05-02 09:53:53 INFO     evaluating now!
+2024-05-02 09:53:53 INFO     Epoch [29/200] train_loss: 3.9008, val_loss: 4.7210, lr: 0.003000, 6.09s
+2024-05-02 09:53:59 INFO     epoch complete!
+2024-05-02 09:53:59 INFO     evaluating now!
+2024-05-02 09:54:00 INFO     Epoch [30/200] train_loss: 3.8701, val_loss: 4.6365, lr: 0.003000, 6.20s
+2024-05-02 09:54:00 INFO     Saved model at 30
+2024-05-02 09:54:00 INFO     Val loss decrease from 4.6733 to 4.6365, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch30.tar
+2024-05-02 09:54:06 INFO     epoch complete!
+2024-05-02 09:54:06 INFO     evaluating now!
+2024-05-02 09:54:06 INFO     Epoch [31/200] train_loss: 3.8583, val_loss: 4.6510, lr: 0.003000, 6.16s
+2024-05-02 09:54:12 INFO     epoch complete!
+2024-05-02 09:54:12 INFO     evaluating now!
+2024-05-02 09:54:12 INFO     Epoch [32/200] train_loss: 3.7993, val_loss: 4.8142, lr: 0.003000, 6.34s
+2024-05-02 09:54:18 INFO     epoch complete!
+2024-05-02 09:54:18 INFO     evaluating now!
+2024-05-02 09:54:19 INFO     Epoch [33/200] train_loss: 3.8193, val_loss: 4.6176, lr: 0.003000, 6.43s
+2024-05-02 09:54:19 INFO     Saved model at 33
+2024-05-02 09:54:19 INFO     Val loss decrease from 4.6365 to 4.6176, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch33.tar
+2024-05-02 09:54:25 INFO     epoch complete!
+2024-05-02 09:54:25 INFO     evaluating now!
+2024-05-02 09:54:25 INFO     Epoch [34/200] train_loss: 3.7201, val_loss: 4.6967, lr: 0.003000, 6.45s
+2024-05-02 09:54:31 INFO     epoch complete!
+2024-05-02 09:54:31 INFO     evaluating now!
+2024-05-02 09:54:32 INFO     Epoch [35/200] train_loss: 3.7421, val_loss: 4.7001, lr: 0.003000, 6.40s
+2024-05-02 09:54:38 INFO     epoch complete!
+2024-05-02 09:54:38 INFO     evaluating now!
+2024-05-02 09:54:38 INFO     Epoch [36/200] train_loss: 3.6947, val_loss: 4.7031, lr: 0.003000, 6.49s
+2024-05-02 09:54:44 INFO     epoch complete!
+2024-05-02 09:54:44 INFO     evaluating now!
+2024-05-02 09:54:44 INFO     Epoch [37/200] train_loss: 3.6961, val_loss: 4.7031, lr: 0.003000, 6.36s
+2024-05-02 09:54:50 INFO     epoch complete!
+2024-05-02 09:54:50 INFO     evaluating now!
+2024-05-02 09:54:51 INFO     Epoch [38/200] train_loss: 3.6648, val_loss: 4.6255, lr: 0.003000, 6.24s
+2024-05-02 09:54:57 INFO     epoch complete!
+2024-05-02 09:54:57 INFO     evaluating now!
+2024-05-02 09:54:57 INFO     Epoch [39/200] train_loss: 3.6075, val_loss: 4.6670, lr: 0.003000, 6.45s
+2024-05-02 09:55:03 INFO     epoch complete!
+2024-05-02 09:55:03 INFO     evaluating now!
+2024-05-02 09:55:04 INFO     Epoch [40/200] train_loss: 3.6360, val_loss: 4.6218, lr: 0.003000, 6.41s
+2024-05-02 09:55:10 INFO     epoch complete!
+2024-05-02 09:55:10 INFO     evaluating now!
+2024-05-02 09:55:10 INFO     Epoch [41/200] train_loss: 3.5720, val_loss: 4.7360, lr: 0.003000, 6.38s
+2024-05-02 09:55:16 INFO     epoch complete!
+2024-05-02 09:55:16 INFO     evaluating now!
+2024-05-02 09:55:16 INFO     Epoch [42/200] train_loss: 3.5760, val_loss: 4.6209, lr: 0.003000, 6.43s
+2024-05-02 09:55:22 INFO     epoch complete!
+2024-05-02 09:55:22 INFO     evaluating now!
+2024-05-02 09:55:23 INFO     Epoch [43/200] train_loss: 3.5428, val_loss: 4.7189, lr: 0.003000, 6.46s
+2024-05-02 09:55:29 INFO     epoch complete!
+2024-05-02 09:55:29 INFO     evaluating now!
+2024-05-02 09:55:29 INFO     Epoch [44/200] train_loss: 3.5278, val_loss: 4.7314, lr: 0.003000, 6.40s
+2024-05-02 09:55:36 INFO     epoch complete!
+2024-05-02 09:55:36 INFO     evaluating now!
+2024-05-02 09:55:36 INFO     Epoch [45/200] train_loss: 3.5149, val_loss: 4.7836, lr: 0.003000, 7.02s
+2024-05-02 09:55:42 INFO     epoch complete!
+2024-05-02 09:55:42 INFO     evaluating now!
+2024-05-02 09:55:42 INFO     Epoch [46/200] train_loss: 3.4887, val_loss: 4.7460, lr: 0.003000, 5.85s
+2024-05-02 09:55:48 INFO     epoch complete!
+2024-05-02 09:55:48 INFO     evaluating now!
+2024-05-02 09:55:48 INFO     Epoch [47/200] train_loss: 3.4745, val_loss: 4.6368, lr: 0.003000, 5.94s
+2024-05-02 09:55:54 INFO     epoch complete!
+2024-05-02 09:55:54 INFO     evaluating now!
+2024-05-02 09:55:54 INFO     Epoch [48/200] train_loss: 3.4377, val_loss: 4.6607, lr: 0.003000, 5.94s
+2024-05-02 09:55:54 WARNING  Early stopping at epoch: 48
+2024-05-02 09:55:54 INFO     Trained totally 49 epochs, average train time is 5.965s, average eval time is 0.361s
+2024-05-02 09:55:54 INFO     Loaded model at 33
+2024-05-02 09:55:54 INFO     Saved model at ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406.m
+2024-05-02 09:55:54 INFO     Start evaluating ...
+2024-05-02 09:55:55 INFO     Note that you select the single mode to evaluate!
+2024-05-02 09:55:55 INFO     Evaluate result is saved at ./libcity/cache/15/evaluate_cache/2024_05_02_09_55_55_AGCRN_CHITaxi20190406.csv
+2024-05-02 09:55:55 INFO     
+         MAE       RMSE
+1   2.198752   6.731879
+2   2.304183   7.263960
+3   2.489915   8.146537
+4   2.567333   8.587802
+5   2.637367   8.903437
+6   2.684867   9.086184
+7   2.700891   9.310616
+8   2.679877   9.520034
+9   2.674503   9.683676
+10  2.674437   9.775371
+11  2.736543   9.911427
+12  2.793988  10.173694
+2024-05-02 09:55:55 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:55:55 INFO     Kownledge Graph Embedding: GIE, Experiment ids: [15, 16, 17, 18, 19]
+2024-05-02 09:55:55 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:55:56 INFO     Average: 
+         MAE       RMSE
+0   2.285607   7.048089
+1   2.375390   7.591069
+2   2.528792   8.398862
+3   2.614315   8.817168
+4   2.671034   9.063055
+5   2.718040   9.245365
+6   2.723713   9.421527
+7   2.721630   9.584631
+8   2.727558   9.641434
+9   2.714353   9.738284
+10  2.748750   9.868534
+11  2.815485  10.150965 
+2024-05-02 09:55:56 INFO     Standard deviation: 
+         MAE      RMSE
+0   0.060818  0.274938
+1   0.049113  0.286800
+2   0.033483  0.242824
+3   0.031762  0.212817
+4   0.032827  0.198647
+5   0.049482  0.220155
+6   0.029337  0.190171
+7   0.042100  0.134410
+8   0.043177  0.116645
+9   0.048209  0.114878
+10  0.056685  0.135857
+11  0.035096  0.096297
+2024-05-02 09:55:56 INFO     ----------------------------------------------------------------------------
+2024-05-02 09:55:56 INFO     12 steps Average: 
+        MAE      RMSE
+0  2.637056  9.047415
+2024-05-02 09:55:56 INFO     12 steps Standard deviation: 
+        MAE     RMSE
+0  0.042674  0.18537
