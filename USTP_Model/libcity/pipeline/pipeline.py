@@ -11,6 +11,7 @@ import random
 from libcity.config import ConfigParser
 from libcity.data import get_dataset
 from libcity.utils import get_executor, get_model, get_logger, ensure_dir, set_random_seed
+from logging import getLogger
 
 
 def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
@@ -34,13 +35,25 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
         # Make a new experiment ID
         exp_id = int(random.SystemRandom().random() * 100000)
         config['exp_id'] = exp_id
+    # !!!
     # logger
-    logger = get_logger(config)
+    # logger = get_logger(config)
+    logger = getLogger()
+    logger.info('----------------------------------------------------------------------------')
+    logger.info("# {}, Kownledge Graph Embedding: {}, Experiment ids: {}".
+                 format(config.get('cur_times', 0),
+                        config.get('embedding_model', 'Normal'),
+                        config.get('exp_id', 0) + config.get('cur_times', 0)))
+    logger.info('----------------------------------------------------------------------------')
+    # !!!
     logger.info('Begin pipeline, task={}, model_name={}, dataset_name={}, exp_id={}'.
                 format(str(task), str(model_name), str(dataset_name), str(exp_id)))
     logger.info(config.config)
+    # !!!
     # seed
-    seed = config.get('seed', 0)
+    # seed = config.get('seed', 0)
+    seed = config.get('seed', int(random.SystemRandom().random() * 100000))
+    # !!!
     set_random_seed(seed)
     # 加载数据集
     dataset = get_dataset(config)
@@ -60,7 +73,9 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     else:
         executor.load_model(model_cache_file)
     # 评估，评估结果将会放在 cache/evaluate_cache 下
-    executor.evaluate(test_data)
+    # !!!
+    return executor.evaluate(test_data)
+    # !!!
 
 
 def parse_search_space(space_file):
@@ -233,7 +248,6 @@ def hyper_parameter(task=None, model_name=None, dataset_name=None, config_file=N
 
 def objective_function(task=None, model_name=None, dataset_name=None, config_file=None,
                        saved_model=True, train=True, other_args=None, hyper_config_dict=None):
-    print(model_name, task, "111111111")
     config = ConfigParser(task, model_name, dataset_name,
                           config_file, saved_model, train, other_args, hyper_config_dict)
     dataset = get_dataset(config)

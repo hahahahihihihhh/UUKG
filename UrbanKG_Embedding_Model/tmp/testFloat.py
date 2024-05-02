@@ -117,7 +117,28 @@ import torch.nn as nn
 # print(a)
 # print(a[torch.tensor([0, 0, 0, 1, 2, 3, 4, 5, 6, 7])])
 
-a = torch.tensor([[1., 2.],
-                  [2., 3.]])
-b = torch.tensor([2., 3.])
-print(a / b)
+# a = np.array([ [[1., 2., 3.],
+#                     [4., 5., 6.]],
+#                    [[7., 8., 9.],
+#                     [10, 11, 12.]],
+#                    [[13., 14., 15.],
+#                     [16., 17., 18.]],
+#                    [[19., 20., 21.],
+#                     [22., 23., 24.]] ])
+# a[:, :, [0, 2]] = 1
+# print(a)
+# print(a)
+# print(a.swapaxes(0, 1))
+
+# time_ind = np.array([1, 2, 3])
+# res = np.tile(time_ind, [1, 2, 1])
+# print(res.shape, res)
+# res2 = res.transpose(2, 1, 0)
+# print(res2.shape, res2)
+#
+# print(np.arange(100))
+
+mask = torch.tensor([[0, 0, 0],
+                     [0, 0, 0]])
+mask = mask.float()
+print(mask / torch.mean(mask))

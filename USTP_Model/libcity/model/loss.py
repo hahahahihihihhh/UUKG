@@ -1,7 +1,24 @@
 import torch
 import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
+from sklearn.metrics import precision_recall_fscore_support
 
+def micro_f1(y_pred, y_true):
+
+    y_pred = y_pred.cpu().detach().numpy()
+    y_true = y_true.cpu().detach().numpy()
+    y_pred = (y_pred.flatten() >= 0.43).astype(int)
+    y_true = (y_true.flatten() >= 0.4).astype(int)
+
+    return precision_recall_fscore_support(y_true, y_pred, average='micro')[2]
+
+def macro_f1(y_pred, y_true):
+    y_pred = y_pred.cpu().detach().numpy()
+    y_true = y_true.cpu().detach().numpy()
+    y_pred = (y_pred.flatten() >= 0.43).astype(int)
+    y_true = (y_true.flatten() >= 0.4).astype(int)
+
+    return precision_recall_fscore_support(y_true, y_pred, average='macro')[2]
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()
