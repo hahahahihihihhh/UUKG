@@ -24,6 +24,8 @@ class TrafficStateDataset(AbstractDataset):
         # !!!
         self.embedding_model = config.get('embedding_model', '')
         self.embedding_type = self.config.get('embedding_type', '')
+        self.ext_time_dim = 0
+        self.ext_space_dim = 0
         # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
@@ -612,6 +614,8 @@ class TrafficStateDataset(AbstractDataset):
             dayofweek = []
             for day in self.timesolts.astype("datetime64[D]"):
                 dayofweek.append(datetime.datetime.strptime(str(day), '%Y-%m-%d').weekday())
+            # day_inw = np.array(dayofweek) / 6
+            # day_in_week = np.tile(day_inw, [1, num_nodes, 1]).transpose((2, 1, 0))
             day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
             day_in_week[np.arange(num_samples), :, dayofweek] = 1
             data_list.append(day_in_week)
@@ -637,18 +641,25 @@ class TrafficStateDataset(AbstractDataset):
         data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
         # !!! ---Concat
         assert self.load_external == True
-        entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
-                                               self.dataset[:3],
-                                               self.embedding_model,
-                                               "{}_embeddings.npy".format(self.embedding_type))
-        )   # [77, 32]
-        ext_feature_dim = entity_embeddings.shape[1]
-        new_data = np.zeros([num_samples, num_nodes, feature_dim + ext_feature_dim])   # [4368, 77, 2 + 32]
-        for _ in range(num_samples):
-            new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
-        # print(new_data.shape, new_data)
-        return new_data
+        if self.embedding_model:
+            print(self.embedding_model)
+            entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
+                                                   self.dataset[:3],
+                                                   self.embedding_model,
+                                                   "{}_embeddings.npy".format(self.embedding_type))
+            )   # [77, 32]
+            self.ext_time_dim = data.shape[-1] - feature_dim
+            self.ext_space_dim = entity_embeddings.shape[1]
+            new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
+            for _ in range(num_samples):
+                new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
+            print(new_data.shape)
+            return new_data
+        else:
+            print(data.shape)
+            return data
         # !!! ---Concat
+        # print(data.shape, data)
         # return data
 
     def _add_external_information_4d(self, df, ext_data=None):
@@ -983,12 +994,20 @@ class TrafficStateDataset(AbstractDataset):
         x_test[..., :self.output_dim] = self.scaler.transform(x_test[..., :self.output_dim])
         y_test[..., :self.output_dim] = self.scaler.transform(y_test[..., :self.output_dim])
         if self.normal_external:
-            x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
-            y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
-            x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
-            y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
-            x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
-            y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
+            # x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
+            # y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
+            # x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
+            # y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
+            # x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
+            # y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
+            # !!!
+            x_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_train[..., -self.ext_space_dim:])
+            y_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_train[..., -self.ext_space_dim:])
+            x_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_val[..., -self.ext_space_dim:])
+            y_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_val[..., -self.ext_space_dim:])
+            x_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_test[..., -self.ext_space_dim:])
+            y_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_test[..., -self.ext_space_dim:])
+            # !!!
         # 把训练集的X和y聚合在一起成为list，测试集验证集同理
         # x_train/y_train: (num_samples, input_length, ..., feature_dim)
         # train_data(list): train_data[i]是一个元组，由x_train[i]和y_train[i]组成
