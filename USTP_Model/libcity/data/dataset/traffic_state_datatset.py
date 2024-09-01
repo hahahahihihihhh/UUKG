@@ -641,14 +641,13 @@ class TrafficStateDataset(AbstractDataset):
         data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
         # !!! ---Concat
         assert self.load_external == True
+        self.ext_time_dim = data.shape[-1] - feature_dim
         if self.embedding_model:
-            print(self.embedding_model)
             entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
                                                    self.dataset[:3],
                                                    self.embedding_model,
                                                    "{}_embeddings.npy".format(self.embedding_type))
             )   # [77, 32]
-            self.ext_time_dim = data.shape[-1] - feature_dim
             self.ext_space_dim = entity_embeddings.shape[1]
             new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
             for _ in range(num_samples):
@@ -985,8 +984,12 @@ class TrafficStateDataset(AbstractDataset):
         self.ext_dim = self.feature_dim - self.output_dim
         self.scaler = self._get_scalar(self.scaler_type,
                                        x_train[..., :self.output_dim], y_train[..., :self.output_dim])
+        # self.ext_scaler = self._get_scalar(self.ext_scaler_type,
+        #                                    x_train[..., self.output_dim:], y_train[..., self.output_dim:])
+        # !!!
         self.ext_scaler = self._get_scalar(self.ext_scaler_type,
-                                           x_train[..., self.output_dim:], y_train[..., self.output_dim:])
+                                           x_train[..., -self.ext_space_dim:], y_train[..., -self.ext_space_dim:])
+        # !!!
         x_train[..., :self.output_dim] = self.scaler.transform(x_train[..., :self.output_dim])
         y_train[..., :self.output_dim] = self.scaler.transform(y_train[..., :self.output_dim])
         x_val[..., :self.output_dim] = self.scaler.transform(x_val[..., :self.output_dim])

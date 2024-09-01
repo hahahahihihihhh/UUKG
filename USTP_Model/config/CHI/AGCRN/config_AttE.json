@@ -4,8 +4,11 @@
     "dataset": "CHITaxi20190406",
 
     "exp_id": 45,
-    "load_external": true,
     "embedding_model": "AttE",
+
+    "load_external": true,
+    "normal_external": true,
+    "ext_scaler": "normal",
 
     "max_epoch": 200,
     "patience": 15,

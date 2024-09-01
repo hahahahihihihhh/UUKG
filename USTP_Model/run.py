@@ -13,7 +13,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHI/AGCRN/config_GIE.json'
+config_file = 'config/CHI/AGCRN/config_RefE.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -51,14 +51,14 @@ def train(config, total = 5):
     else:
         ext = 'ExtNone'
 
-    if extSpace:
-        scl = 'Scaler/'
-        if config.get('normal_external', False):
-            scl += config.get('ext_scaler', 'none')
-        else:
-            scl += 'none'
-    else:
-        scl = ''
+    # if extSpace:
+    #     scl = 'Scaler/'
+    #     if config.get('normal_external', False):
+    #         scl += config.get('ext_scaler', 'none')
+    #     else:
+    #         scl += 'none'
+    # else:
+    #     scl = ''
 
     if extSpace:
         emb = config.get('embedding_model', 'NoneE')
@@ -67,7 +67,6 @@ def train(config, total = 5):
 
     save_dir = os.path.join(log, config['dataset'], config['model'],
                             ext,
-                            scl,
                             emb)
     print(save_dir)
 
