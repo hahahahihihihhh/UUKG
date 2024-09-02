@@ -13,7 +13,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHI/AGCRN/config_RefE.json'
+config_file = 'config/CHI/AGCRN/config_TransH.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -60,14 +60,11 @@ def train(config, total = 5):
     # else:
     #     scl = ''
 
+    emb = ''
     if extSpace:
-        emb = config.get('embedding_model', 'NoneE')
-    else:
-        emb = ''
+        emb = config.get('embedding_model', '')
 
-    save_dir = os.path.join(log, config['dataset'], config['model'],
-                            ext,
-                            emb)
+    save_dir = os.path.join(log, config['dataset'], config['model'], ext, emb)
     print(save_dir)
 
     # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')

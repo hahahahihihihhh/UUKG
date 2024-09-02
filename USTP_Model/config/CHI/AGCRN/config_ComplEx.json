@@ -1,0 +1,19 @@
+{
+    "task": "traffic_state_pred",
+    "model": "AGCRN",
+    "dataset": "CHITaxi20190406",
+
+    "exp_id": 70,
+    "embedding_model": "ComplEx",
+
+    "load_external": true,
+    "normal_external": true,
+    "ext_scaler": "normal",
+
+    "max_epoch": 200,
+    "patience": 15,
+    "cache_dataset": false,
+    "output_window": 12,
+    "metrics": ["MAE", "RMSE"]
+
+}
