@@ -1,0 +1,28 @@
+{
+  "dataset": "NYC",
+  "model": "GIE",
+  "optimizer": "Adam",
+
+  "max_epochs": 300,
+  "patience": 10,
+  "valid": 3,
+
+  "rank": 32,
+  "batch_size": 4096,
+  "learning_rate": 0.001,
+
+  "neg_sample_size": 50,
+  "init_size": 0.001,
+  "multi_c": true,
+
+  "regularizer": "N3",
+  "reg": 0,
+  "dropout": 0,
+  "gamma": 0,
+
+  "bias": "constant",
+  "dtype": "double",
+  "double_neg": false,
+
+  "debug": false
+}
