@@ -1,13 +1,3 @@
-import networkx as nx
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
-
-ANA, area_num = 0, 77
-df = pd.read_csv("./UrbanKG/CHI/triplets_CHI.txt", sep=" ", header=None)
-entity2id = pd.read_csv("./UrbanKG/CHI/entity2id_CHI.txt", sep=" ", header=None)
-
 class Graph_Matrix:
     """
     Adjacency Matrix
@@ -117,62 +107,3 @@ class Graph_Matrix:
 
     def to_do_edge(self, w, k):
         print('edge tail: %s, edge head: %s, weight: %s' % (self.vertices[w], self.vertices[k], str(self.matrix[w][k])))
-
-
-def draw_directed_graph(my_graph):
-    G = nx.DiGraph()  # 建立一个空的无向图G
-    for node in my_graph.vertices:
-        G.add_node(str(node))
-    G.add_weighted_edges_from(my_graph.edges_array)
-
-    print("nodes:", G.nodes())  # 输出全部的节点
-    print("edges:", G.edges())  # 输出全部的边
-    print("number of edges:", G.number_of_edges())  # 输出边的数量
-    nx.draw(G, with_labels=True)
-    plt.savefig("directed_graph.png")
-    plt.show()
-
-
-def get_area_id(area: str) -> int:
-    return int(area.split("/")[1])
-
-# def create_directed_graph_from_edges(edge_list):
-#     nodes = ["Area/" + str(_) for _ in range(area_num + 1)]
-#     my_graph = Graph_Matrix(nodes)
-#     my_graph.add_edges_from_list(edge_list)
-#     print(my_graph)
-#     return my_graph
-#
-# def draw_directed_graph(my_graph):
-#     G = nx.DiGraph()  # 建立一个空的无向图G
-#     for node in my_graph.vertices:
-#         G.add_node(str(node))
-#     G.add_weighted_edges_from(my_graph.edges_array)
-#
-#     print("nodes:", G.nodes())  # 输出全部的节点
-#     print("edges:", G.edges())  # 输出全部的边
-#     print("number of edges:", G.number_of_edges())  # 输出边的数量
-#     nx.draw(G, with_labels=True)
-#     plt.savefig("directed_graph.png")
-#     plt.show()
-
-
-id2entity = {}
-for _e, _i in entity2id.values:
-    id2entity[_i] = _e
-area = ["" + str(_) for _ in range(77)]
-area_graph = [[0 for _i in range(area_num)] for _ in range(area_num)]
-edges = []
-for _h, _r, _t in df.values:
-    if _r == ANA:
-        # edges.append((id2entity[_h], id2entity[_t], 1))
-        _h, _t = get_area_id(id2entity[_h]), get_area_id(id2entity[_t])
-        area_graph[_h-1][_t-1] = 1
-
-g = Graph_Matrix(vertices=area, matrix=area_graph)
-
-draw_directed_graph(g)
-
-
-
-

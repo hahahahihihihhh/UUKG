@@ -24,12 +24,12 @@ DATA_PATH = '../data'
 # model_path = "embedding_model/CHI/RotH"
 # model_path = "embedding_model/CHI/AttH"
 # model_path = "embedding_model/CHI/RefH"
-# model_path = "embedding_model/CHI/GIE"
+model_path = "embedding_model/CHI/GIE"
 # model_path = "embedding_model/CHI/RandomE"
 # model_path = "embedding_model/CHI/RotatE"
 # model_path = "embedding_model/CHI/ComplEx"
 
-model_path = "embedding_model/NYC/GIE"
+# model_path = "embedding_model/NYC/GIE"
 
 
 KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id", "xxx_embeddings"
@@ -121,13 +121,14 @@ def get_embeddings(model_path):
         os.path.join(model_path, "model.pt")))   # fill parameters
     # get embeddings
     entity_embeddings = model.entity.weight.detach().numpy()
+    rel_embeddings = model.rel.weight.detach().numpy()
     idx = pd.read_csv(os.path.join(DATA_PATH, args.dataset, "entities_idx.csv"), header=None)
     entity_idx = np.array(idx)
     entity_final_embedddings = np.zeros([entity_embeddings.shape[0], entity_embeddings.shape[1]])
     for _i in range(entity_embeddings.shape[0]):
         assert _i == int(entity_idx[_i])
         entity_final_embedddings[int(entity_idx[_i])] = entity_embeddings[_i]
-    return entity_final_embedddings
+    return entity_final_embedddings, rel_embeddings
 
 def get_area_embeddings(area_id2KG_id_path, entity_final_embedddings, embedding_name):
     area = pd.read_csv(area_id2KG_id_path)
@@ -162,6 +163,11 @@ def get_POI_embeddings(POI_id2KG_id_path, entity_final_embedddings, embedding_na
         os.makedirs(save_path)
     np.save(os.path.join(save_path, embedding_name), POI_embeddings)
 
+def get_rel_embeddings(rel_final_embedddings, embedding_name):
+    save_path = os.path.join(save_path_prefix, args.dataset, args.model)
+    nr = rel_final_embedddings.shape[0]
+    np.save(os.path.join(save_path, embedding_name), rel_final_embedddings[:nr//2])
+
 if __name__ == "__main__":
     # entity_final_embedddings, pca_final_embeddings, tsne_dim2_embeddings = get_embeddings(parser.parse_args())
     # load config file
@@ -169,13 +175,14 @@ if __name__ == "__main__":
         config = json.load(config)
         parser = init_parser(config)
         args = parser.parse_args()
-    entity_final_embedddings = get_embeddings(model_path)
+    entity_final_embedddings, rel_final_embeddings = get_embeddings(model_path)
     get_area_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_area_id2KG_id.csv"),
                         entity_final_embedddings,"area_embeddings.npy")
     get_road_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_road_id2KG_id.csv"),
                         entity_final_embedddings,"road_embeddings.npy")
     get_POI_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_POI_id2KG_id.csv"),
                         entity_final_embedddings,  "POI_embeddings.npy")
+    get_rel_embeddings(rel_final_embeddings, "rel_embeddings.npy")
 
 
 
