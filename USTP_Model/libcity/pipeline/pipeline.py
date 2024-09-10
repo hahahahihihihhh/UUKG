@@ -63,6 +63,7 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     # 加载执行器
     model_cache_file = './libcity/cache/{}/model_cache/{}_{}.m'.format(
         exp_id, model_name, dataset_name)
+    print(config)
     model = get_model(config, data_feature)
     executor = get_executor(config, model, data_feature)
     # 训练

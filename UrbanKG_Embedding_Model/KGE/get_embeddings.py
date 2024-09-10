@@ -14,22 +14,22 @@ from datasets.kg_dataset import KGDataset
 from models import all_models
 
 DATA_PATH = '../data'
+# model_path = "embedding_model/CHI/AttE"
+# model_path = "embedding_model/CHI/AttH"
+# model_path = "embedding_model/CHI/ComplEx"
+# model_path = "embedding_model/CHI/DisMult"
+# model_path = "embedding_model/CHI/GIE"
+# model_path = "embedding_model/CHI/MuRE"
+# model_path = "embedding_model/CHI/RandomE"
+# model_path = "embedding_model/CHI/RefE"
+# model_path = "embedding_model/CHI/RefH"
+# model_path = "embedding_model/CHI/RotatE"
+# model_path = "embedding_model/CHI/RotE"
+# model_path = "embedding_model/CHI/RotH"
 # model_path = "embedding_model/CHI/TransE"
 # model_path = "embedding_model/CHI/TransH"
-# model_path = "embedding_model/CHI/DisMult"
-# model_path = "embedding_model/CHI/MuRE"
-# model_path = "embedding_model/CHI/RotE"
-# model_path = "embedding_model/CHI/AttE"
-# model_path = "embedding_model/CHI/RefE"
-# model_path = "embedding_model/CHI/RotH"
-# model_path = "embedding_model/CHI/AttH"
-# model_path = "embedding_model/CHI/RefH"
-model_path = "embedding_model/CHI/GIE"
-# model_path = "embedding_model/CHI/RandomE"
-# model_path = "embedding_model/CHI/RotatE"
-# model_path = "embedding_model/CHI/ComplEx"
 
-# model_path = "embedding_model/NYC/GIE"
+model_path = "embedding_model/NYC/GIE"
 
 
 KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id", "xxx_embeddings"
@@ -177,12 +177,12 @@ if __name__ == "__main__":
         args = parser.parse_args()
     entity_final_embedddings, rel_final_embeddings = get_embeddings(model_path)
     get_area_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_area_id2KG_id.csv"),
-                        entity_final_embedddings,"area_embeddings.npy")
+                        entity_final_embedddings,"area_{}d.npy".format(args.rank))
     get_road_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_road_id2KG_id.csv"),
-                        entity_final_embedddings,"road_embeddings.npy")
+                        entity_final_embedddings,"road_{}d.npy".format(args.rank))
     get_POI_embeddings(os.path.join(KG_id_path_prefix, args.dataset, "used_POI_id2KG_id.csv"),
-                        entity_final_embedddings,  "POI_embeddings.npy")
-    get_rel_embeddings(rel_final_embeddings, "rel_embeddings.npy")
+                        entity_final_embedddings,  "POI_{}d.npy".format(args.rank))
+    get_rel_embeddings(rel_final_embeddings, "rel_{}d.npy".format(args.rank))
 
 
 

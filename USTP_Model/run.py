@@ -13,7 +13,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/NYC/AGCRN/NYCTaxi20200406/config_GIE.json'
+config_file = 'config/NYCHuman20200406/AGCRN/config.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -38,7 +38,7 @@ config_file = 'config/NYC/AGCRN/NYCTaxi20200406/config_GIE.json'
 #     add_general_args(parser)
 #     return parser
 
-def train(config, total = 5):
+def train(config, total = 1):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
     extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
     extSpace = config.get('load_external', False) and config.get('embedding_model', None)
@@ -50,16 +50,6 @@ def train(config, total = 5):
         ext = 'ExtSpace'
     else:
         ext = 'ExtNone'
-
-    # if extSpace:
-    #     scl = 'Scaler/'
-    #     if config.get('normal_external', False):
-    #         scl += config.get('ext_scaler', 'none')
-    #     else:
-    #         scl += 'none'
-    # else:
-    #     scl = ''
-
     emb = ''
     if extSpace:
         emb = config.get('embedding_model', '')
@@ -78,7 +68,6 @@ def train(config, total = 5):
         filename=os.path.join(save_dir, "train.log"),
         filemode='w'
     )
-
     # stdout logger
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)

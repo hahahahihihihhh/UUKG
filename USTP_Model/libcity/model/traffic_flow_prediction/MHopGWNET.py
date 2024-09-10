@@ -131,11 +131,11 @@ class MHScoreLayer(nn.Module):
             padding_mask: [B, L]
             fusion_type:
         """
-        feat = feat.permute(1, 2, 0)  # B, D, L
-        padding_mask = padding_mask.unsqueeze(-1).repeat(1, 1, self.input_dim).permute(0, 2, 1)  # B, D, L
+        feat = feat.permute(1, 2, 0)  # B, D, L (471, 32, 4)
+        padding_mask = padding_mask.unsqueeze(-1).repeat(1, 1, self.input_dim).permute(0, 2, 1)  # B, D, L (471, 32, 4)
         # valued_mask = 1 - padding_mask
         # weight_mask = feat.sum(1).unsequence(1).repeat(1, self.input_dim, 1)  # B, D, L
-        feat = feat.masked_fill(padding_mask, float('-inf'))
+        feat = feat.masked_fill(padding_mask, float('-inf'))        # 掩码
 
         if fusion_type == 'maxpooling':
             feat = self.hop_max_pooling(feat).squeeze(-1)
@@ -215,22 +215,19 @@ class MHopGWNET(AbstractTrafficStateModel):
         self.attn_num_heads = config.get('attn_num_heads', 1)
 
         # process path feat
-        self.path_feat_path = 'kg_utils/path_feature/{}/{}_{}_{}hop.pkl'.format(
+        self.path_feat_path = './KG/path_feature/{}/{}/{}_{}hop.pkl'.format(
             self.dataset, self.ke_model, self.ke_dim, self.max_hop)
         with open(self.path_feat_path, mode='rb') as f:
-            print(111)
             origin_path_feats = pickle.load(f)
-        exit(0)
+        # after path feature fusion
         self._logger.info('load path_feat from {}'.format(self.path_feat_path))
         max_path_len, self.mh_feat, self.mh_value_mask, self.mh_padding_mask, self.i1d_to_ij2d = \
             self.process_feats(origin_path_feats)  # 注意，value_mask与padding_mask的意义相反
-
         # init mh_layers
         self.mh_feat_encoder = None
         # if self.mh_encoder_type == 'Attention':
         attn_layers = [PathAttention(embedding_dim=self.ke_dim, num_heads=self.attn_num_heads) for _ in range(self.attn_num_layers)]
         self.mh_feat_encoder = nn.Sequential(*attn_layers)
-        print(self.mh_feat_encoder)
         self.mh_score_layer = MHScoreLayer(max_path_len, self.ke_dim, self.num_nodes)
 
         self.apt_layer = config.get('apt_layer', True)
@@ -347,16 +344,15 @@ class MHopGWNET(AbstractTrafficStateModel):
         for i in range(self.num_nodes):
             for j in range(self.num_nodes):
                 if origin_path_feats[i][j] is not None:
-                    max_path_len = max(max_path_len, origin_path_feats[i][j].shape[1] // self.ke_dim)
-
+                    max_path_len = max(max_path_len, origin_path_feats[i][j].shape[0] // self.ke_dim)
         padding_feat, padding_mask, i1d_to_ij2d, value_mask = [], [], {}, torch.zeros((self.num_nodes, self.num_nodes))
         cur_i1d = 0
         for i in range(self.num_nodes):
             for j in range(self.num_nodes):
                 if origin_path_feats[i][j] is not None:
                     zero_feat = torch.zeros((1, max_path_len, self.ke_dim))
-                    one_mask = torch.zeros(1, max_path_len)
-                    value_feat = origin_path_feats[i][j].view(-1, self.ke_dim)
+                    one_mask = torch.ones(1, max_path_len)
+                    value_feat = origin_path_feats[i][j].view(-1, self.ke_dim)      # path_len, self.ke_dim
                     zero_feat[:, :value_feat.shape[0]] = value_feat
                     one_mask[:, :value_feat.shape[0]] = False  # 将没有被 padding 的位置置为 0
                     padding_feat.append(zero_feat)
@@ -364,7 +360,6 @@ class MHopGWNET(AbstractTrafficStateModel):
                     value_mask[i][j] = True  # 将没有被 padding 的位置置为 1
                     i1d_to_ij2d[cur_i1d] = [i, j]
                     cur_i1d += 1
-
         mh_feat = torch.cat(padding_feat, dim=0).permute(1, 0, 2).to(self.device)
         mh_padding_mask = torch.cat(padding_mask, dim=0).to(self.device).bool()
         mh_value_mask = value_mask.to(self.device).bool()
@@ -403,7 +398,7 @@ class MHopGWNET(AbstractTrafficStateModel):
             mh_score[i2d][j2d] = score[i1d]
 
         np.savetxt('MHop_Correlation.csv', mh_score.detach().cpu().numpy())
-        exit()
+
         new_supports += [mh_score]
 
         # new_supports += [self.eval_mh_score]

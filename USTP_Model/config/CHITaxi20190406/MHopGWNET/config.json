@@ -1,0 +1,17 @@
+{
+    "task": "traffic_state_pred",
+    "model": "MHopGWNET",
+    "dataset": "CHITaxi20190406",
+
+    "exp_id": 10000,
+    "ke_model": "GIE",
+    "ke_dim": 32,
+    "max_hop": 1,
+
+    "max_epoch": 200,
+    "patience": 15,
+    "cache_dataset": false,
+    "output_window": 12,
+    "metrics": ["MAE", "RMSE"]
+
+}
