@@ -26,6 +26,7 @@ class TrafficStateDataset(AbstractDataset):
         self.embedding_type = self.config.get('embedding_type', '')
         self.ext_time_dim = 0
         self.ext_space_dim = 0
+        self.ke_dim = config.get('ke_dim', 32)
         # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
@@ -644,18 +645,18 @@ class TrafficStateDataset(AbstractDataset):
         self.ext_time_dim = data.shape[-1] - feature_dim
         if self.embedding_model:
             entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
-                                                   self.dataset[:3],
+                                                   self.dataset,
                                                    self.embedding_model,
-                                                   "{}_embeddings.npy".format(self.embedding_type))
+                                                   "{}_{}d.npy".format(self.embedding_type, self.ke_dim))
             )   # [77, 32]
             self.ext_space_dim = entity_embeddings.shape[1]
             new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
             for _ in range(num_samples):
                 new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
-            print(new_data.shape)
+            print('new_data shape : ', new_data.shape)
             return new_data
         else:
-            print(data.shape)
+            print('data shape: ', data.shape)
             return data
         # !!! ---Concat
         # print(data.shape, data)
