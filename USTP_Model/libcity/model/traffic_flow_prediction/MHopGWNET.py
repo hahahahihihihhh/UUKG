@@ -286,10 +286,10 @@ class MHopGWNET(AbstractTrafficStateModel):
                 # dilated convolutions
                 self.filter_convs.append(nn.Conv2d(in_channels=self.residual_channels,
                                                    out_channels=self.dilation_channels,
-                                                   kernel_size=(1, self.kernel_size), dilation=new_dilation))
+                                                   kernel_size=(1, self.kernel_size), dilation=new_dilation))   # 二维卷积
                 self.gate_convs.append(nn.Conv1d(in_channels=self.residual_channels,
                                                  out_channels=self.dilation_channels,
-                                                 kernel_size=(1, self.kernel_size), dilation=new_dilation))
+                                                 kernel_size=(1, self.kernel_size), dilation=new_dilation))     # 一维卷积
                 # 1x1 convolution for residual connection
                 self.residual_convs.append(nn.Conv1d(in_channels=self.dilation_channels,
                                                      out_channels=self.residual_channels,
@@ -350,35 +350,34 @@ class MHopGWNET(AbstractTrafficStateModel):
         for i in range(self.num_nodes):
             for j in range(self.num_nodes):
                 if origin_path_feats[i][j] is not None:
-                    zero_feat = torch.zeros((1, max_path_len, self.ke_dim))
-                    one_mask = torch.ones(1, max_path_len)
-                    value_feat = origin_path_feats[i][j].view(-1, self.ke_dim)      # path_len, self.ke_dim
-                    zero_feat[:, :value_feat.shape[0]] = value_feat
-                    one_mask[:, :value_feat.shape[0]] = False  # 将没有被 padding 的位置置为 0
-                    padding_feat.append(zero_feat)
-                    padding_mask.append(one_mask)
-                    value_mask[i][j] = True  # 将没有被 padding 的位置置为 1
-                    i1d_to_ij2d[cur_i1d] = [i, j]
+                    zero_feat = torch.zeros((1, max_path_len, self.ke_dim))         # (1, max_path_len, ke_dim)
+                    one_mask = torch.ones(1, max_path_len)                          # (1, max_path_len)
+                    value_feat = origin_path_feats[i][j].view(-1, self.ke_dim)      # (path_len, ke_dim)
+                    zero_feat[:, :value_feat.shape[0]] = value_feat                 # (1, max_path_len, ke_dim) 填充路径，其余位置用0填充
+                    one_mask[:, :value_feat.shape[0]] = False                       # (1, max_path_len) 填充路径，其余位置用1填充
+                    padding_feat.append(zero_feat)                                  # L * (1, max_path_len, ke_dim)
+                    padding_mask.append(one_mask)                                   # L * (1, max_path_len)
+                    value_mask[i][j] = True                                         # 将有路径的结点对置为 1 (num_nodes, num_nodes)
+                    i1d_to_ij2d[cur_i1d] = [i, j]                                   # 字典存储有路径的结点对
                     cur_i1d += 1
-        mh_feat = torch.cat(padding_feat, dim=0).permute(1, 0, 2).to(self.device)
-        mh_padding_mask = torch.cat(padding_mask, dim=0).to(self.device).bool()
-        mh_value_mask = value_mask.to(self.device).bool()
+        mh_feat = torch.cat(padding_feat, dim=0).permute(1, 0, 2).to(self.device)     # (L, max_path_len, ke_dim) -> (max_path_len, L, ke_dim)
+        mh_padding_mask = torch.cat(padding_mask, dim=0).to(self.device).bool()             # (L, max_path_len)
+        mh_value_mask = value_mask.to(self.device).bool()                                   # (num_nodes, num_nodes)
         return max_path_len, mh_feat, mh_value_mask, mh_padding_mask, i1d_to_ij2d
 
     def forward(self, batch):
         inputs = batch['X']  # (batch_size, input_window, num_nodes, feature_dim)
-        mh_feat = self.mh_feat.detach()
-        mh_padding_mask = self.mh_padding_mask.detach()
+        mh_feat = self.mh_feat.detach() # (max_path_len, L, ke_dim)
+        mh_padding_mask = self.mh_padding_mask.detach() # (L, max_path_len)
 
         inputs = inputs.transpose(1, 3)  # (batch_size, feature_dim, num_nodes, input_window)
         inputs = nn.functional.pad(inputs, (1, 0, 0, 0))  # (batch_size, feature_dim, num_nodes, input_window+1)
-
-        in_len = inputs.size(3)
+        in_len = inputs.size(3)         # in_len = input_window
         if in_len < self.receptive_field:
-            x = nn.functional.pad(inputs, (self.receptive_field - in_len, 0, 0, 0))
+            x = nn.functional.pad(inputs, (self.receptive_field - in_len, 0, 0, 0)) # (batch_size, feature_dim, num_nodes, receptive_field)
         else:
             x = inputs
-        x = self.start_conv(x)  # (batch_size, residual_channels, num_nodes, self.receptive_field)
+        x = self.start_conv(x)  # (batch_size, residual_channels (32), num_nodes, self.receptive_field)
         skip = 0
 
         # calculate the current adaptive adj matrix once per iteration

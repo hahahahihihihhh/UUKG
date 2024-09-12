@@ -13,7 +13,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/NYCBike20200406/AGCRN/config_GIE.json'
+config_file = 'config/CHITaxi20190406/MHopGWNET/config.json'
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
