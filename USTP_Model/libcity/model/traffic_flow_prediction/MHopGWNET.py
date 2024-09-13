@@ -89,7 +89,7 @@ class PathAttention(nn.Module):
     def forward(self, feat, padding_mask):
         """
         Args:
-            feat: (L, N, E) where L is the target sequence length, N is the batch size, E is the embedding dimension
+            feat: (L, N, E) where L = S is the target sequence length, N is the batch size, E is the embedding dimension
             padding_mask: (N, S)` where N is the batch size, S is the source sequence length.
         """
         attn_output, attn_output_weights = self.attention(feat, feat, feat, key_padding_mask=padding_mask)
@@ -131,21 +131,22 @@ class MHScoreLayer(nn.Module):
             padding_mask: [B, L]
             fusion_type:
         """
-        feat = feat.permute(1, 2, 0)  # B, D, L (471, 32, 4)
-        padding_mask = padding_mask.unsqueeze(-1).repeat(1, 1, self.input_dim).permute(0, 2, 1)  # B, D, L (471, 32, 4)
+        feat = feat.permute(1, 2, 0)  # (max_path_len, L, ke_dim) -> (L, ke_dim, max_path_len)
+        # (L, max_path) -> (L, max_path, 1) -> (L, max_path, ke_dim) -> (L, ke_dim, max_path)
+        padding_mask = padding_mask.unsqueeze(-1).repeat(1, 1, self.input_dim).permute(0, 2, 1)
         # valued_mask = 1 - padding_mask
         # weight_mask = feat.sum(1).unsequence(1).repeat(1, self.input_dim, 1)  # B, D, L
         feat = feat.masked_fill(padding_mask, float('-inf'))        # 掩码
 
         if fusion_type == 'maxpooling':
-            feat = self.hop_max_pooling(feat).squeeze(-1)
+            feat = self.hop_max_pooling(feat).squeeze(-1)   # (L, ke_dim, max_path) -> (L, ke_dim, 1) -> (L, ke_dim)
         # elif fusion_type == 'attention':
         #     # 将 attention 的输出，加权，
         #     feat = feat * weight_mask
 
 
-        feat = self.fcb(feat)
-        score = self.fc(feat)
+        feat = self.fcb(feat)       # (L, ke_dim) -> (L, ke_dim // 2)
+        score = self.fc(feat)       # (L, ke_dim // 2) -> (L, 1)
         return score
 
 
@@ -232,7 +233,7 @@ class MHopGWNET(AbstractTrafficStateModel):
 
         self.apt_layer = config.get('apt_layer', True)
         if self.apt_layer:
-            self.layers = np.int(
+            self.layers = int(
                 np.round(np.log((((self.input_window - 1) / (self.blocks * (self.kernel_size - 1))) + 1)) / np.log(2)))
             print('# of layers change to %s' % self.layers)
 
@@ -377,7 +378,7 @@ class MHopGWNET(AbstractTrafficStateModel):
             x = nn.functional.pad(inputs, (self.receptive_field - in_len, 0, 0, 0)) # (batch_size, feature_dim, num_nodes, receptive_field)
         else:
             x = inputs
-        x = self.start_conv(x)  # (batch_size, residual_channels (32), num_nodes, self.receptive_field)
+        x = self.start_conv(x)  # (batch_size, residual_channels, num_nodes, self.receptive_field)
         skip = 0
 
         # calculate the current adaptive adj matrix once per iteration
@@ -391,7 +392,7 @@ class MHopGWNET(AbstractTrafficStateModel):
             for att_layer in self.mh_feat_encoder:
                 att_out = att_layer(mh_feat, mh_padding_mask)
                 mh_feat = mh_feat + att_out
-        score = self.mh_score_layer(mh_feat, mh_padding_mask)
+        score = self.mh_score_layer(mh_feat, mh_padding_mask)       # (L, 1)
         mh_score = torch.zeros((self.num_nodes, self.num_nodes)).to(self.device)
         for i1d, (i2d, j2d) in self.i1d_to_ij2d.items():
             mh_score[i2d][j2d] = score[i1d]
