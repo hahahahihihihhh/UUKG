@@ -327,7 +327,7 @@ rel_id = 0
 type = 'geo'
 
 
-poi_dafaframe = pd.read_csv('../UrbanKG_data/Processed_data/NYC/tmp/NYC_poi.csv')
+poi_dafaframe = pd.read_csv('../UrbanKG_data/Processed_data/NYC/NYC_poi.csv')
 poi_dafaframe_filter = poi_dafaframe[poi_dafaframe['poi_id'].isin(unique_road_id)]
 poi_datanumpy = poi_dafaframe_filter[['lng', 'lat', 'poi_id']].values
 
