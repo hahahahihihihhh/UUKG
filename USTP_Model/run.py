@@ -13,8 +13,8 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = ''
-config_file = 'config/CHITaxi20190406/PDFormer/{}/config.json'.format(ke_method)
+ke_method = 'MultiHop'
+config_file = 'config/CHITaxi20190406/GWNET/{}/config_GIE.json'.format(ke_method)
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)

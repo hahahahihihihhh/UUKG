@@ -1,24 +1,24 @@
-2024-09-14 22:26:12 INFO     Saving logs in: ./logs/CHITaxi20190406\AGCRN\Test
-2024-09-14 22:26:12 INFO     ----------------------------------------------------------------------------
-2024-09-14 22:26:12 INFO     # 0, Kownledge Graph Embedding: Normal, Experiment ids: 100
-2024-09-14 22:26:12 INFO     ----------------------------------------------------------------------------
-2024-09-14 22:26:12 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=100
-2024-09-14 22:26:12 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 100, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 0, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 4368, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'embedding_type': 'area', 'device': device(type='cuda', index=0)}
-2024-09-14 22:26:12 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
-2024-09-14 22:26:12 INFO     set_weight_link_or_dist: dist
-2024-09-14 22:26:12 INFO     init_weight_inf_or_zero: inf
-2024-09-14 22:26:12 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
-2024-09-14 22:26:12 INFO     Start Calculate the weight by Gauss kernel!
-2024-09-14 22:26:12 INFO     Loading file CHITaxi20190406.dyna
-2024-09-14 22:26:12 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
-2024-09-14 22:26:13 INFO     Dataset created
-2024-09-14 22:26:13 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
-2024-09-14 22:26:13 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
-2024-09-14 22:26:13 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
-2024-09-14 22:26:13 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
-2024-09-14 22:26:13 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
-2024-09-14 22:26:13 INFO     NoneScaler
-2024-09-14 22:26:15 INFO     AGCRN(
+2024-09-14 23:58:12 INFO     Saving logs in: ./logs/CHITaxi20190406\AGCRN\Test
+2024-09-14 23:58:12 INFO     ----------------------------------------------------------------------------
+2024-09-14 23:58:12 INFO     # 0, Kownledge Graph Embedding: Normal, Experiment ids: 15
+2024-09-14 23:58:12 INFO     ----------------------------------------------------------------------------
+2024-09-14 23:58:12 INFO     Begin pipeline, task=traffic_state_pred, model_name=AGCRN, dataset_name=CHITaxi20190406, exp_id=15
+2024-09-14 23:58:12 INFO     {'task': 'traffic_state_pred', 'model': 'AGCRN', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 15, 'ke_model': 'GIE', 'ke_dim': 32, 'load_external': True, 'max_epoch': 200, 'patience': 15, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 0, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 10, 'rnn_units': 64, 'num_layers': 2, 'cheb_order': 2, 'bidir_adj_mx': True, 'scaler': 'standard', 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.003, 'lr_decay': False, 'clip_grad_norm': False, 'use_early_stop': True, 'batch_size': 64, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-14 23:58:12 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-14 23:58:12 INFO     set_weight_link_or_dist: dist
+2024-09-14 23:58:12 INFO     init_weight_inf_or_zero: inf
+2024-09-14 23:58:12 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-14 23:58:12 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-14 23:58:12 INFO     Loading file CHITaxi20190406.dyna
+2024-09-14 23:58:12 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-14 23:58:15 INFO     Dataset created
+2024-09-14 23:58:15 INFO     x shape: (4345, 12, 77, 34), y shape: (4345, 12, 77, 34)
+2024-09-14 23:58:15 INFO     train	x: (3042, 12, 77, 34), y: (3042, 12, 77, 34)
+2024-09-14 23:58:15 INFO     eval	x: (434, 12, 77, 34), y: (434, 12, 77, 34)
+2024-09-14 23:58:15 INFO     test	x: (869, 12, 77, 34), y: (869, 12, 77, 34)
+2024-09-14 23:58:15 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-14 23:58:15 INFO     NoneScaler
+2024-09-14 23:58:20 INFO     AGCRN(
   (encoder): AVWDCRNN(
     (dcrnn_cells): ModuleList(
       (0): AGCRNCell(
@@ -33,29 +33,39 @@
   )
   (end_conv): Conv2d(1, 24, kernel_size=(1, 64), stride=(1, 1))
 )
-2024-09-14 22:26:15 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 66, 128])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 66, 64])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
-2024-09-14 22:26:15 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
-2024-09-14 22:26:15 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
-2024-09-14 22:26:15 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
-2024-09-14 22:26:15 INFO     Total parameter numbers: 751130
-2024-09-14 22:26:15 INFO     You select `adam` optimizer.
-2024-09-14 22:26:15 WARNING  Received none train loss func and will use the loss func defined in the model.
-2024-09-14 22:26:15 INFO     Start training ...
-2024-09-14 22:26:15 INFO     num_batches:48
-2024-09-14 22:26:35 INFO     epoch complete!
-2024-09-14 22:26:35 INFO     evaluating now!
-2024-09-14 22:26:36 INFO     Epoch [0/200] train_loss: 24.3347, val_loss: 17.4440, lr: 0.003000, 21.02s
-2024-09-14 22:26:36 INFO     Saved model at 0
-2024-09-14 22:26:36 INFO     Val loss decrease from inf to 17.4440, saving to ./libcity/cache/100/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
-2024-09-14 22:26:55 INFO     epoch complete!
-2024-09-14 22:26:55 INFO     evaluating now!
-2024-09-14 22:26:56 INFO     Epoch [1/200] train_loss: 13.4437, val_loss: 12.3332, lr: 0.003000, 20.22s
-2024-09-14 22:26:56 INFO     Saved model at 1
-2024-09-14 22:26:56 INFO     Val loss decrease from 17.4440 to 12.3332, saving to ./libcity/cache/100/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-09-14 23:58:20 INFO     node_embeddings	torch.Size([77, 10])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 98, 128])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 98, 64])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 128, 128])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 128])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 128, 64])	cuda:0	True
+2024-09-14 23:58:20 INFO     encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 64])	cuda:0	True
+2024-09-14 23:58:20 INFO     end_conv.weight	torch.Size([24, 1, 1, 64])	cuda:0	True
+2024-09-14 23:58:20 INFO     end_conv.bias	torch.Size([24])	cuda:0	True
+2024-09-14 23:58:20 INFO     Total parameter numbers: 874010
+2024-09-14 23:58:20 INFO     You select `adam` optimizer.
+2024-09-14 23:58:20 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-14 23:58:20 INFO     Start training ...
+2024-09-14 23:58:20 INFO     num_batches:48
+2024-09-14 23:58:41 INFO     epoch complete!
+2024-09-14 23:58:41 INFO     evaluating now!
+2024-09-14 23:58:43 INFO     Epoch [0/200] train_loss: 24.9538, val_loss: 17.9358, lr: 0.003000, 22.82s
+2024-09-14 23:58:43 INFO     Saved model at 0
+2024-09-14 23:58:43 INFO     Val loss decrease from inf to 17.9358, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch0.tar
+2024-09-14 23:59:04 INFO     epoch complete!
+2024-09-14 23:59:04 INFO     evaluating now!
+2024-09-14 23:59:05 INFO     Epoch [1/200] train_loss: 14.2272, val_loss: 13.3475, lr: 0.003000, 22.37s
+2024-09-14 23:59:05 INFO     Saved model at 1
+2024-09-14 23:59:05 INFO     Val loss decrease from 17.9358 to 13.3475, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch1.tar
+2024-09-14 23:59:26 INFO     epoch complete!
+2024-09-14 23:59:26 INFO     evaluating now!
+2024-09-14 23:59:27 INFO     Epoch [2/200] train_loss: 11.1166, val_loss: 10.9238, lr: 0.003000, 22.45s
+2024-09-14 23:59:27 INFO     Saved model at 2
+2024-09-14 23:59:27 INFO     Val loss decrease from 13.3475 to 10.9238, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch2.tar
+2024-09-14 23:59:48 INFO     epoch complete!
+2024-09-14 23:59:48 INFO     evaluating now!
+2024-09-14 23:59:50 INFO     Epoch [3/200] train_loss: 9.1325, val_loss: 8.5287, lr: 0.003000, 22.56s
+2024-09-14 23:59:50 INFO     Saved model at 3
+2024-09-14 23:59:50 INFO     Val loss decrease from 10.9238 to 8.5287, saving to ./libcity/cache/15/model_cache/AGCRN_CHITaxi20190406_epoch3.tar

@@ -42,7 +42,7 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     logger.info('----------------------------------------------------------------------------')
     logger.info("# {}, Kownledge Graph Embedding: {}, Experiment ids: {}".
                  format(config.get('cur_times', 0),
-                        config.get('embedding_model', 'Normal'),
+                        config.get('ke_model', 'None'),
                         config.get('exp_id', 0) + config.get('cur_times', 0)))
     logger.info('----------------------------------------------------------------------------')
     # !!!
