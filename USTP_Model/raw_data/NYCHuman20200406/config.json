@@ -34,11 +34,11 @@
     "geo_file": "NYCHuman20200406",
     "rel_file": "NYCHuman20200406",
     "output_dim": 2,
-    "time_intervals": 4368,
+    "time_intervals": 1800,
     "init_weight_inf_or_zero": "inf",
     "set_weight_link_or_dist": "dist",
     "calculate_weight_adj": true,
     "weight_adj_epsilon": 0.1,
-    "embedding_type": "POI"
+    "ke_type": "POI"
   }
 }
