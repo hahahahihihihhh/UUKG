@@ -13,7 +13,8 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHITaxi20190406/MHopGWNET/config.json'
+ke_method = 'Concat'
+config_file = 'config/CHITaxi20190406/AGCRN/{}/config_GIE.json'.format(ke_method)
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -38,27 +39,27 @@ config_file = 'config/CHITaxi20190406/MHopGWNET/config.json'
 #     add_general_args(parser)
 #     return parser
 
-def train(config, total = 1):
+def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
-    extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
-    extSpace = config.get('load_external', False) and config.get('embedding_model', None)
-    if extTime and extSpace:
-        ext = "ExtTime&Space"
-    elif extTime:
-        ext = 'ExtTime'
-    elif extSpace:
-        ext = 'ExtSpace'
-    else:
-        ext = 'ExtNone'
-    emb = ''
+    # extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
+    extSpace = config.get('load_external', False) and config.get('ke_model', None)
+    # if extTime and extSpace:
+    #     ext = "ExtTime&Space"
+    # elif extTime:
+    #     ext = 'ExtTime'
+    # elif extSpace:
+    #     ext = 'ExtSpace'
+    # else:
+    #     ext = 'ExtNone'
+    # emb = ''
+    ext, ke_model = 'ExtNone', ''
     if extSpace:
-        emb = config.get('embedding_model', '')
+        ext, ke_model = "ExtSpace", config.get('ke_model', '')
+    # save_dir = os.path.join(log, config['dataset'], config['model'], ext, ke_method, ke_model)
 
-    save_dir = os.path.join(log, config['dataset'], config['model'], ext, emb)
-    print(save_dir)
-
-    # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
+    save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
     ensure_dir(save_dir)
+    # print(save_dir)
 
     # file logger
     logging.basicConfig(
@@ -101,7 +102,7 @@ def train(config, total = 1):
 
     logger.info('----------------------------------------------------------------------------')
     logger.info("Kownledge Graph Embedding: {}, Experiment ids: {}"
-                 .format(config.get('embedding_model', 'Normal'), exp_ids))
+                 .format(config.get('ke_model', 'Normal'), exp_ids))
     # 计算指标均值和标准差
     avg_results = np.zeros([predict_steps, len(eval_metrics)])
     std_results = np.zeros([predict_steps, len(eval_metrics)])

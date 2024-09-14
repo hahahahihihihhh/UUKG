@@ -22,7 +22,7 @@ class TrafficStateDataset(AbstractDataset):
         self.config = config
         self.dataset = self.config.get('dataset', '')
         # !!!
-        self.embedding_model = config.get('embedding_model', '')
+        self.ke_model = config.get('ke_model', '')
         self.embedding_type = self.config.get('embedding_type', '')
         self.ext_time_dim = 0
         self.ext_space_dim = 0
@@ -643,13 +643,13 @@ class TrafficStateDataset(AbstractDataset):
         # !!! ---Concat
         assert self.load_external == True
         self.ext_time_dim = data.shape[-1] - feature_dim
-        if self.embedding_model:
+        if self.ke_model:
             entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
                                                    self.dataset,
-                                                   self.embedding_model,
+                                                   self.ke_model,
                                                    "{}_{}d.npy".format(self.embedding_type, self.ke_dim))
             )   # [77, 32]
-            self.ext_space_dim = entity_embeddings.shape[1]
+            self.ext_space_dim = self.ke_dim
             new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
             for _ in range(num_samples):
                 new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)

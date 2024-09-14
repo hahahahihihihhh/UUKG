@@ -4,7 +4,6 @@
     "dataset": "NYCTaxi20200406",
 
     "exp_id": 3000,
-    "ke_dim": 32,
 
     "max_epoch": 200,
     "patience": 15,

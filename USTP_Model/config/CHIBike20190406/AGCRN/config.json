@@ -4,7 +4,6 @@
     "dataset": "CHIBike20190406",
 
     "exp_id": 1000,
-    "ke_dim": 32,
 
     "max_epoch": 200,
     "patience": 15,

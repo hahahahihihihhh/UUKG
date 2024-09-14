@@ -3,7 +3,15 @@
     "model": "AGCRN",
     "dataset": "CHITaxi20190406",
 
-    "exp_id": 0,
+    "exp_id": 160,
+    "ke_model": "RandomE",
+    "ke_dim": 32,
+    "add_time_in_day": true,
+    "add_day_in_week": true,
+
+    "load_external": true,
+    "normal_external": true,
+    "ext_scaler": "normal",
 
     "max_epoch": 200,
     "patience": 15,

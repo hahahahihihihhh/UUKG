@@ -262,9 +262,9 @@ class MHopGWNET(AbstractTrafficStateModel):
         if self.gcn_bool and self.use_apt_adj:
             if self.aptinit is None:
                 self.nodevec1 = nn.Parameter(torch.randn(self.num_nodes, 10).to(self.device),
-                                             requires_grad=True).to(self.device)
+                                             requires_grad=True).to(self.device)    # source node embedding
                 self.nodevec2 = nn.Parameter(torch.randn(10, self.num_nodes).to(self.device),
-                                             requires_grad=True).to(self.device)
+                                             requires_grad=True).to(self.device)    # target node embedding
             else:
                 m, p, n = torch.svd(self.aptinit)
                 initemb1 = torch.mm(m[:, :10], torch.diag(p[:10] ** 0.5))
@@ -412,11 +412,11 @@ class MHopGWNET(AbstractTrafficStateModel):
             # dilated convolution
             filter = self.filter_convs[i](residual)
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
-            filter = torch.tanh(filter)
+            filter = torch.tanh(filter)     # TCN-a
             gate = self.gate_convs[i](residual)
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
-            gate = torch.sigmoid(gate)
-            x = filter * gate
+            gate = torch.sigmoid(gate)      # TCN-b
+            x = filter * gate               # Gated TCN
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
             # parametrized skip connection
             s = x
