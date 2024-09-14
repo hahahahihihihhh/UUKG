@@ -7,7 +7,7 @@ from logging import getLogger
 from libcity.data.dataset import AbstractDataset
 from libcity.data.utils import generate_dataloader
 from libcity.utils import StandardScaler, NormalScaler, NoneScaler, \
-    MinMax01Scaler, MinMax11Scaler, LogScaler, ensure_dir
+    MinMax01Scaler, MinMax11Scaler, LogScaler, ensure_dir, zero_noise, gaussian_noise
 
 
 class TrafficStateDataset(AbstractDataset):
@@ -42,6 +42,11 @@ class TrafficStateDataset(AbstractDataset):
         self.add_day_in_week = self.config.get('add_day_in_week', False)
         self.input_window = self.config.get('input_window', 12)
         self.output_window = self.config.get('output_window', 12)
+        self.robustness_test = self.config.get('robustness_test', False)
+        self.disturb_rate = self.config.get('disturb_rate', 0.5)
+        self.noise_type = self.config.get('noise_type', 'none')
+        self.noise_mean = self.config.get('noise_mean', [0])
+        self.noise_SD = self.config.get('noise_SD', [0])
         self.parameters_str = \
             str(self.dataset) + '_' + str(self.input_window) + '_' + str(self.output_window) + '_' \
             + str(self.train_rate) + '_' + str(self.eval_rate) + '_' + str(self.scaler_type) + '_' \
@@ -268,7 +273,6 @@ class TrafficStateDataset(AbstractDataset):
         else:  # 不指定则加载所有列
             dynafile = dynafile[dynafile.columns[2:]]  # 从time列开始所有列
         # 求时间序列
-        assert(self.time_intervals == int(dynafile.shape[0] / len(self.geo_ids)))
         self.timesolts = list(dynafile['time'][:int(dynafile.shape[0] / len(self.geo_ids))])
         self.idx_of_timesolts = dict()
         if not dynafile['time'].isna().any():  # 时间没有空值
@@ -283,7 +287,7 @@ class TrafficStateDataset(AbstractDataset):
         data = []
         for i in range(0, df.shape[0], len_time):
             data.append(df[i:i + len_time].values)
-        data = np.array(data, dtype=float)  # (len(self.geo_ids), len_time, feature_dim)
+        data = np.array(data, dtype=np.float)  # (len(self.geo_ids), len_time, feature_dim)
         data = data.swapaxes(0, 1)  # (len_time, len(self.geo_ids), feature_dim)
         self._logger.info("Loaded file " + filename + '.dyna' + ', shape=' + str(data.shape))
         return data
@@ -707,17 +711,6 @@ class TrafficStateDataset(AbstractDataset):
                         data_ind = np.tile(data_ind, [1, len_row, len_column, 1]).transpose((3, 1, 2, 0))
                         data_list.append(data_ind)
         data = np.concatenate(data_list, axis=-1)
-
-        # region_embeddings = np.load("XXX/NYC_area_embeddingn.npy")
-        # region_embeddings_plus = np.zeros([77, 32])
-        # for i in range(region_embeddings.shape[0]):
-        #     region_embeddings_plus[i] = region_embeddings[i]
-
-        # new_data = np.zeros([data.shape[0], data.shape[1], data.shape[2] + region_embeddings_plus.shape[1]])
-        # for k in range(data.shape[0]):
-        #     new_data[k] = np.concatenate([data[k], region_embeddings_plus], axis=1)
-        # return new_data
-
         return data
 
     def _add_external_information_6d(self, df, ext_data=None):
@@ -962,6 +955,28 @@ class TrafficStateDataset(AbstractDataset):
             raise ValueError('Scaler type error!')
         return scaler
 
+    def _add_noise(self, x_test):
+        """
+        根据全局参数`noise_type`选择噪声类型，并随机加入到测试数据X
+
+        Args:
+            x_test: 测试数据X
+
+        Returns:
+            x_test_disturbed: 添加噪声后的测试数据X
+        """
+        if self.noise_type == "zero":
+            self._logger.info('zero noise \trate: ' + str(self.disturb_rate))
+            x_test_disturbed = zero_noise(x_test, self.disturb_rate, self.output_dim)
+        elif self.noise_type == "gaussian":
+            self._logger.info('gaussian noise \trate: ' + str(self.disturb_rate) +
+                              ", mean: " + str(self.noise_mean) + ", std: " + str(self.noise_SD))
+            x_test_disturbed = gaussian_noise(x_test, self.disturb_rate,
+                                              self.noise_mean, self.noise_SD, self.output_dim)
+        else:
+            raise ValueError('noise type error!')
+        return x_test_disturbed
+
     def get_data(self):
         """
         返回数据的DataLoader，包括训练数据、测试数据、验证数据
@@ -980,6 +995,9 @@ class TrafficStateDataset(AbstractDataset):
                 x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
             else:
                 x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
+        # 在测试集上添加随机扰动
+        if self.robustness_test:
+            x_test = self._add_noise(x_test)
         # 数据归一化
         self.feature_dim = x_train.shape[-1]
         self.ext_dim = self.feature_dim - self.output_dim

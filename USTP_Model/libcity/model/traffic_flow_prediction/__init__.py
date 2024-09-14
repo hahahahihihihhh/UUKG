@@ -19,7 +19,22 @@ from libcity.model.traffic_flow_prediction.CRANN import CRANN
 from libcity.model.traffic_flow_prediction.CONVGCNCommon import CONVGCNCommon
 from libcity.model.traffic_flow_prediction.DSAN import DSAN
 from libcity.model.traffic_flow_prediction.MultiSTGCnetCommon import MultiSTGCnetCommon
-from libcity.model.traffic_flow_prediction.MHopGWNET import MHopGWNET
+from libcity.model.traffic_flow_prediction.STGODE import STGODE
+from libcity.model.traffic_flow_prediction.STNorm import STNorm
+from libcity.model.traffic_flow_prediction.ESG import ESG
+from libcity.model.traffic_flow_prediction.SSTBAN import SSTBAN
+from libcity.model.traffic_flow_prediction.STTSNet import STTSNet
+from libcity.model.traffic_flow_prediction.FOGS import FOGS
+from libcity.model.traffic_flow_prediction.RGSL import RGSL
+from libcity.model.traffic_flow_prediction.DSTAGNN import DSTAGNN
+from libcity.model.traffic_flow_prediction.STPGCN import STPGCN
+from libcity.model.traffic_flow_prediction.MultiSPANS import MultiSPANS
+from libcity.model.traffic_flow_prediction.SimST import SimST
+from libcity.model.traffic_flow_prediction.TimeMixer import TimeMixer
+from libcity.model.traffic_flow_prediction.STSSL import STSSL
+from libcity.model.traffic_flow_prediction.STWave import STWave
+from libcity.model.traffic_flow_prediction.PDFormer import PDFormer
+
 
 __all__ = [
     "AGCRN",
@@ -43,5 +58,19 @@ __all__ = [
     "CONVGCNCommon",
     "DSAN",
     "MultiSTGCnetCommon",
-    "MHopGWNET",
+    "STGODE",
+    "STNorm",
+    "ESG",
+    "SSTBAN",
+    "STTSNet",
+    "FOGS",
+    "RGSL",
+    "DSTAGNN",
+    "STPGCN",
+    "MultiSPANS",
+    "SimST",
+    "TimeMixer",
+    "STSSL",
+    "STWave",
+    "PDFormer",
 ]

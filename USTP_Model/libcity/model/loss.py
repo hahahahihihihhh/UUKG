@@ -1,24 +1,7 @@
 import torch
 import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
-from sklearn.metrics import precision_recall_fscore_support
 
-def micro_f1(y_pred, y_true):
-
-    y_pred = y_pred.cpu().detach().numpy()
-    y_true = y_true.cpu().detach().numpy()
-    y_pred = (y_pred.flatten() >= 0.43).astype(int)
-    y_true = (y_true.flatten() >= 0.4).astype(int)
-
-    return precision_recall_fscore_support(y_true, y_pred, average='micro')[2]
-
-def macro_f1(y_pred, y_true):
-    y_pred = y_pred.cpu().detach().numpy()
-    y_true = y_true.cpu().detach().numpy()
-    y_pred = (y_pred.flatten() >= 0.43).astype(int)
-    y_true = (y_true.flatten() >= 0.4).astype(int)
-
-    return precision_recall_fscore_support(y_true, y_pred, average='macro')[2]
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()
@@ -31,19 +14,24 @@ def masked_mae_loss(y_pred, y_true):
     return loss.mean()
 
 
-def masked_mae_torch(preds, labels, null_val=np.nan):
+def masked_mae_torch(preds, labels, null_val=np.nan, reduce=True, mask_val=None):
     labels[torch.abs(labels) < 1e-4] = 0
     if np.isnan(null_val):
         mask = ~torch.isnan(labels)
     else:
         mask = labels.ne(null_val)
+    if mask_val:
+        mask &= labels.ge(mask_val)
     mask = mask.float()
     mask /= torch.mean(mask)
     mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
     loss = torch.abs(torch.sub(preds, labels))
     loss = loss * mask
     loss = torch.where(torch.isnan(loss), torch.zeros_like(loss), loss)
-    return torch.mean(loss)
+    if reduce:
+        return torch.mean(loss)
+    else:
+        return loss
 
 
 def log_cosh_loss(preds, labels):
@@ -68,7 +56,7 @@ def quantile_loss(preds, labels, delta=0.25):
     return torch.mean(torch.where(condition, large_res, small_res))
 
 
-def masked_mape_torch(preds, labels, null_val=np.nan, eps=0):
+def masked_mape_torch(preds, labels, null_val=np.nan, eps=0, mask_val=None):
     labels[torch.abs(labels) < 1e-4] = 0
     if np.isnan(null_val) and eps != 0:
         loss = torch.abs((preds - labels) / (labels + eps))
@@ -77,6 +65,8 @@ def masked_mape_torch(preds, labels, null_val=np.nan, eps=0):
         mask = ~torch.isnan(labels)
     else:
         mask = labels.ne(null_val)
+    if mask_val:
+        mask &= labels.ge(mask_val)
     mask = mask.float()
     mask /= torch.mean(mask)
     mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
@@ -86,12 +76,14 @@ def masked_mape_torch(preds, labels, null_val=np.nan, eps=0):
     return torch.mean(loss)
 
 
-def masked_mse_torch(preds, labels, null_val=np.nan):
+def masked_mse_torch(preds, labels, null_val=np.nan, mask_val=None):
     labels[torch.abs(labels) < 1e-4] = 0
     if np.isnan(null_val):
         mask = ~torch.isnan(labels)
     else:
         mask = labels.ne(null_val)
+    if mask_val:
+        mask &= labels.ge(mask_val)
     mask = mask.float()
     mask /= torch.mean(mask)
     mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
@@ -101,10 +93,10 @@ def masked_mse_torch(preds, labels, null_val=np.nan):
     return torch.mean(loss)
 
 
-def masked_rmse_torch(preds, labels, null_val=np.nan):
+def masked_rmse_torch(preds, labels, null_val=np.nan, mask_val=None):
     labels[torch.abs(labels) < 1e-4] = 0
     return torch.sqrt(masked_mse_torch(preds=preds, labels=labels,
-                                       null_val=null_val))
+                                       null_val=null_val, mask_val=mask_val))
 
 
 def r2_score_torch(preds, labels):
@@ -121,7 +113,7 @@ def explained_variance_score_torch(preds, labels):
 
 def masked_rmse_np(preds, labels, null_val=np.nan):
     return np.sqrt(masked_mse_np(preds=preds, labels=labels,
-                   null_val=null_val))
+                                 null_val=null_val))
 
 
 def masked_mse_np(preds, labels, null_val=np.nan):
@@ -174,3 +166,12 @@ def explained_variance_score_np(preds, labels):
     preds = preds.flatten()
     labels = labels.flatten()
     return explained_variance_score(labels, preds)
+
+
+def smooth_l1_loss(preds, labels, beta=1.0):
+    residual = preds - labels
+    abs_residual = torch.abs(residual)
+    condition = torch.lt(abs_residual, beta)
+    small_res = 0.5 * (residual ** 2 / beta)
+    large_res = abs_residual - (0.5 * beta)
+    return torch.mean(torch.where(condition, small_res, large_res))

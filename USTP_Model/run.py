@@ -13,8 +13,8 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = 'Concat'
-config_file = 'config/CHITaxi20190406/AGCRN/{}/config_GIE.json'.format(ke_method)
+ke_method = ''
+config_file = 'config/CHITaxi20190406/PDFormer/{}/config.json'.format(ke_method)
 
 # def init_parser(config):
 #     seed = random.randint(0, 10000)
@@ -102,7 +102,7 @@ def train(config, total = 5):
 
     logger.info('----------------------------------------------------------------------------')
     logger.info("Kownledge Graph Embedding: {}, Experiment ids: {}"
-                 .format(config.get('ke_model', 'Normal'), exp_ids))
+                     .format(config.get('ke_model', 'None'), exp_ids))
     # 计算指标均值和标准差
     avg_results = np.zeros([predict_steps, len(eval_metrics)])
     std_results = np.zeros([predict_steps, len(eval_metrics)])
