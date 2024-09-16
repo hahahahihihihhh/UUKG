@@ -13,7 +13,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = 'MultiHop'
+ke_method = 'Concat'
 config_file = 'config/CHITaxi20190406/GWNET/{}/config_GIE.json'.format(ke_method)
 
 # def init_parser(config):
@@ -42,7 +42,7 @@ config_file = 'config/CHITaxi20190406/GWNET/{}/config_GIE.json'.format(ke_method
 def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
     # extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
-    extSpace = config.get('load_external', False) and config.get('ke_model', None)
+    # extSpace = config.get('load_external', False) and config.get('ke_model', None)
     # if extTime and extSpace:
     #     ext = "ExtTime&Space"
     # elif extTime:
@@ -52,12 +52,13 @@ def train(config, total = 5):
     # else:
     #     ext = 'ExtNone'
     # emb = ''
-    ext, ke_model = 'ExtNone', ''
-    if extSpace:
-        ext, ke_model = "ExtSpace", config.get('ke_model', '')
-    # save_dir = os.path.join(log, config['dataset'], config['model'], ext, ke_method, ke_model)
+    # ext, ke_model = 'ExtNone', ''
+    # if extSpace:
+    #     ext, ke_model = "ExtSpace", config.get('ke_model', '')
+    ke_model = config['ke_model']
+    save_dir = os.path.join(log, config['dataset'], config['model'], ke_method, ke_model)
 
-    save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
+    # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
     ensure_dir(save_dir)
     # print(save_dir)
 

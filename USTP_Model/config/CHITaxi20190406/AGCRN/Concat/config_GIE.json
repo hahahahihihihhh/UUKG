@@ -6,6 +6,7 @@
     "exp_id": 15,
     "ke_model": "GIE",
     "ke_dim": 32,
+    "ke_method": "Concat",
 
     "load_external": true,
 

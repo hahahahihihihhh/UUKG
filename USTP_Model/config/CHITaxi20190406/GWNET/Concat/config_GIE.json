@@ -3,11 +3,12 @@
     "model": "GWNET",
     "dataset": "CHITaxi20190406",
 
-    "exp_id": 10000,
+    "exp_id": 10015,
     "ke_model": "GIE",
     "ke_dim": 32,
-    "ke_method": "MultiHop",
-    "max_hop": 1,
+    "ke_method": "Concat",
+
+    "load_external": true,
 
     "max_epoch": 200,
     "patience": 15,

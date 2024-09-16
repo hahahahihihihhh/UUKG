@@ -1,6 +1,6 @@
 {
     "task": "traffic_state_pred",
-    "model": "AGCRN",
+    "model": "GWNET",
     "dataset": "CHITaxi20190406",
 
     "exp_id": 100,

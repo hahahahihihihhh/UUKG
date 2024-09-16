@@ -2,12 +2,13 @@
   "dropout": 0.3,
   "blocks": 4,
   "layers": 2,
-  "batch_size": 32,
   "apt_layer": true,
   "gcn_bool": true,
+  "addaptadj": true,
   "adjtype": "doubletransition",
   "bidir_adj_mx": false,
   "randomadj": true,
+  "aptonly": true,
   "kernel_size": 2,
   "nhid": 32,
   "residual_channels": 32,
@@ -26,7 +27,5 @@
   "lr_decay": false,
   "clip_grad_norm": true,
   "max_grad_norm": 5,
-  "use_early_stop": false,
-  "use_rel_adj": true,
-  "use_apt_adj": true
+  "use_early_stop": false
 }

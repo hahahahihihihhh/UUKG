@@ -27,6 +27,7 @@ class TrafficStateDataset(AbstractDataset):
         self.ext_time_dim = 0
         self.ext_space_dim = 0
         self.ke_dim = config.get('ke_dim', 32)
+        self.ke_method = config.get('ke_method', '')
         # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
@@ -647,11 +648,11 @@ class TrafficStateDataset(AbstractDataset):
         # !!! ---Concat
         assert self.load_external == True
         self.ext_time_dim = data.shape[-1] - feature_dim
-        if self.ke_model:
-            entity_embeddings = np.load(os.path.join("KG/xxx_embeddings",
-                                                   self.dataset,
-                                                   self.ke_model,
-                                                   "{}_{}d.npy".format(self.ke_type, self.ke_dim))
+        if self.ke_method == 'Concat':
+            entity_embeddings = np.load(os.path.join("KG/model/{}/Concat/{}".
+                                                     format(self.dataset, self.ke_model),
+                                                     "{}_{}d.npy".
+                                                     format(self.ke_type, self.ke_dim))
             )   # [77, 32]
             self.ext_space_dim = self.ke_dim
             new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
@@ -659,9 +660,7 @@ class TrafficStateDataset(AbstractDataset):
                 new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
             print('new_data shape : ', new_data.shape)
             return new_data
-        else:
-            print('data shape: ', data.shape)
-            return data
+        return data
         # !!! ---Concat
         # print(data.shape, data)
         # return data
