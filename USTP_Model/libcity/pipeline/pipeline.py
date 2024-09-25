@@ -30,12 +30,8 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     # load config
     config = ConfigParser(task, model_name, dataset_name,
                           config_file, saved_model, train, other_args)
-    exp_id = config.get('exp_id', None)
-    if exp_id is None:
-        # Make a new experiment ID
-        exp_id = int(random.SystemRandom().random() * 100000)
-        config['exp_id'] = exp_id
     # !!!
+    exp_id = config['exp_id'] = config.get('exp_id', int(random.SystemRandom().random() * 100000)) + config.get('cur_times', 0)
     # logger
     # logger = get_logger(config)
     logger = getLogger()
@@ -43,7 +39,7 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     logger.info("# {}, Kownledge Graph Embedding: {}, Experiment ids: {}".
                  format(config.get('cur_times', 0),
                         config.get('ke_model', 'None'),
-                        config.get('exp_id', 0) + config.get('cur_times', 0)))
+                        exp_id))
     logger.info('----------------------------------------------------------------------------')
     # !!!
     logger.info('Begin pipeline, task={}, model_name={}, dataset_name={}, exp_id={}'.
