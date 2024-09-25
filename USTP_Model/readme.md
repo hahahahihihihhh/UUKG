@@ -29,7 +29,7 @@ through https://zhuanlan.zhihu.com/p/659534878
   - |cache/:    Store the cache. Specifically, data preprocessing results, model training results, and evaluation results will be cached.
   - |-tmp/:    Store temporary files such as checkpoint generated during training.
   - |-utils/:    Store some general utility functions.
-- |-log/:    Store log information during training.
+- |-logs/:    Store log information during training.
 
 The directory structure could help readers better understand our code framework.
 
@@ -90,6 +90,11 @@ nohup python run.py > /dev/null 2>&1 &
 ```
 The script `run.py` used for training and evaluating a single model is provided in the root directory of the framework, and a series of command line parameters are provided to allow users to adjust the running parameter configuration.
 When run the `run.py`, you must specify the following three parameters, namely `task`, `dataset` and `model`.
+
+If you want to kill it
+```bash
+kill -9 PID
+```
 
 **How to fuse UrbanKG embedding?**
 

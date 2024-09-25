@@ -13,10 +13,10 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = ''
-config_file = 'config/CHITaxi20190406/GWNET/{}/config.json'.format(ke_method)
+ke_method = 'Concat'
+config_file = 'config/CHITaxi20190406/GWNET/{}/config_GIE.json'.format(ke_method)
 
-def train(config, total = 3):
+def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
     # extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
     # extSpace = config.get('load_external', False) and config.get('ke_model', None)

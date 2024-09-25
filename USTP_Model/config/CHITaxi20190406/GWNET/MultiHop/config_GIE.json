@@ -11,6 +11,7 @@
 
     "max_epoch": 200,
     "patience": 15,
+    "use_early_stop": true,
     "cache_dataset": false,
     "output_window": 12,
     "metrics": ["MAE", "RMSE"]
