@@ -12,6 +12,9 @@ conda activate libcity
 conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
 pip install -r requirements.txt
 ```
+after install the environment, we should solve the problem
+![img.png](img.png)
+through https://zhuanlan.zhihu.com/p/659534878
 
 ## Directory Structure
 
@@ -82,15 +85,11 @@ entity_id: Describe which entity the record is based on, which is the ID of geo 
 
 ## Quick to Usage
 
-The script `run_model.py` used for training and evaluating a single model is provided in the root directory of the framework, and a series of command line parameters are provided to allow users to adjust the running parameter configuration.
-
-When run the `run_model.py`, you must specify the following three parameters, namely `task`, `dataset` and `model`. For example:
-
 ```bash
-python run.py --task traffic_state_pred --model STGCN --dataset NYCTaxi20200406
+nohup python run.py > /dev/null 2>&1 &
 ```
-
-This script will run the STGCN model on the NYCTaxi20200406 dataset for traffic state prediction task under the default configuration.
+The script `run.py` used for training and evaluating a single model is provided in the root directory of the framework, and a series of command line parameters are provided to allow users to adjust the running parameter configuration.
+When run the `run.py`, you must specify the following three parameters, namely `task`, `dataset` and `model`.
 
 **How to fuse UrbanKG embedding?**
 

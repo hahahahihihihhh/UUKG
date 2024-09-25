@@ -13,33 +13,10 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = 'Concat'
-config_file = 'config/CHITaxi20190406/GWNET/{}/config_GIE.json'.format(ke_method)
+ke_method = ''
+config_file = 'config/CHITaxi20190406/GWNET/{}/config.json'.format(ke_method)
 
-# def init_parser(config):
-#     seed = random.randint(0, 10000)
-#     parser = argparse.ArgumentParser()
-#     # 增加指定的参数
-#     parser.add_argument('--task', type=str,
-#                         default=config['task'], help='the name of task')
-#     parser.add_argument('--model', type=str,
-#                         default=config['model'], help='the name of model')
-#     parser.add_argument('--dataset', type=str,
-#                         default=config['dataset'], help='the name of dataset')
-#     parser.add_argument('--config_file', type=str,
-#                         default=config_file, help='the file name of config file')
-#     # parser.add_argument('--saved_model', type=str2bool,
-#     #                     default=config['saved_model'], help='whether save the trained model')
-#     # parser.add_argument('--train', type=str2bool, default=True,
-#     #                     help='whether re-train model if the model is trained before')
-#     parser.add_argument('--exp_id', type=str, default=str(seed), help='id of experiment')
-#     parser.add_argument('--seed', type=int, default=seed, help='random seed')
-#     # parser.add_argument('--load_external', type=str2bool, default=True, help="whether to load external data")
-#     # 增加其他可选的参数
-#     add_general_args(parser)
-#     return parser
-
-def train(config, total = 5):
+def train(config, total = 3):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
     # extTime = config.get('load_external', False) and (config.get("add_time_in_day", False) or config.get("add_day_in_week", False))
     # extSpace = config.get('load_external', False) and config.get('ke_model', None)
@@ -55,7 +32,8 @@ def train(config, total = 5):
     # ext, ke_model = 'ExtNone', ''
     # if extSpace:
     #     ext, ke_model = "ExtSpace", config.get('ke_model', '')
-    ke_model = config['ke_model']
+
+    ke_model = config.get('ke_model', '')
     save_dir = os.path.join(log, config['dataset'], config['model'], ke_method, ke_model)
 
     # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
