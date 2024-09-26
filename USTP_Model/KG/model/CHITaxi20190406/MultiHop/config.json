@@ -1,6 +1,6 @@
 {
   "num_nodes": 77,
-  "ke_model": "GIE",
+  "ke_model": "TransE",
   "ke_dim": 32,
   "max_hop": 1,
   "use_rl": true,

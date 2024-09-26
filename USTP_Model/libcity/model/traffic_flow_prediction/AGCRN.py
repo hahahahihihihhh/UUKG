@@ -22,12 +22,12 @@ class AVWGCN(nn.Module):
         # default cheb_k = 3
         for k in range(2, self.cheb_k):
             support_set.append(torch.matmul(2 * supports, support_set[-1]) - support_set[-2])
-        supports = torch.stack(support_set, dim=0)
+        supports = torch.stack(support_set, dim=0)  # cheb_k, N, N
         weights = torch.einsum('nd,dkio->nkio', node_embeddings, self.weights_pool)  # N, cheb_k, dim_in, dim_out
         bias = torch.matmul(node_embeddings, self.bias_pool)                       # N, dim_out
         x_g = torch.einsum("knm,bmc->bknc", supports, x)      # B, cheb_k, N, dim_in
         x_g = x_g.permute(0, 2, 1, 3)  # B, N, cheb_k, dim_in
-        x_gconv = torch.einsum('bnki,nkio->bno', x_g, weights) + bias     # b, N, dim_out
+        x_gconv = torch.einsum('bnki,nkio->bno', x_g, weights) + bias     # B, N, dim_out
         return x_gconv
 
 
@@ -40,15 +40,15 @@ class AGCRNCell(nn.Module):
         self.update = AVWGCN(dim_in+self.hidden_dim, dim_out, cheb_k, embed_dim)
 
     def forward(self, x, state, node_embeddings):
-        # x: B, num_nodes, input_dim
-        # state: B, num_nodes, hidden_dim
+        # x: B, N, input_dim
+        # state: B, N, hidden_dim
         state = state.to(x.device)
-        input_and_state = torch.cat((x, state), dim=-1)
-        z_r = torch.sigmoid(self.gate(input_and_state, node_embeddings))
-        z, r = torch.split(z_r, self.hidden_dim, dim=-1)
-        candidate = torch.cat((x, z*state), dim=-1)
-        hc = torch.tanh(self.update(candidate, node_embeddings))
-        h = r*state + (1-r)*hc
+        input_and_state = torch.cat((x, state), dim=-1) # B, N, input_dim + hidden_dim
+        z_r = torch.sigmoid(self.gate(input_and_state, node_embeddings))    # B, N, hidden_dim * 2
+        z, r = torch.split(z_r, self.hidden_dim, dim=-1)    # B, N, hidden_dim
+        candidate = torch.cat((x, z*state), dim=-1) # B, N, input_dim + hidden_dim
+        hc = torch.tanh(self.update(candidate, node_embeddings))    # B, N, hidden_dim
+        h = r*state + (1-r)*hc  # B, N, hidden_dim
         return h
 
     def init_hidden_state(self, batch_size):
@@ -84,10 +84,10 @@ class AVWDCRNN(nn.Module):
             state = init_state[i]
             inner_states = []
             for t in range(seq_length):
-                state = self.dcrnn_cells[i](current_inputs[:, t, :, :], state, node_embeddings)
+                state = self.dcrnn_cells[i](current_inputs[:, t, :, :], state, node_embeddings) # B, N, hidden_dim
                 inner_states.append(state)
             output_hidden.append(state)
-            current_inputs = torch.stack(inner_states, dim=1)
+            current_inputs = torch.stack(inner_states, dim=1)   # B, T, N, hidden_dim
         # current_inputs: the outputs of last layer: (B, T, N, hidden_dim)
         # output_hidden: the last state for each layer: (num_layers, B, N, hidden_dim)
         # last_state: (B, N, hidden_dim)
@@ -143,6 +143,7 @@ class AGCRN(AbstractTrafficStateModel):
         # CNN based predictor
         output = self.end_conv(output)                           # B, T*C, N, 1
         output = output.squeeze(-1).reshape(-1, self.output_window, self.output_dim, self.num_nodes)
+        # (B, T*C, N, 1) -> (B, T*C, N) -> (B, T, C, N)
         output = output.permute(0, 1, 3, 2)                      # B, T, N, C
         return output
 

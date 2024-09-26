@@ -1,0 +1,2284 @@
+2024-09-26 09:28:51 INFO     Saving logs in: ./logs/CHITaxi20190406/GWNET/MultiHop/TransE
+2024-09-26 09:28:52 INFO     ----------------------------------------------------------------------------
+2024-09-26 09:28:52 INFO     # 0, Kownledge Graph Embedding: TransE, Experiment ids: 10005
+2024-09-26 09:28:52 INFO     ----------------------------------------------------------------------------
+2024-09-26 09:28:52 INFO     Begin pipeline, task=traffic_state_pred, model_name=GWNET, dataset_name=CHITaxi20190406, exp_id=10005
+2024-09-26 09:28:52 INFO     {'task': 'traffic_state_pred', 'model': 'GWNET', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 10005, 'ke_model': 'TransE', 'ke_dim': 32, 'ke_method': 'MultiHop', 'max_hop': 1, 'max_epoch': 200, 'patience': 15, 'use_early_stop': True, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 0, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'dropout': 0.3, 'blocks': 4, 'layers': 2, 'batch_size': 32, 'apt_layer': True, 'gcn_bool': True, 'adjtype': 'doubletransition', 'bidir_adj_mx': False, 'randomadj': True, 'kernel_size': 2, 'nhid': 32, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_rel_adj': True, 'use_apt_adj': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-26 09:28:52 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-26 09:28:52 INFO     set_weight_link_or_dist: dist
+2024-09-26 09:28:52 INFO     init_weight_inf_or_zero: inf
+2024-09-26 09:28:52 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-26 09:28:52 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-26 09:28:52 INFO     Loading file CHITaxi20190406.dyna
+2024-09-26 09:28:52 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-26 09:28:52 INFO     Dataset created
+2024-09-26 09:28:52 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
+2024-09-26 09:28:52 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
+2024-09-26 09:28:52 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
+2024-09-26 09:28:52 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
+2024-09-26 09:28:52 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-26 09:28:52 INFO     NoneScaler
+2024-09-26 09:28:56 INFO     add adj_mx to supports
+2024-09-26 09:28:56 INFO     add apt_adj(v1 * v2) in forward process
+2024-09-26 09:28:56 INFO     add multi hop score in forward process
+2024-09-26 09:28:56 INFO     receptive_field: 14
+2024-09-26 09:28:57 INFO     GWNET(
+  (filter_convs): ModuleList(
+    (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+  )
+  (gate_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (2): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (4): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (6): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+  )
+  (skip_convs): ModuleList(
+    (0): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+  )
+  (bn): ModuleList(
+    (0): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (gconv): ModuleList(
+    (0): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (2): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (3): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (4): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (5): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (6): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (7): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+  )
+  (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-09-26 09:28:57 INFO     nodevec1	torch.Size([77, 10])	cuda:0	True
+2024-09-26 09:28:57 INFO     nodevec2	torch.Size([10, 77])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     filter_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:28:57 INFO     gate_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     residual_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.4.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.5.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.6.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     skip_convs.7.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.0.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.1.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.2.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.3.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.4.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.5.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.6.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.7.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     bn.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.0.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.1.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.2.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.3.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.4.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.5.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.6.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.7.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     start_conv.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:28:57 INFO     end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     end_conv_1.bias	torch.Size([512])	cuda:0	True
+2024-09-26 09:28:57 INFO     end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+2024-09-26 09:28:57 INFO     end_conv_2.bias	torch.Size([12])	cuda:0	True
+2024-09-26 09:28:57 INFO     Total parameter numbers: 323184
+2024-09-26 09:28:57 INFO     You select `adam` optimizer.
+2024-09-26 09:28:57 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-26 09:28:57 INFO     Start training ...
+2024-09-26 09:28:57 INFO     num_batches:96
+2024-09-26 09:29:17 INFO     epoch complete!
+2024-09-26 09:29:17 INFO     evaluating now!
+2024-09-26 09:29:20 INFO     Epoch [0/200] train_loss: 12.2212, val_loss: 9.7062, lr: 0.001000, 22.29s
+2024-09-26 09:29:20 INFO     Saved model at 0
+2024-09-26 09:29:20 INFO     Val loss decrease from inf to 9.7062, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch0.tar
+2024-09-26 09:29:40 INFO     epoch complete!
+2024-09-26 09:29:40 INFO     evaluating now!
+2024-09-26 09:29:42 INFO     Epoch [1/200] train_loss: 8.9200, val_loss: 9.3100, lr: 0.001000, 21.94s
+2024-09-26 09:29:42 INFO     Saved model at 1
+2024-09-26 09:29:42 INFO     Val loss decrease from 9.7062 to 9.3100, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch1.tar
+2024-09-26 09:30:02 INFO     epoch complete!
+2024-09-26 09:30:02 INFO     evaluating now!
+2024-09-26 09:30:04 INFO     Epoch [2/200] train_loss: 8.3851, val_loss: 12.3677, lr: 0.001000, 21.82s
+2024-09-26 09:30:24 INFO     epoch complete!
+2024-09-26 09:30:24 INFO     evaluating now!
+2024-09-26 09:30:26 INFO     Epoch [3/200] train_loss: 8.1257, val_loss: 7.7862, lr: 0.001000, 22.02s
+2024-09-26 09:30:26 INFO     Saved model at 3
+2024-09-26 09:30:26 INFO     Val loss decrease from 9.3100 to 7.7862, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch3.tar
+2024-09-26 09:30:46 INFO     epoch complete!
+2024-09-26 09:30:46 INFO     evaluating now!
+2024-09-26 09:30:48 INFO     Epoch [4/200] train_loss: 7.9759, val_loss: 10.3342, lr: 0.001000, 21.99s
+2024-09-26 09:31:08 INFO     epoch complete!
+2024-09-26 09:31:08 INFO     evaluating now!
+2024-09-26 09:31:10 INFO     Epoch [5/200] train_loss: 7.9202, val_loss: 7.7029, lr: 0.001000, 22.12s
+2024-09-26 09:31:10 INFO     Saved model at 5
+2024-09-26 09:31:10 INFO     Val loss decrease from 7.7862 to 7.7029, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch5.tar
+2024-09-26 09:31:30 INFO     epoch complete!
+2024-09-26 09:31:30 INFO     evaluating now!
+2024-09-26 09:31:32 INFO     Epoch [6/200] train_loss: 7.6744, val_loss: 11.2122, lr: 0.001000, 22.01s
+2024-09-26 09:31:51 INFO     epoch complete!
+2024-09-26 09:31:51 INFO     evaluating now!
+2024-09-26 09:31:53 INFO     Epoch [7/200] train_loss: 7.6085, val_loss: 11.4203, lr: 0.001000, 20.80s
+2024-09-26 09:32:12 INFO     epoch complete!
+2024-09-26 09:32:12 INFO     evaluating now!
+2024-09-26 09:32:15 INFO     Epoch [8/200] train_loss: 7.4127, val_loss: 7.4868, lr: 0.001000, 21.35s
+2024-09-26 09:32:15 INFO     Saved model at 8
+2024-09-26 09:32:15 INFO     Val loss decrease from 7.7029 to 7.4868, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch8.tar
+2024-09-26 09:32:34 INFO     epoch complete!
+2024-09-26 09:32:34 INFO     evaluating now!
+2024-09-26 09:32:36 INFO     Epoch [9/200] train_loss: 6.9461, val_loss: 6.8598, lr: 0.001000, 21.23s
+2024-09-26 09:32:36 INFO     Saved model at 9
+2024-09-26 09:32:36 INFO     Val loss decrease from 7.4868 to 6.8598, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch9.tar
+2024-09-26 09:32:56 INFO     epoch complete!
+2024-09-26 09:32:56 INFO     evaluating now!
+2024-09-26 09:32:58 INFO     Epoch [10/200] train_loss: 6.0898, val_loss: 7.0795, lr: 0.001000, 21.76s
+2024-09-26 09:33:18 INFO     epoch complete!
+2024-09-26 09:33:18 INFO     evaluating now!
+2024-09-26 09:33:20 INFO     Epoch [11/200] train_loss: 5.7357, val_loss: 5.7597, lr: 0.001000, 21.85s
+2024-09-26 09:33:20 INFO     Saved model at 11
+2024-09-26 09:33:20 INFO     Val loss decrease from 6.8598 to 5.7597, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch11.tar
+2024-09-26 09:33:40 INFO     epoch complete!
+2024-09-26 09:33:40 INFO     evaluating now!
+2024-09-26 09:33:42 INFO     Epoch [12/200] train_loss: 5.5507, val_loss: 5.3391, lr: 0.001000, 21.65s
+2024-09-26 09:33:42 INFO     Saved model at 12
+2024-09-26 09:33:42 INFO     Val loss decrease from 5.7597 to 5.3391, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch12.tar
+2024-09-26 09:34:02 INFO     epoch complete!
+2024-09-26 09:34:02 INFO     evaluating now!
+2024-09-26 09:34:04 INFO     Epoch [13/200] train_loss: 5.4365, val_loss: 7.2735, lr: 0.001000, 21.83s
+2024-09-26 09:34:24 INFO     epoch complete!
+2024-09-26 09:34:24 INFO     evaluating now!
+2024-09-26 09:34:26 INFO     Epoch [14/200] train_loss: 5.3096, val_loss: 5.9292, lr: 0.001000, 21.92s
+2024-09-26 09:34:45 INFO     epoch complete!
+2024-09-26 09:34:45 INFO     evaluating now!
+2024-09-26 09:34:47 INFO     Epoch [15/200] train_loss: 5.3949, val_loss: 5.4753, lr: 0.001000, 21.23s
+2024-09-26 09:35:06 INFO     epoch complete!
+2024-09-26 09:35:06 INFO     evaluating now!
+2024-09-26 09:35:08 INFO     Epoch [16/200] train_loss: 5.1749, val_loss: 5.4932, lr: 0.001000, 21.09s
+2024-09-26 09:35:27 INFO     epoch complete!
+2024-09-26 09:35:27 INFO     evaluating now!
+2024-09-26 09:35:29 INFO     Epoch [17/200] train_loss: 5.0918, val_loss: 7.1300, lr: 0.001000, 20.79s
+2024-09-26 09:35:48 INFO     epoch complete!
+2024-09-26 09:35:48 INFO     evaluating now!
+2024-09-26 09:35:50 INFO     Epoch [18/200] train_loss: 5.0056, val_loss: 7.9328, lr: 0.001000, 20.73s
+2024-09-26 09:36:09 INFO     epoch complete!
+2024-09-26 09:36:09 INFO     evaluating now!
+2024-09-26 09:36:11 INFO     Epoch [19/200] train_loss: 4.9556, val_loss: 5.9203, lr: 0.001000, 21.52s
+2024-09-26 09:36:31 INFO     epoch complete!
+2024-09-26 09:36:31 INFO     evaluating now!
+2024-09-26 09:36:33 INFO     Epoch [20/200] train_loss: 4.9087, val_loss: 5.2411, lr: 0.001000, 21.49s
+2024-09-26 09:36:33 INFO     Saved model at 20
+2024-09-26 09:36:33 INFO     Val loss decrease from 5.3391 to 5.2411, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch20.tar
+2024-09-26 09:36:52 INFO     epoch complete!
+2024-09-26 09:36:52 INFO     evaluating now!
+2024-09-26 09:36:54 INFO     Epoch [21/200] train_loss: 4.8756, val_loss: 5.4726, lr: 0.001000, 21.23s
+2024-09-26 09:37:13 INFO     epoch complete!
+2024-09-26 09:37:13 INFO     evaluating now!
+2024-09-26 09:37:15 INFO     Epoch [22/200] train_loss: 4.8199, val_loss: 5.3532, lr: 0.001000, 21.14s
+2024-09-26 09:37:34 INFO     epoch complete!
+2024-09-26 09:37:34 INFO     evaluating now!
+2024-09-26 09:37:36 INFO     Epoch [23/200] train_loss: 4.8233, val_loss: 5.2141, lr: 0.001000, 21.08s
+2024-09-26 09:37:37 INFO     Saved model at 23
+2024-09-26 09:37:37 INFO     Val loss decrease from 5.2411 to 5.2141, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch23.tar
+2024-09-26 09:37:55 INFO     epoch complete!
+2024-09-26 09:37:55 INFO     evaluating now!
+2024-09-26 09:37:57 INFO     Epoch [24/200] train_loss: 4.7901, val_loss: 5.1769, lr: 0.001000, 20.89s
+2024-09-26 09:37:58 INFO     Saved model at 24
+2024-09-26 09:37:58 INFO     Val loss decrease from 5.2141 to 5.1769, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch24.tar
+2024-09-26 09:38:17 INFO     epoch complete!
+2024-09-26 09:38:17 INFO     evaluating now!
+2024-09-26 09:38:19 INFO     Epoch [25/200] train_loss: 4.7414, val_loss: 5.3086, lr: 0.001000, 21.30s
+2024-09-26 09:38:38 INFO     epoch complete!
+2024-09-26 09:38:38 INFO     evaluating now!
+2024-09-26 09:38:40 INFO     Epoch [26/200] train_loss: 4.6887, val_loss: 5.0366, lr: 0.001000, 21.18s
+2024-09-26 09:38:40 INFO     Saved model at 26
+2024-09-26 09:38:40 INFO     Val loss decrease from 5.1769 to 5.0366, saving to ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406_epoch26.tar
+2024-09-26 09:38:59 INFO     epoch complete!
+2024-09-26 09:38:59 INFO     evaluating now!
+2024-09-26 09:39:01 INFO     Epoch [27/200] train_loss: 4.5994, val_loss: 7.0290, lr: 0.001000, 20.97s
+2024-09-26 09:39:21 INFO     epoch complete!
+2024-09-26 09:39:21 INFO     evaluating now!
+2024-09-26 09:39:23 INFO     Epoch [28/200] train_loss: 4.5845, val_loss: 5.8211, lr: 0.001000, 21.25s
+2024-09-26 09:39:42 INFO     epoch complete!
+2024-09-26 09:39:42 INFO     evaluating now!
+2024-09-26 09:39:44 INFO     Epoch [29/200] train_loss: 4.5613, val_loss: 5.1636, lr: 0.001000, 21.63s
+2024-09-26 09:40:04 INFO     epoch complete!
+2024-09-26 09:40:04 INFO     evaluating now!
+2024-09-26 09:40:06 INFO     Epoch [30/200] train_loss: 4.5026, val_loss: 5.0850, lr: 0.001000, 21.62s
+2024-09-26 09:40:25 INFO     epoch complete!
+2024-09-26 09:40:25 INFO     evaluating now!
+2024-09-26 09:40:27 INFO     Epoch [31/200] train_loss: 4.4817, val_loss: 5.5890, lr: 0.001000, 21.55s
+2024-09-26 09:40:47 INFO     epoch complete!
+2024-09-26 09:40:47 INFO     evaluating now!
+2024-09-26 09:40:49 INFO     Epoch [32/200] train_loss: 4.4517, val_loss: 5.1412, lr: 0.001000, 21.71s
+2024-09-26 09:41:09 INFO     epoch complete!
+2024-09-26 09:41:09 INFO     evaluating now!
+2024-09-26 09:41:11 INFO     Epoch [33/200] train_loss: 4.4319, val_loss: 5.0675, lr: 0.001000, 21.82s
+2024-09-26 09:41:30 INFO     epoch complete!
+2024-09-26 09:41:30 INFO     evaluating now!
+2024-09-26 09:41:32 INFO     Epoch [34/200] train_loss: 4.3444, val_loss: 5.5682, lr: 0.001000, 21.49s
+2024-09-26 09:41:52 INFO     epoch complete!
+2024-09-26 09:41:52 INFO     evaluating now!
+2024-09-26 09:41:54 INFO     Epoch [35/200] train_loss: 4.3027, val_loss: 5.1598, lr: 0.001000, 21.53s
+2024-09-26 09:42:13 INFO     epoch complete!
+2024-09-26 09:42:13 INFO     evaluating now!
+2024-09-26 09:42:16 INFO     Epoch [36/200] train_loss: 4.3253, val_loss: 5.0800, lr: 0.001000, 21.51s
+2024-09-26 09:42:35 INFO     epoch complete!
+2024-09-26 09:42:35 INFO     evaluating now!
+2024-09-26 09:42:37 INFO     Epoch [37/200] train_loss: 4.3950, val_loss: 5.6570, lr: 0.001000, 21.53s
+2024-09-26 09:42:56 INFO     epoch complete!
+2024-09-26 09:42:56 INFO     evaluating now!
+2024-09-26 09:42:58 INFO     Epoch [38/200] train_loss: 4.3553, val_loss: 5.2191, lr: 0.001000, 21.44s
+2024-09-26 09:43:18 INFO     epoch complete!
+2024-09-26 09:43:18 INFO     evaluating now!
+2024-09-26 09:43:20 INFO     Epoch [39/200] train_loss: 4.3309, val_loss: 6.9398, lr: 0.001000, 21.28s
+2024-09-26 09:43:39 INFO     epoch complete!
+2024-09-26 09:43:39 INFO     evaluating now!
+2024-09-26 09:43:41 INFO     Epoch [40/200] train_loss: 4.2912, val_loss: 5.7257, lr: 0.001000, 21.45s
+2024-09-26 09:44:01 INFO     epoch complete!
+2024-09-26 09:44:01 INFO     evaluating now!
+2024-09-26 09:44:03 INFO     Epoch [41/200] train_loss: 4.2519, val_loss: 5.6281, lr: 0.001000, 21.58s
+2024-09-26 09:44:03 WARNING  Early stopping at epoch: 41
+2024-09-26 09:44:03 INFO     Trained totally 42 epochs, average train time is 19.411s, average eval time is 2.079s
+2024-09-26 09:44:03 INFO     Loaded model at 26
+2024-09-26 09:44:03 INFO     Saved model at ./libcity/cache/10005/model_cache/GWNET_CHITaxi20190406.m
+2024-09-26 09:44:03 INFO     Start evaluating ...
+2024-09-26 09:44:08 INFO     Note that you select the single mode to evaluate!
+2024-09-26 09:44:08 INFO     Evaluate result is saved at ./libcity/cache/10005/evaluate_cache/2024_09_26_09_44_08_GWNET_CHITaxi20190406.csv
+2024-09-26 09:44:08 INFO     
+         MAE       RMSE
+1   2.392667   7.334098
+2   2.637014   8.642166
+3   2.838041   9.795637
+4   2.936708  10.327730
+5   2.889153  10.227607
+6   2.985403  10.341474
+7   3.078082  10.419310
+8   3.080591  10.646948
+9   3.136510  10.885831
+10  3.220360  11.483673
+11  3.332832  11.917933
+12  3.566631  13.065095
+2024-09-26 09:44:09 INFO     ----------------------------------------------------------------------------
+2024-09-26 09:44:09 INFO     # 1, Kownledge Graph Embedding: TransE, Experiment ids: 10006
+2024-09-26 09:44:09 INFO     ----------------------------------------------------------------------------
+2024-09-26 09:44:09 INFO     Begin pipeline, task=traffic_state_pred, model_name=GWNET, dataset_name=CHITaxi20190406, exp_id=10006
+2024-09-26 09:44:09 INFO     {'task': 'traffic_state_pred', 'model': 'GWNET', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 10006, 'ke_model': 'TransE', 'ke_dim': 32, 'ke_method': 'MultiHop', 'max_hop': 1, 'max_epoch': 200, 'patience': 15, 'use_early_stop': True, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 1, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'dropout': 0.3, 'blocks': 4, 'layers': 2, 'batch_size': 32, 'apt_layer': True, 'gcn_bool': True, 'adjtype': 'doubletransition', 'bidir_adj_mx': False, 'randomadj': True, 'kernel_size': 2, 'nhid': 32, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_rel_adj': True, 'use_apt_adj': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-26 09:44:09 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-26 09:44:09 INFO     set_weight_link_or_dist: dist
+2024-09-26 09:44:09 INFO     init_weight_inf_or_zero: inf
+2024-09-26 09:44:09 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-26 09:44:09 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-26 09:44:09 INFO     Loading file CHITaxi20190406.dyna
+2024-09-26 09:44:09 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-26 09:44:09 INFO     Dataset created
+2024-09-26 09:44:09 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
+2024-09-26 09:44:09 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
+2024-09-26 09:44:09 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
+2024-09-26 09:44:09 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
+2024-09-26 09:44:09 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-26 09:44:09 INFO     NoneScaler
+2024-09-26 09:44:10 INFO     add adj_mx to supports
+2024-09-26 09:44:10 INFO     add apt_adj(v1 * v2) in forward process
+2024-09-26 09:44:10 INFO     add multi hop score in forward process
+2024-09-26 09:44:10 INFO     receptive_field: 14
+2024-09-26 09:44:10 INFO     GWNET(
+  (filter_convs): ModuleList(
+    (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+  )
+  (gate_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (2): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (4): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (6): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+  )
+  (skip_convs): ModuleList(
+    (0): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+  )
+  (bn): ModuleList(
+    (0): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (gconv): ModuleList(
+    (0): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (2): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (3): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (4): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (5): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (6): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (7): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+  )
+  (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-09-26 09:44:10 INFO     nodevec1	torch.Size([77, 10])	cuda:0	True
+2024-09-26 09:44:10 INFO     nodevec2	torch.Size([10, 77])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     filter_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 09:44:10 INFO     gate_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     residual_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.4.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.5.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.6.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     skip_convs.7.bias	torch.Size([256])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.0.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.1.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.2.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.3.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.4.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.5.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.6.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.7.weight	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     bn.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.0.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.1.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.2.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.3.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.4.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.5.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.6.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.7.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     start_conv.bias	torch.Size([32])	cuda:0	True
+2024-09-26 09:44:10 INFO     end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     end_conv_1.bias	torch.Size([512])	cuda:0	True
+2024-09-26 09:44:10 INFO     end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+2024-09-26 09:44:10 INFO     end_conv_2.bias	torch.Size([12])	cuda:0	True
+2024-09-26 09:44:10 INFO     Total parameter numbers: 323184
+2024-09-26 09:44:10 INFO     You select `adam` optimizer.
+2024-09-26 09:44:10 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-26 09:44:10 INFO     Start training ...
+2024-09-26 09:44:10 INFO     num_batches:96
+2024-09-26 09:44:29 INFO     epoch complete!
+2024-09-26 09:44:29 INFO     evaluating now!
+2024-09-26 09:44:31 INFO     Epoch [0/200] train_loss: 12.1996, val_loss: 11.7300, lr: 0.001000, 21.08s
+2024-09-26 09:44:31 INFO     Saved model at 0
+2024-09-26 09:44:31 INFO     Val loss decrease from inf to 11.7300, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch0.tar
+2024-09-26 09:44:50 INFO     epoch complete!
+2024-09-26 09:44:50 INFO     evaluating now!
+2024-09-26 09:44:52 INFO     Epoch [1/200] train_loss: 9.0564, val_loss: 9.2221, lr: 0.001000, 21.17s
+2024-09-26 09:44:53 INFO     Saved model at 1
+2024-09-26 09:44:53 INFO     Val loss decrease from 11.7300 to 9.2221, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch1.tar
+2024-09-26 09:45:12 INFO     epoch complete!
+2024-09-26 09:45:12 INFO     evaluating now!
+2024-09-26 09:45:14 INFO     Epoch [2/200] train_loss: 8.5325, val_loss: 8.5989, lr: 0.001000, 21.19s
+2024-09-26 09:45:14 INFO     Saved model at 2
+2024-09-26 09:45:14 INFO     Val loss decrease from 9.2221 to 8.5989, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch2.tar
+2024-09-26 09:45:33 INFO     epoch complete!
+2024-09-26 09:45:33 INFO     evaluating now!
+2024-09-26 09:45:35 INFO     Epoch [3/200] train_loss: 8.1071, val_loss: 7.9273, lr: 0.001000, 21.05s
+2024-09-26 09:45:35 INFO     Saved model at 3
+2024-09-26 09:45:35 INFO     Val loss decrease from 8.5989 to 7.9273, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch3.tar
+2024-09-26 09:45:54 INFO     epoch complete!
+2024-09-26 09:45:54 INFO     evaluating now!
+2024-09-26 09:45:56 INFO     Epoch [4/200] train_loss: 7.6962, val_loss: 9.9939, lr: 0.001000, 21.11s
+2024-09-26 09:46:15 INFO     epoch complete!
+2024-09-26 09:46:15 INFO     evaluating now!
+2024-09-26 09:46:17 INFO     Epoch [5/200] train_loss: 7.4929, val_loss: 7.5037, lr: 0.001000, 21.02s
+2024-09-26 09:46:18 INFO     Saved model at 5
+2024-09-26 09:46:18 INFO     Val loss decrease from 7.9273 to 7.5037, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch5.tar
+2024-09-26 09:46:36 INFO     epoch complete!
+2024-09-26 09:46:36 INFO     evaluating now!
+2024-09-26 09:46:38 INFO     Epoch [6/200] train_loss: 7.4262, val_loss: 7.7810, lr: 0.001000, 20.71s
+2024-09-26 09:46:57 INFO     epoch complete!
+2024-09-26 09:46:57 INFO     evaluating now!
+2024-09-26 09:46:59 INFO     Epoch [7/200] train_loss: 7.2957, val_loss: 7.6200, lr: 0.001000, 20.83s
+2024-09-26 09:47:18 INFO     epoch complete!
+2024-09-26 09:47:18 INFO     evaluating now!
+2024-09-26 09:47:20 INFO     Epoch [8/200] train_loss: 6.6224, val_loss: 6.8952, lr: 0.001000, 20.55s
+2024-09-26 09:47:20 INFO     Saved model at 8
+2024-09-26 09:47:20 INFO     Val loss decrease from 7.5037 to 6.8952, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch8.tar
+2024-09-26 09:47:39 INFO     epoch complete!
+2024-09-26 09:47:39 INFO     evaluating now!
+2024-09-26 09:47:41 INFO     Epoch [9/200] train_loss: 5.9655, val_loss: 6.4435, lr: 0.001000, 20.81s
+2024-09-26 09:47:41 INFO     Saved model at 9
+2024-09-26 09:47:41 INFO     Val loss decrease from 6.8952 to 6.4435, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch9.tar
+2024-09-26 09:48:00 INFO     epoch complete!
+2024-09-26 09:48:00 INFO     evaluating now!
+2024-09-26 09:48:02 INFO     Epoch [10/200] train_loss: 5.6606, val_loss: 5.4015, lr: 0.001000, 21.21s
+2024-09-26 09:48:02 INFO     Saved model at 10
+2024-09-26 09:48:02 INFO     Val loss decrease from 6.4435 to 5.4015, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch10.tar
+2024-09-26 09:48:22 INFO     epoch complete!
+2024-09-26 09:48:22 INFO     evaluating now!
+2024-09-26 09:48:24 INFO     Epoch [11/200] train_loss: 5.5692, val_loss: 6.0888, lr: 0.001000, 21.31s
+2024-09-26 09:48:43 INFO     epoch complete!
+2024-09-26 09:48:43 INFO     evaluating now!
+2024-09-26 09:48:45 INFO     Epoch [12/200] train_loss: 5.3358, val_loss: 5.8775, lr: 0.001000, 21.32s
+2024-09-26 09:49:04 INFO     epoch complete!
+2024-09-26 09:49:04 INFO     evaluating now!
+2024-09-26 09:49:06 INFO     Epoch [13/200] train_loss: 5.3411, val_loss: 5.7151, lr: 0.001000, 21.21s
+2024-09-26 09:49:26 INFO     epoch complete!
+2024-09-26 09:49:26 INFO     evaluating now!
+2024-09-26 09:49:28 INFO     Epoch [14/200] train_loss: 5.3480, val_loss: 5.3403, lr: 0.001000, 21.32s
+2024-09-26 09:49:28 INFO     Saved model at 14
+2024-09-26 09:49:28 INFO     Val loss decrease from 5.4015 to 5.3403, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch14.tar
+2024-09-26 09:49:47 INFO     epoch complete!
+2024-09-26 09:49:47 INFO     evaluating now!
+2024-09-26 09:49:49 INFO     Epoch [15/200] train_loss: 5.1277, val_loss: 6.5760, lr: 0.001000, 20.98s
+2024-09-26 09:50:08 INFO     epoch complete!
+2024-09-26 09:50:08 INFO     evaluating now!
+2024-09-26 09:50:10 INFO     Epoch [16/200] train_loss: 5.1008, val_loss: 6.5163, lr: 0.001000, 21.41s
+2024-09-26 09:50:29 INFO     epoch complete!
+2024-09-26 09:50:29 INFO     evaluating now!
+2024-09-26 09:50:31 INFO     Epoch [17/200] train_loss: 4.9484, val_loss: 5.6648, lr: 0.001000, 21.14s
+2024-09-26 09:50:51 INFO     epoch complete!
+2024-09-26 09:50:51 INFO     evaluating now!
+2024-09-26 09:50:53 INFO     Epoch [18/200] train_loss: 4.8482, val_loss: 6.4145, lr: 0.001000, 21.39s
+2024-09-26 09:51:12 INFO     epoch complete!
+2024-09-26 09:51:12 INFO     evaluating now!
+2024-09-26 09:51:14 INFO     Epoch [19/200] train_loss: 4.8989, val_loss: 5.2564, lr: 0.001000, 21.55s
+2024-09-26 09:51:14 INFO     Saved model at 19
+2024-09-26 09:51:14 INFO     Val loss decrease from 5.3403 to 5.2564, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch19.tar
+2024-09-26 09:51:33 INFO     epoch complete!
+2024-09-26 09:51:33 INFO     evaluating now!
+2024-09-26 09:51:36 INFO     Epoch [20/200] train_loss: 4.8568, val_loss: 5.1576, lr: 0.001000, 21.09s
+2024-09-26 09:51:36 INFO     Saved model at 20
+2024-09-26 09:51:36 INFO     Val loss decrease from 5.2564 to 5.1576, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch20.tar
+2024-09-26 09:51:54 INFO     epoch complete!
+2024-09-26 09:51:55 INFO     evaluating now!
+2024-09-26 09:51:57 INFO     Epoch [21/200] train_loss: 4.8611, val_loss: 5.0370, lr: 0.001000, 20.80s
+2024-09-26 09:51:57 INFO     Saved model at 21
+2024-09-26 09:51:57 INFO     Val loss decrease from 5.1576 to 5.0370, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch21.tar
+2024-09-26 09:52:16 INFO     epoch complete!
+2024-09-26 09:52:16 INFO     evaluating now!
+2024-09-26 09:52:18 INFO     Epoch [22/200] train_loss: 4.7339, val_loss: 5.5179, lr: 0.001000, 21.28s
+2024-09-26 09:52:37 INFO     epoch complete!
+2024-09-26 09:52:37 INFO     evaluating now!
+2024-09-26 09:52:39 INFO     Epoch [23/200] train_loss: 4.7350, val_loss: 5.0161, lr: 0.001000, 21.32s
+2024-09-26 09:52:40 INFO     Saved model at 23
+2024-09-26 09:52:40 INFO     Val loss decrease from 5.0370 to 5.0161, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch23.tar
+2024-09-26 09:52:59 INFO     epoch complete!
+2024-09-26 09:52:59 INFO     evaluating now!
+2024-09-26 09:53:01 INFO     Epoch [24/200] train_loss: 4.6865, val_loss: 5.3311, lr: 0.001000, 21.49s
+2024-09-26 09:53:20 INFO     epoch complete!
+2024-09-26 09:53:20 INFO     evaluating now!
+2024-09-26 09:53:22 INFO     Epoch [25/200] train_loss: 4.6392, val_loss: 6.3622, lr: 0.001000, 21.40s
+2024-09-26 09:53:42 INFO     epoch complete!
+2024-09-26 09:53:42 INFO     evaluating now!
+2024-09-26 09:53:44 INFO     Epoch [26/200] train_loss: 4.6436, val_loss: 5.1583, lr: 0.001000, 21.33s
+2024-09-26 09:54:03 INFO     epoch complete!
+2024-09-26 09:54:03 INFO     evaluating now!
+2024-09-26 09:54:05 INFO     Epoch [27/200] train_loss: 4.5999, val_loss: 5.5579, lr: 0.001000, 21.38s
+2024-09-26 09:54:24 INFO     epoch complete!
+2024-09-26 09:54:24 INFO     evaluating now!
+2024-09-26 09:54:26 INFO     Epoch [28/200] train_loss: 4.5870, val_loss: 5.2299, lr: 0.001000, 21.27s
+2024-09-26 09:54:46 INFO     epoch complete!
+2024-09-26 09:54:46 INFO     evaluating now!
+2024-09-26 09:54:48 INFO     Epoch [29/200] train_loss: 4.5171, val_loss: 5.9101, lr: 0.001000, 21.27s
+2024-09-26 09:55:07 INFO     epoch complete!
+2024-09-26 09:55:07 INFO     evaluating now!
+2024-09-26 09:55:09 INFO     Epoch [30/200] train_loss: 4.5585, val_loss: 4.9870, lr: 0.001000, 21.37s
+2024-09-26 09:55:09 INFO     Saved model at 30
+2024-09-26 09:55:09 INFO     Val loss decrease from 5.0161 to 4.9870, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch30.tar
+2024-09-26 09:55:28 INFO     epoch complete!
+2024-09-26 09:55:28 INFO     evaluating now!
+2024-09-26 09:55:30 INFO     Epoch [31/200] train_loss: 4.5100, val_loss: 5.2588, lr: 0.001000, 21.28s
+2024-09-26 09:55:49 INFO     epoch complete!
+2024-09-26 09:55:49 INFO     evaluating now!
+2024-09-26 09:55:52 INFO     Epoch [32/200] train_loss: 4.3846, val_loss: 5.1738, lr: 0.001000, 21.07s
+2024-09-26 09:56:11 INFO     epoch complete!
+2024-09-26 09:56:11 INFO     evaluating now!
+2024-09-26 09:56:13 INFO     Epoch [33/200] train_loss: 4.4052, val_loss: 5.1099, lr: 0.001000, 21.54s
+2024-09-26 09:56:32 INFO     epoch complete!
+2024-09-26 09:56:32 INFO     evaluating now!
+2024-09-26 09:56:34 INFO     Epoch [34/200] train_loss: 4.3664, val_loss: 4.8916, lr: 0.001000, 21.18s
+2024-09-26 09:56:34 INFO     Saved model at 34
+2024-09-26 09:56:34 INFO     Val loss decrease from 4.9870 to 4.8916, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch34.tar
+2024-09-26 09:56:54 INFO     epoch complete!
+2024-09-26 09:56:54 INFO     evaluating now!
+2024-09-26 09:56:56 INFO     Epoch [35/200] train_loss: 4.3813, val_loss: 5.0153, lr: 0.001000, 21.29s
+2024-09-26 09:57:15 INFO     epoch complete!
+2024-09-26 09:57:15 INFO     evaluating now!
+2024-09-26 09:57:17 INFO     Epoch [36/200] train_loss: 4.3415, val_loss: 5.2684, lr: 0.001000, 21.42s
+2024-09-26 09:57:37 INFO     epoch complete!
+2024-09-26 09:57:37 INFO     evaluating now!
+2024-09-26 09:57:39 INFO     Epoch [37/200] train_loss: 4.3765, val_loss: 5.6166, lr: 0.001000, 21.47s
+2024-09-26 09:57:58 INFO     epoch complete!
+2024-09-26 09:57:58 INFO     evaluating now!
+2024-09-26 09:58:00 INFO     Epoch [38/200] train_loss: 4.3128, val_loss: 6.3334, lr: 0.001000, 21.22s
+2024-09-26 09:58:19 INFO     epoch complete!
+2024-09-26 09:58:19 INFO     evaluating now!
+2024-09-26 09:58:21 INFO     Epoch [39/200] train_loss: 4.2557, val_loss: 5.3929, lr: 0.001000, 20.88s
+2024-09-26 09:58:39 INFO     epoch complete!
+2024-09-26 09:58:39 INFO     evaluating now!
+2024-09-26 09:58:41 INFO     Epoch [40/200] train_loss: 4.3023, val_loss: 5.0240, lr: 0.001000, 20.63s
+2024-09-26 09:59:00 INFO     epoch complete!
+2024-09-26 09:59:00 INFO     evaluating now!
+2024-09-26 09:59:03 INFO     Epoch [41/200] train_loss: 4.2184, val_loss: 5.0821, lr: 0.001000, 21.21s
+2024-09-26 09:59:22 INFO     epoch complete!
+2024-09-26 09:59:22 INFO     evaluating now!
+2024-09-26 09:59:24 INFO     Epoch [42/200] train_loss: 4.2570, val_loss: 5.1812, lr: 0.001000, 21.25s
+2024-09-26 09:59:43 INFO     epoch complete!
+2024-09-26 09:59:43 INFO     evaluating now!
+2024-09-26 09:59:45 INFO     Epoch [43/200] train_loss: 4.2885, val_loss: 5.0974, lr: 0.001000, 20.99s
+2024-09-26 10:00:04 INFO     epoch complete!
+2024-09-26 10:00:04 INFO     evaluating now!
+2024-09-26 10:00:06 INFO     Epoch [44/200] train_loss: 4.1985, val_loss: 5.9871, lr: 0.001000, 21.25s
+2024-09-26 10:00:25 INFO     epoch complete!
+2024-09-26 10:00:25 INFO     evaluating now!
+2024-09-26 10:00:27 INFO     Epoch [45/200] train_loss: 4.1513, val_loss: 5.1859, lr: 0.001000, 21.06s
+2024-09-26 10:00:46 INFO     epoch complete!
+2024-09-26 10:00:46 INFO     evaluating now!
+2024-09-26 10:00:49 INFO     Epoch [46/200] train_loss: 4.1337, val_loss: 5.9432, lr: 0.001000, 21.39s
+2024-09-26 10:01:08 INFO     epoch complete!
+2024-09-26 10:01:08 INFO     evaluating now!
+2024-09-26 10:01:10 INFO     Epoch [47/200] train_loss: 4.2210, val_loss: 5.1030, lr: 0.001000, 21.21s
+2024-09-26 10:01:29 INFO     epoch complete!
+2024-09-26 10:01:29 INFO     evaluating now!
+2024-09-26 10:01:31 INFO     Epoch [48/200] train_loss: 4.1084, val_loss: 4.9461, lr: 0.001000, 21.34s
+2024-09-26 10:01:50 INFO     epoch complete!
+2024-09-26 10:01:50 INFO     evaluating now!
+2024-09-26 10:01:52 INFO     Epoch [49/200] train_loss: 4.1072, val_loss: 4.8642, lr: 0.001000, 21.29s
+2024-09-26 10:01:53 INFO     Saved model at 49
+2024-09-26 10:01:53 INFO     Val loss decrease from 4.8916 to 4.8642, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch49.tar
+2024-09-26 10:02:12 INFO     epoch complete!
+2024-09-26 10:02:12 INFO     evaluating now!
+2024-09-26 10:02:14 INFO     Epoch [50/200] train_loss: 4.1410, val_loss: 5.5172, lr: 0.001000, 21.34s
+2024-09-26 10:02:33 INFO     epoch complete!
+2024-09-26 10:02:33 INFO     evaluating now!
+2024-09-26 10:02:35 INFO     Epoch [51/200] train_loss: 4.0395, val_loss: 5.4375, lr: 0.001000, 21.28s
+2024-09-26 10:02:55 INFO     epoch complete!
+2024-09-26 10:02:55 INFO     evaluating now!
+2024-09-26 10:02:57 INFO     Epoch [52/200] train_loss: 4.0341, val_loss: 4.7436, lr: 0.001000, 21.36s
+2024-09-26 10:02:57 INFO     Saved model at 52
+2024-09-26 10:02:57 INFO     Val loss decrease from 4.8642 to 4.7436, saving to ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406_epoch52.tar
+2024-09-26 10:03:16 INFO     epoch complete!
+2024-09-26 10:03:16 INFO     evaluating now!
+2024-09-26 10:03:18 INFO     Epoch [53/200] train_loss: 4.0757, val_loss: 5.0767, lr: 0.001000, 21.34s
+2024-09-26 10:03:38 INFO     epoch complete!
+2024-09-26 10:03:38 INFO     evaluating now!
+2024-09-26 10:03:40 INFO     Epoch [54/200] train_loss: 4.1375, val_loss: 4.9354, lr: 0.001000, 21.39s
+2024-09-26 10:03:59 INFO     epoch complete!
+2024-09-26 10:03:59 INFO     evaluating now!
+2024-09-26 10:04:01 INFO     Epoch [55/200] train_loss: 4.0193, val_loss: 6.3204, lr: 0.001000, 21.39s
+2024-09-26 10:04:20 INFO     epoch complete!
+2024-09-26 10:04:20 INFO     evaluating now!
+2024-09-26 10:04:22 INFO     Epoch [56/200] train_loss: 4.0180, val_loss: 5.2966, lr: 0.001000, 21.40s
+2024-09-26 10:04:42 INFO     epoch complete!
+2024-09-26 10:04:42 INFO     evaluating now!
+2024-09-26 10:04:44 INFO     Epoch [57/200] train_loss: 4.0427, val_loss: 5.0989, lr: 0.001000, 21.23s
+2024-09-26 10:05:03 INFO     epoch complete!
+2024-09-26 10:05:03 INFO     evaluating now!
+2024-09-26 10:05:05 INFO     Epoch [58/200] train_loss: 3.9758, val_loss: 5.2988, lr: 0.001000, 21.35s
+2024-09-26 10:05:24 INFO     epoch complete!
+2024-09-26 10:05:24 INFO     evaluating now!
+2024-09-26 10:05:26 INFO     Epoch [59/200] train_loss: 4.0089, val_loss: 5.2952, lr: 0.001000, 21.38s
+2024-09-26 10:05:45 INFO     epoch complete!
+2024-09-26 10:05:45 INFO     evaluating now!
+2024-09-26 10:05:48 INFO     Epoch [60/200] train_loss: 3.9563, val_loss: 5.3626, lr: 0.001000, 21.10s
+2024-09-26 10:06:07 INFO     epoch complete!
+2024-09-26 10:06:07 INFO     evaluating now!
+2024-09-26 10:06:09 INFO     Epoch [61/200] train_loss: 3.9659, val_loss: 5.5842, lr: 0.001000, 21.22s
+2024-09-26 10:06:28 INFO     epoch complete!
+2024-09-26 10:06:28 INFO     evaluating now!
+2024-09-26 10:06:30 INFO     Epoch [62/200] train_loss: 3.8974, val_loss: 5.1111, lr: 0.001000, 21.48s
+2024-09-26 10:06:50 INFO     epoch complete!
+2024-09-26 10:06:50 INFO     evaluating now!
+2024-09-26 10:06:52 INFO     Epoch [63/200] train_loss: 3.8815, val_loss: 6.2997, lr: 0.001000, 21.58s
+2024-09-26 10:07:11 INFO     epoch complete!
+2024-09-26 10:07:11 INFO     evaluating now!
+2024-09-26 10:07:13 INFO     Epoch [64/200] train_loss: 3.9391, val_loss: 5.1388, lr: 0.001000, 21.53s
+2024-09-26 10:07:33 INFO     epoch complete!
+2024-09-26 10:07:33 INFO     evaluating now!
+2024-09-26 10:07:35 INFO     Epoch [65/200] train_loss: 3.8861, val_loss: 4.9925, lr: 0.001000, 21.43s
+2024-09-26 10:07:54 INFO     epoch complete!
+2024-09-26 10:07:54 INFO     evaluating now!
+2024-09-26 10:07:56 INFO     Epoch [66/200] train_loss: 3.8891, val_loss: 5.5068, lr: 0.001000, 21.51s
+2024-09-26 10:08:15 INFO     epoch complete!
+2024-09-26 10:08:15 INFO     evaluating now!
+2024-09-26 10:08:17 INFO     Epoch [67/200] train_loss: 3.8834, val_loss: 4.8307, lr: 0.001000, 21.22s
+2024-09-26 10:08:17 WARNING  Early stopping at epoch: 67
+2024-09-26 10:08:17 INFO     Trained totally 68 epochs, average train time is 19.176s, average eval time is 2.056s
+2024-09-26 10:08:18 INFO     Loaded model at 52
+2024-09-26 10:08:18 INFO     Saved model at ./libcity/cache/10006/model_cache/GWNET_CHITaxi20190406.m
+2024-09-26 10:08:18 INFO     Start evaluating ...
+2024-09-26 10:08:23 INFO     Note that you select the single mode to evaluate!
+2024-09-26 10:08:23 INFO     Evaluate result is saved at ./libcity/cache/10006/evaluate_cache/2024_09_26_10_08_23_GWNET_CHITaxi20190406.csv
+2024-09-26 10:08:23 INFO     
+         MAE       RMSE
+1   2.275385   6.648589
+2   2.470129   7.552111
+3   2.622481   8.460582
+4   2.751128   8.971931
+5   2.863494   9.440602
+6   2.991797   9.875698
+7   3.052601  10.328842
+8   3.157632  10.781149
+9   3.210355  11.185670
+10  3.210560  11.445730
+11  3.338843  11.728948
+12  3.381911  12.024039
+2024-09-26 10:08:23 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:08:23 INFO     # 2, Kownledge Graph Embedding: TransE, Experiment ids: 10007
+2024-09-26 10:08:23 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:08:23 INFO     Begin pipeline, task=traffic_state_pred, model_name=GWNET, dataset_name=CHITaxi20190406, exp_id=10007
+2024-09-26 10:08:23 INFO     {'task': 'traffic_state_pred', 'model': 'GWNET', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 10007, 'ke_model': 'TransE', 'ke_dim': 32, 'ke_method': 'MultiHop', 'max_hop': 1, 'max_epoch': 200, 'patience': 15, 'use_early_stop': True, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 2, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'dropout': 0.3, 'blocks': 4, 'layers': 2, 'batch_size': 32, 'apt_layer': True, 'gcn_bool': True, 'adjtype': 'doubletransition', 'bidir_adj_mx': False, 'randomadj': True, 'kernel_size': 2, 'nhid': 32, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_rel_adj': True, 'use_apt_adj': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-26 10:08:23 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-26 10:08:23 INFO     set_weight_link_or_dist: dist
+2024-09-26 10:08:23 INFO     init_weight_inf_or_zero: inf
+2024-09-26 10:08:23 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-26 10:08:23 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-26 10:08:23 INFO     Loading file CHITaxi20190406.dyna
+2024-09-26 10:08:23 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-26 10:08:23 INFO     Dataset created
+2024-09-26 10:08:23 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
+2024-09-26 10:08:23 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
+2024-09-26 10:08:23 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
+2024-09-26 10:08:23 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
+2024-09-26 10:08:23 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-26 10:08:23 INFO     NoneScaler
+2024-09-26 10:08:24 INFO     add adj_mx to supports
+2024-09-26 10:08:24 INFO     add apt_adj(v1 * v2) in forward process
+2024-09-26 10:08:24 INFO     add multi hop score in forward process
+2024-09-26 10:08:24 INFO     receptive_field: 14
+2024-09-26 10:08:24 INFO     GWNET(
+  (filter_convs): ModuleList(
+    (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+  )
+  (gate_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (2): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (4): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (6): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+  )
+  (skip_convs): ModuleList(
+    (0): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+  )
+  (bn): ModuleList(
+    (0): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (gconv): ModuleList(
+    (0): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (2): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (3): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (4): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (5): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (6): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (7): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+  )
+  (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-09-26 10:08:24 INFO     nodevec1	torch.Size([77, 10])	cuda:0	True
+2024-09-26 10:08:24 INFO     nodevec2	torch.Size([10, 77])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     filter_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:08:24 INFO     gate_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     residual_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.4.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.5.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.6.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     skip_convs.7.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.0.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.1.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.2.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.3.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.4.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.5.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.6.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.7.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     bn.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.0.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.1.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.2.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.3.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.4.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.5.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.6.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.7.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     start_conv.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:08:24 INFO     end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     end_conv_1.bias	torch.Size([512])	cuda:0	True
+2024-09-26 10:08:24 INFO     end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+2024-09-26 10:08:24 INFO     end_conv_2.bias	torch.Size([12])	cuda:0	True
+2024-09-26 10:08:24 INFO     Total parameter numbers: 323184
+2024-09-26 10:08:24 INFO     You select `adam` optimizer.
+2024-09-26 10:08:24 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-26 10:08:24 INFO     Start training ...
+2024-09-26 10:08:24 INFO     num_batches:96
+2024-09-26 10:08:44 INFO     epoch complete!
+2024-09-26 10:08:44 INFO     evaluating now!
+2024-09-26 10:08:46 INFO     Epoch [0/200] train_loss: 12.1798, val_loss: 9.6711, lr: 0.001000, 21.45s
+2024-09-26 10:08:46 INFO     Saved model at 0
+2024-09-26 10:08:46 INFO     Val loss decrease from inf to 9.6711, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch0.tar
+2024-09-26 10:09:05 INFO     epoch complete!
+2024-09-26 10:09:05 INFO     evaluating now!
+2024-09-26 10:09:07 INFO     Epoch [1/200] train_loss: 9.0935, val_loss: 8.8956, lr: 0.001000, 21.44s
+2024-09-26 10:09:07 INFO     Saved model at 1
+2024-09-26 10:09:07 INFO     Val loss decrease from 9.6711 to 8.8956, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch1.tar
+2024-09-26 10:09:27 INFO     epoch complete!
+2024-09-26 10:09:27 INFO     evaluating now!
+2024-09-26 10:09:29 INFO     Epoch [2/200] train_loss: 8.3617, val_loss: 8.1156, lr: 0.001000, 21.26s
+2024-09-26 10:09:29 INFO     Saved model at 2
+2024-09-26 10:09:29 INFO     Val loss decrease from 8.8956 to 8.1156, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch2.tar
+2024-09-26 10:09:48 INFO     epoch complete!
+2024-09-26 10:09:48 INFO     evaluating now!
+2024-09-26 10:09:50 INFO     Epoch [3/200] train_loss: 8.2223, val_loss: 8.2480, lr: 0.001000, 20.66s
+2024-09-26 10:10:08 INFO     epoch complete!
+2024-09-26 10:10:08 INFO     evaluating now!
+2024-09-26 10:10:10 INFO     Epoch [4/200] train_loss: 7.9172, val_loss: 8.4135, lr: 0.001000, 20.33s
+2024-09-26 10:10:28 INFO     epoch complete!
+2024-09-26 10:10:28 INFO     evaluating now!
+2024-09-26 10:10:31 INFO     Epoch [5/200] train_loss: 7.7371, val_loss: 11.9845, lr: 0.001000, 20.60s
+2024-09-26 10:10:48 INFO     epoch complete!
+2024-09-26 10:10:48 INFO     evaluating now!
+2024-09-26 10:10:50 INFO     Epoch [6/200] train_loss: 7.6005, val_loss: 9.0586, lr: 0.001000, 19.70s
+2024-09-26 10:11:09 INFO     epoch complete!
+2024-09-26 10:11:09 INFO     evaluating now!
+2024-09-26 10:11:11 INFO     Epoch [7/200] train_loss: 7.4728, val_loss: 8.5130, lr: 0.001000, 20.44s
+2024-09-26 10:11:29 INFO     epoch complete!
+2024-09-26 10:11:29 INFO     evaluating now!
+2024-09-26 10:11:31 INFO     Epoch [8/200] train_loss: 7.5222, val_loss: 7.7609, lr: 0.001000, 20.62s
+2024-09-26 10:11:31 INFO     Saved model at 8
+2024-09-26 10:11:31 INFO     Val loss decrease from 8.1156 to 7.7609, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch8.tar
+2024-09-26 10:11:50 INFO     epoch complete!
+2024-09-26 10:11:50 INFO     evaluating now!
+2024-09-26 10:11:52 INFO     Epoch [9/200] train_loss: 7.4129, val_loss: 7.1953, lr: 0.001000, 20.43s
+2024-09-26 10:11:52 INFO     Saved model at 9
+2024-09-26 10:11:52 INFO     Val loss decrease from 7.7609 to 7.1953, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch9.tar
+2024-09-26 10:12:10 INFO     epoch complete!
+2024-09-26 10:12:10 INFO     evaluating now!
+2024-09-26 10:12:12 INFO     Epoch [10/200] train_loss: 6.8686, val_loss: 6.2936, lr: 0.001000, 19.68s
+2024-09-26 10:12:12 INFO     Saved model at 10
+2024-09-26 10:12:12 INFO     Val loss decrease from 7.1953 to 6.2936, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch10.tar
+2024-09-26 10:12:30 INFO     epoch complete!
+2024-09-26 10:12:30 INFO     evaluating now!
+2024-09-26 10:12:32 INFO     Epoch [11/200] train_loss: 5.9080, val_loss: 6.4513, lr: 0.001000, 20.08s
+2024-09-26 10:12:50 INFO     epoch complete!
+2024-09-26 10:12:50 INFO     evaluating now!
+2024-09-26 10:12:52 INFO     Epoch [12/200] train_loss: 5.6791, val_loss: 5.9753, lr: 0.001000, 20.27s
+2024-09-26 10:12:52 INFO     Saved model at 12
+2024-09-26 10:12:52 INFO     Val loss decrease from 6.2936 to 5.9753, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch12.tar
+2024-09-26 10:13:11 INFO     epoch complete!
+2024-09-26 10:13:11 INFO     evaluating now!
+2024-09-26 10:13:13 INFO     Epoch [13/200] train_loss: 5.4988, val_loss: 5.8047, lr: 0.001000, 20.71s
+2024-09-26 10:13:13 INFO     Saved model at 13
+2024-09-26 10:13:13 INFO     Val loss decrease from 5.9753 to 5.8047, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch13.tar
+2024-09-26 10:13:32 INFO     epoch complete!
+2024-09-26 10:13:32 INFO     evaluating now!
+2024-09-26 10:13:34 INFO     Epoch [14/200] train_loss: 5.4020, val_loss: 5.9151, lr: 0.001000, 20.99s
+2024-09-26 10:13:53 INFO     epoch complete!
+2024-09-26 10:13:53 INFO     evaluating now!
+2024-09-26 10:13:55 INFO     Epoch [15/200] train_loss: 5.2044, val_loss: 8.2664, lr: 0.001000, 21.07s
+2024-09-26 10:14:14 INFO     epoch complete!
+2024-09-26 10:14:14 INFO     evaluating now!
+2024-09-26 10:14:16 INFO     Epoch [16/200] train_loss: 5.1522, val_loss: 5.5073, lr: 0.001000, 20.58s
+2024-09-26 10:14:16 INFO     Saved model at 16
+2024-09-26 10:14:16 INFO     Val loss decrease from 5.8047 to 5.5073, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch16.tar
+2024-09-26 10:14:35 INFO     epoch complete!
+2024-09-26 10:14:35 INFO     evaluating now!
+2024-09-26 10:14:37 INFO     Epoch [17/200] train_loss: 5.1075, val_loss: 5.9181, lr: 0.001000, 21.29s
+2024-09-26 10:14:57 INFO     epoch complete!
+2024-09-26 10:14:57 INFO     evaluating now!
+2024-09-26 10:14:59 INFO     Epoch [18/200] train_loss: 4.9991, val_loss: 5.3548, lr: 0.001000, 21.15s
+2024-09-26 10:14:59 INFO     Saved model at 18
+2024-09-26 10:14:59 INFO     Val loss decrease from 5.5073 to 5.3548, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch18.tar
+2024-09-26 10:15:17 INFO     epoch complete!
+2024-09-26 10:15:17 INFO     evaluating now!
+2024-09-26 10:15:19 INFO     Epoch [19/200] train_loss: 4.9785, val_loss: 5.6573, lr: 0.001000, 20.41s
+2024-09-26 10:15:38 INFO     epoch complete!
+2024-09-26 10:15:38 INFO     evaluating now!
+2024-09-26 10:15:40 INFO     Epoch [20/200] train_loss: 4.8563, val_loss: 5.2691, lr: 0.001000, 20.78s
+2024-09-26 10:15:40 INFO     Saved model at 20
+2024-09-26 10:15:40 INFO     Val loss decrease from 5.3548 to 5.2691, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch20.tar
+2024-09-26 10:15:59 INFO     epoch complete!
+2024-09-26 10:15:59 INFO     evaluating now!
+2024-09-26 10:16:01 INFO     Epoch [21/200] train_loss: 4.7850, val_loss: 6.0502, lr: 0.001000, 20.68s
+2024-09-26 10:16:19 INFO     epoch complete!
+2024-09-26 10:16:19 INFO     evaluating now!
+2024-09-26 10:16:21 INFO     Epoch [22/200] train_loss: 4.7564, val_loss: 5.5639, lr: 0.001000, 20.33s
+2024-09-26 10:16:39 INFO     epoch complete!
+2024-09-26 10:16:39 INFO     evaluating now!
+2024-09-26 10:16:41 INFO     Epoch [23/200] train_loss: 4.8021, val_loss: 5.2349, lr: 0.001000, 20.29s
+2024-09-26 10:16:42 INFO     Saved model at 23
+2024-09-26 10:16:42 INFO     Val loss decrease from 5.2691 to 5.2349, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch23.tar
+2024-09-26 10:17:00 INFO     epoch complete!
+2024-09-26 10:17:00 INFO     evaluating now!
+2024-09-26 10:17:02 INFO     Epoch [24/200] train_loss: 4.7606, val_loss: 5.3894, lr: 0.001000, 20.72s
+2024-09-26 10:17:21 INFO     epoch complete!
+2024-09-26 10:17:21 INFO     evaluating now!
+2024-09-26 10:17:23 INFO     Epoch [25/200] train_loss: 4.6171, val_loss: 6.2578, lr: 0.001000, 20.87s
+2024-09-26 10:17:42 INFO     epoch complete!
+2024-09-26 10:17:42 INFO     evaluating now!
+2024-09-26 10:17:44 INFO     Epoch [26/200] train_loss: 4.7081, val_loss: 5.1929, lr: 0.001000, 20.81s
+2024-09-26 10:17:44 INFO     Saved model at 26
+2024-09-26 10:17:44 INFO     Val loss decrease from 5.2349 to 5.1929, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch26.tar
+2024-09-26 10:18:03 INFO     epoch complete!
+2024-09-26 10:18:03 INFO     evaluating now!
+2024-09-26 10:18:05 INFO     Epoch [27/200] train_loss: 4.5564, val_loss: 5.8545, lr: 0.001000, 20.98s
+2024-09-26 10:18:24 INFO     epoch complete!
+2024-09-26 10:18:24 INFO     evaluating now!
+2024-09-26 10:18:26 INFO     Epoch [28/200] train_loss: 4.5389, val_loss: 7.1741, lr: 0.001000, 20.92s
+2024-09-26 10:18:45 INFO     epoch complete!
+2024-09-26 10:18:45 INFO     evaluating now!
+2024-09-26 10:18:47 INFO     Epoch [29/200] train_loss: 4.5212, val_loss: 5.0643, lr: 0.001000, 20.70s
+2024-09-26 10:18:47 INFO     Saved model at 29
+2024-09-26 10:18:47 INFO     Val loss decrease from 5.1929 to 5.0643, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch29.tar
+2024-09-26 10:19:06 INFO     epoch complete!
+2024-09-26 10:19:06 INFO     evaluating now!
+2024-09-26 10:19:08 INFO     Epoch [30/200] train_loss: 4.5871, val_loss: 5.7254, lr: 0.001000, 20.66s
+2024-09-26 10:19:26 INFO     epoch complete!
+2024-09-26 10:19:26 INFO     evaluating now!
+2024-09-26 10:19:28 INFO     Epoch [31/200] train_loss: 4.4753, val_loss: 5.2444, lr: 0.001000, 20.31s
+2024-09-26 10:19:47 INFO     epoch complete!
+2024-09-26 10:19:47 INFO     evaluating now!
+2024-09-26 10:19:49 INFO     Epoch [32/200] train_loss: 4.4470, val_loss: 5.5120, lr: 0.001000, 20.61s
+2024-09-26 10:20:07 INFO     epoch complete!
+2024-09-26 10:20:07 INFO     evaluating now!
+2024-09-26 10:20:09 INFO     Epoch [33/200] train_loss: 4.4414, val_loss: 5.3505, lr: 0.001000, 20.75s
+2024-09-26 10:20:28 INFO     epoch complete!
+2024-09-26 10:20:28 INFO     evaluating now!
+2024-09-26 10:20:30 INFO     Epoch [34/200] train_loss: 4.4402, val_loss: 5.5350, lr: 0.001000, 20.94s
+2024-09-26 10:20:49 INFO     epoch complete!
+2024-09-26 10:20:49 INFO     evaluating now!
+2024-09-26 10:20:51 INFO     Epoch [35/200] train_loss: 4.3484, val_loss: 4.8942, lr: 0.001000, 20.81s
+2024-09-26 10:20:51 INFO     Saved model at 35
+2024-09-26 10:20:51 INFO     Val loss decrease from 5.0643 to 4.8942, saving to ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406_epoch35.tar
+2024-09-26 10:21:10 INFO     epoch complete!
+2024-09-26 10:21:10 INFO     evaluating now!
+2024-09-26 10:21:12 INFO     Epoch [36/200] train_loss: 4.3341, val_loss: 5.6957, lr: 0.001000, 20.90s
+2024-09-26 10:21:31 INFO     epoch complete!
+2024-09-26 10:21:31 INFO     evaluating now!
+2024-09-26 10:21:33 INFO     Epoch [37/200] train_loss: 4.3171, val_loss: 5.2894, lr: 0.001000, 21.00s
+2024-09-26 10:21:52 INFO     epoch complete!
+2024-09-26 10:21:52 INFO     evaluating now!
+2024-09-26 10:21:54 INFO     Epoch [38/200] train_loss: 4.3197, val_loss: 7.1487, lr: 0.001000, 20.89s
+2024-09-26 10:22:13 INFO     epoch complete!
+2024-09-26 10:22:13 INFO     evaluating now!
+2024-09-26 10:22:15 INFO     Epoch [39/200] train_loss: 4.2820, val_loss: 5.0348, lr: 0.001000, 20.71s
+2024-09-26 10:22:34 INFO     epoch complete!
+2024-09-26 10:22:34 INFO     evaluating now!
+2024-09-26 10:22:36 INFO     Epoch [40/200] train_loss: 4.2905, val_loss: 5.0262, lr: 0.001000, 20.92s
+2024-09-26 10:22:54 INFO     epoch complete!
+2024-09-26 10:22:54 INFO     evaluating now!
+2024-09-26 10:22:56 INFO     Epoch [41/200] train_loss: 4.2182, val_loss: 5.3190, lr: 0.001000, 20.56s
+2024-09-26 10:23:15 INFO     epoch complete!
+2024-09-26 10:23:15 INFO     evaluating now!
+2024-09-26 10:23:17 INFO     Epoch [42/200] train_loss: 4.2071, val_loss: 4.9416, lr: 0.001000, 20.75s
+2024-09-26 10:23:36 INFO     epoch complete!
+2024-09-26 10:23:36 INFO     evaluating now!
+2024-09-26 10:23:38 INFO     Epoch [43/200] train_loss: 4.2217, val_loss: 5.3859, lr: 0.001000, 20.72s
+2024-09-26 10:23:57 INFO     epoch complete!
+2024-09-26 10:23:57 INFO     evaluating now!
+2024-09-26 10:23:59 INFO     Epoch [44/200] train_loss: 4.1829, val_loss: 5.8683, lr: 0.001000, 20.88s
+2024-09-26 10:24:18 INFO     epoch complete!
+2024-09-26 10:24:18 INFO     evaluating now!
+2024-09-26 10:24:20 INFO     Epoch [45/200] train_loss: 4.1624, val_loss: 4.9712, lr: 0.001000, 20.87s
+2024-09-26 10:24:39 INFO     epoch complete!
+2024-09-26 10:24:39 INFO     evaluating now!
+2024-09-26 10:24:41 INFO     Epoch [46/200] train_loss: 4.1394, val_loss: 6.7198, lr: 0.001000, 20.97s
+2024-09-26 10:24:59 INFO     epoch complete!
+2024-09-26 10:24:59 INFO     evaluating now!
+2024-09-26 10:25:01 INFO     Epoch [47/200] train_loss: 4.1555, val_loss: 5.9320, lr: 0.001000, 20.47s
+2024-09-26 10:25:20 INFO     epoch complete!
+2024-09-26 10:25:20 INFO     evaluating now!
+2024-09-26 10:25:22 INFO     Epoch [48/200] train_loss: 4.0983, val_loss: 5.0201, lr: 0.001000, 20.59s
+2024-09-26 10:25:41 INFO     epoch complete!
+2024-09-26 10:25:41 INFO     evaluating now!
+2024-09-26 10:25:43 INFO     Epoch [49/200] train_loss: 4.0756, val_loss: 5.2221, lr: 0.001000, 20.93s
+2024-09-26 10:26:02 INFO     epoch complete!
+2024-09-26 10:26:02 INFO     evaluating now!
+2024-09-26 10:26:04 INFO     Epoch [50/200] train_loss: 4.0889, val_loss: 5.2906, lr: 0.001000, 21.18s
+2024-09-26 10:26:04 WARNING  Early stopping at epoch: 50
+2024-09-26 10:26:04 INFO     Trained totally 51 epochs, average train time is 18.705s, average eval time is 2.013s
+2024-09-26 10:26:04 INFO     Loaded model at 35
+2024-09-26 10:26:04 INFO     Saved model at ./libcity/cache/10007/model_cache/GWNET_CHITaxi20190406.m
+2024-09-26 10:26:04 INFO     Start evaluating ...
+2024-09-26 10:26:09 INFO     Note that you select the single mode to evaluate!
+2024-09-26 10:26:09 INFO     Evaluate result is saved at ./libcity/cache/10007/evaluate_cache/2024_09_26_10_26_09_GWNET_CHITaxi20190406.csv
+2024-09-26 10:26:09 INFO     
+         MAE       RMSE
+1   2.212509   6.728374
+2   2.389818   7.783850
+3   2.645829   8.809399
+4   2.673868   9.345625
+5   2.982059   9.732409
+6   2.935498   9.975040
+7   2.916969  10.402639
+8   3.097289  10.917490
+9   3.074874  11.472817
+10  3.220906  12.047704
+11  3.320674  12.280285
+12  3.467407  12.662570
+2024-09-26 10:26:09 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:26:09 INFO     # 3, Kownledge Graph Embedding: TransE, Experiment ids: 10008
+2024-09-26 10:26:09 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:26:09 INFO     Begin pipeline, task=traffic_state_pred, model_name=GWNET, dataset_name=CHITaxi20190406, exp_id=10008
+2024-09-26 10:26:09 INFO     {'task': 'traffic_state_pred', 'model': 'GWNET', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 10008, 'ke_model': 'TransE', 'ke_dim': 32, 'ke_method': 'MultiHop', 'max_hop': 1, 'max_epoch': 200, 'patience': 15, 'use_early_stop': True, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 3, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'dropout': 0.3, 'blocks': 4, 'layers': 2, 'batch_size': 32, 'apt_layer': True, 'gcn_bool': True, 'adjtype': 'doubletransition', 'bidir_adj_mx': False, 'randomadj': True, 'kernel_size': 2, 'nhid': 32, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_rel_adj': True, 'use_apt_adj': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-26 10:26:09 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-26 10:26:09 INFO     set_weight_link_or_dist: dist
+2024-09-26 10:26:09 INFO     init_weight_inf_or_zero: inf
+2024-09-26 10:26:09 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-26 10:26:09 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-26 10:26:09 INFO     Loading file CHITaxi20190406.dyna
+2024-09-26 10:26:10 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-26 10:26:10 INFO     Dataset created
+2024-09-26 10:26:10 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
+2024-09-26 10:26:10 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
+2024-09-26 10:26:10 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
+2024-09-26 10:26:10 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
+2024-09-26 10:26:10 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-26 10:26:10 INFO     NoneScaler
+2024-09-26 10:26:10 INFO     add adj_mx to supports
+2024-09-26 10:26:10 INFO     add apt_adj(v1 * v2) in forward process
+2024-09-26 10:26:10 INFO     add multi hop score in forward process
+2024-09-26 10:26:10 INFO     receptive_field: 14
+2024-09-26 10:26:10 INFO     GWNET(
+  (filter_convs): ModuleList(
+    (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+  )
+  (gate_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (2): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (4): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (6): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+  )
+  (skip_convs): ModuleList(
+    (0): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+  )
+  (bn): ModuleList(
+    (0): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (gconv): ModuleList(
+    (0): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (2): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (3): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (4): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (5): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (6): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (7): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+  )
+  (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-09-26 10:26:10 INFO     nodevec1	torch.Size([77, 10])	cuda:0	True
+2024-09-26 10:26:10 INFO     nodevec2	torch.Size([10, 77])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     filter_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:26:10 INFO     gate_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     residual_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.4.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.5.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.6.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     skip_convs.7.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.0.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.1.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.2.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.3.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.4.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.5.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.6.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.7.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     bn.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.0.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.1.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.2.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.3.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.4.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.5.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.6.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.7.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     start_conv.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:26:10 INFO     end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     end_conv_1.bias	torch.Size([512])	cuda:0	True
+2024-09-26 10:26:10 INFO     end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+2024-09-26 10:26:10 INFO     end_conv_2.bias	torch.Size([12])	cuda:0	True
+2024-09-26 10:26:10 INFO     Total parameter numbers: 323184
+2024-09-26 10:26:10 INFO     You select `adam` optimizer.
+2024-09-26 10:26:10 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-26 10:26:10 INFO     Start training ...
+2024-09-26 10:26:10 INFO     num_batches:96
+2024-09-26 10:26:28 INFO     epoch complete!
+2024-09-26 10:26:28 INFO     evaluating now!
+2024-09-26 10:26:30 INFO     Epoch [0/200] train_loss: 12.2193, val_loss: 10.1325, lr: 0.001000, 19.86s
+2024-09-26 10:26:30 INFO     Saved model at 0
+2024-09-26 10:26:30 INFO     Val loss decrease from inf to 10.1325, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch0.tar
+2024-09-26 10:26:49 INFO     epoch complete!
+2024-09-26 10:26:49 INFO     evaluating now!
+2024-09-26 10:26:51 INFO     Epoch [1/200] train_loss: 9.2209, val_loss: 11.2992, lr: 0.001000, 20.16s
+2024-09-26 10:27:09 INFO     epoch complete!
+2024-09-26 10:27:09 INFO     evaluating now!
+2024-09-26 10:27:10 INFO     Epoch [2/200] train_loss: 8.4681, val_loss: 8.1635, lr: 0.001000, 19.98s
+2024-09-26 10:27:11 INFO     Saved model at 2
+2024-09-26 10:27:11 INFO     Val loss decrease from 10.1325 to 8.1635, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch2.tar
+2024-09-26 10:27:29 INFO     epoch complete!
+2024-09-26 10:27:29 INFO     evaluating now!
+2024-09-26 10:27:30 INFO     Epoch [3/200] train_loss: 8.1820, val_loss: 8.5317, lr: 0.001000, 19.82s
+2024-09-26 10:27:49 INFO     epoch complete!
+2024-09-26 10:27:49 INFO     evaluating now!
+2024-09-26 10:27:51 INFO     Epoch [4/200] train_loss: 7.8548, val_loss: 9.2392, lr: 0.001000, 20.46s
+2024-09-26 10:28:09 INFO     epoch complete!
+2024-09-26 10:28:09 INFO     evaluating now!
+2024-09-26 10:28:11 INFO     Epoch [5/200] train_loss: 7.6223, val_loss: 7.5336, lr: 0.001000, 20.47s
+2024-09-26 10:28:12 INFO     Saved model at 5
+2024-09-26 10:28:12 INFO     Val loss decrease from 8.1635 to 7.5336, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch5.tar
+2024-09-26 10:28:30 INFO     epoch complete!
+2024-09-26 10:28:30 INFO     evaluating now!
+2024-09-26 10:28:32 INFO     Epoch [6/200] train_loss: 7.5454, val_loss: 9.3002, lr: 0.001000, 20.63s
+2024-09-26 10:28:51 INFO     epoch complete!
+2024-09-26 10:28:51 INFO     evaluating now!
+2024-09-26 10:28:53 INFO     Epoch [7/200] train_loss: 7.2568, val_loss: 7.0712, lr: 0.001000, 20.68s
+2024-09-26 10:28:53 INFO     Saved model at 7
+2024-09-26 10:28:53 INFO     Val loss decrease from 7.5336 to 7.0712, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch7.tar
+2024-09-26 10:29:12 INFO     epoch complete!
+2024-09-26 10:29:12 INFO     evaluating now!
+2024-09-26 10:29:14 INFO     Epoch [8/200] train_loss: 6.6101, val_loss: 7.0228, lr: 0.001000, 20.59s
+2024-09-26 10:29:14 INFO     Saved model at 8
+2024-09-26 10:29:14 INFO     Val loss decrease from 7.0712 to 7.0228, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch8.tar
+2024-09-26 10:29:32 INFO     epoch complete!
+2024-09-26 10:29:32 INFO     evaluating now!
+2024-09-26 10:29:34 INFO     Epoch [9/200] train_loss: 6.1618, val_loss: 5.7507, lr: 0.001000, 20.41s
+2024-09-26 10:29:34 INFO     Saved model at 9
+2024-09-26 10:29:34 INFO     Val loss decrease from 7.0228 to 5.7507, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch9.tar
+2024-09-26 10:29:53 INFO     epoch complete!
+2024-09-26 10:29:53 INFO     evaluating now!
+2024-09-26 10:29:55 INFO     Epoch [10/200] train_loss: 5.8637, val_loss: 6.6030, lr: 0.001000, 20.74s
+2024-09-26 10:30:14 INFO     epoch complete!
+2024-09-26 10:30:14 INFO     evaluating now!
+2024-09-26 10:30:16 INFO     Epoch [11/200] train_loss: 5.6606, val_loss: 7.6848, lr: 0.001000, 20.74s
+2024-09-26 10:30:35 INFO     epoch complete!
+2024-09-26 10:30:35 INFO     evaluating now!
+2024-09-26 10:30:37 INFO     Epoch [12/200] train_loss: 5.5216, val_loss: 6.0206, lr: 0.001000, 20.93s
+2024-09-26 10:30:55 INFO     epoch complete!
+2024-09-26 10:30:55 INFO     evaluating now!
+2024-09-26 10:30:57 INFO     Epoch [13/200] train_loss: 5.3393, val_loss: 6.1095, lr: 0.001000, 20.83s
+2024-09-26 10:31:16 INFO     epoch complete!
+2024-09-26 10:31:16 INFO     evaluating now!
+2024-09-26 10:31:18 INFO     Epoch [14/200] train_loss: 5.3346, val_loss: 6.4945, lr: 0.001000, 20.33s
+2024-09-26 10:31:36 INFO     epoch complete!
+2024-09-26 10:31:36 INFO     evaluating now!
+2024-09-26 10:31:38 INFO     Epoch [15/200] train_loss: 5.1597, val_loss: 5.9492, lr: 0.001000, 19.89s
+2024-09-26 10:31:56 INFO     epoch complete!
+2024-09-26 10:31:56 INFO     evaluating now!
+2024-09-26 10:31:57 INFO     Epoch [16/200] train_loss: 5.0623, val_loss: 5.4434, lr: 0.001000, 19.80s
+2024-09-26 10:31:58 INFO     Saved model at 16
+2024-09-26 10:31:58 INFO     Val loss decrease from 5.7507 to 5.4434, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch16.tar
+2024-09-26 10:32:16 INFO     epoch complete!
+2024-09-26 10:32:16 INFO     evaluating now!
+2024-09-26 10:32:18 INFO     Epoch [17/200] train_loss: 5.0188, val_loss: 6.3789, lr: 0.001000, 20.12s
+2024-09-26 10:32:36 INFO     epoch complete!
+2024-09-26 10:32:36 INFO     evaluating now!
+2024-09-26 10:32:38 INFO     Epoch [18/200] train_loss: 5.0260, val_loss: 5.5543, lr: 0.001000, 19.99s
+2024-09-26 10:32:56 INFO     epoch complete!
+2024-09-26 10:32:56 INFO     evaluating now!
+2024-09-26 10:32:58 INFO     Epoch [19/200] train_loss: 4.9635, val_loss: 7.7343, lr: 0.001000, 20.41s
+2024-09-26 10:33:17 INFO     epoch complete!
+2024-09-26 10:33:17 INFO     evaluating now!
+2024-09-26 10:33:19 INFO     Epoch [20/200] train_loss: 4.8340, val_loss: 5.0980, lr: 0.001000, 20.27s
+2024-09-26 10:33:19 INFO     Saved model at 20
+2024-09-26 10:33:19 INFO     Val loss decrease from 5.4434 to 5.0980, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch20.tar
+2024-09-26 10:33:37 INFO     epoch complete!
+2024-09-26 10:33:37 INFO     evaluating now!
+2024-09-26 10:33:39 INFO     Epoch [21/200] train_loss: 4.7992, val_loss: 5.8932, lr: 0.001000, 20.05s
+2024-09-26 10:33:57 INFO     epoch complete!
+2024-09-26 10:33:57 INFO     evaluating now!
+2024-09-26 10:33:59 INFO     Epoch [22/200] train_loss: 4.7235, val_loss: 5.2358, lr: 0.001000, 20.01s
+2024-09-26 10:34:18 INFO     epoch complete!
+2024-09-26 10:34:18 INFO     evaluating now!
+2024-09-26 10:34:20 INFO     Epoch [23/200] train_loss: 4.7157, val_loss: 5.4131, lr: 0.001000, 20.64s
+2024-09-26 10:34:38 INFO     epoch complete!
+2024-09-26 10:34:38 INFO     evaluating now!
+2024-09-26 10:34:40 INFO     Epoch [24/200] train_loss: 4.8258, val_loss: 5.6667, lr: 0.001000, 20.70s
+2024-09-26 10:34:59 INFO     epoch complete!
+2024-09-26 10:34:59 INFO     evaluating now!
+2024-09-26 10:35:01 INFO     Epoch [25/200] train_loss: 4.7006, val_loss: 5.0652, lr: 0.001000, 20.73s
+2024-09-26 10:35:01 INFO     Saved model at 25
+2024-09-26 10:35:01 INFO     Val loss decrease from 5.0980 to 5.0652, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch25.tar
+2024-09-26 10:35:20 INFO     epoch complete!
+2024-09-26 10:35:20 INFO     evaluating now!
+2024-09-26 10:35:22 INFO     Epoch [26/200] train_loss: 4.6407, val_loss: 5.5954, lr: 0.001000, 20.81s
+2024-09-26 10:35:41 INFO     epoch complete!
+2024-09-26 10:35:41 INFO     evaluating now!
+2024-09-26 10:35:43 INFO     Epoch [27/200] train_loss: 4.5505, val_loss: 6.4802, lr: 0.001000, 20.68s
+2024-09-26 10:36:02 INFO     epoch complete!
+2024-09-26 10:36:02 INFO     evaluating now!
+2024-09-26 10:36:04 INFO     Epoch [28/200] train_loss: 4.5639, val_loss: 5.1214, lr: 0.001000, 20.96s
+2024-09-26 10:36:22 INFO     epoch complete!
+2024-09-26 10:36:22 INFO     evaluating now!
+2024-09-26 10:36:24 INFO     Epoch [29/200] train_loss: 4.5291, val_loss: 7.1092, lr: 0.001000, 20.42s
+2024-09-26 10:36:42 INFO     epoch complete!
+2024-09-26 10:36:42 INFO     evaluating now!
+2024-09-26 10:36:44 INFO     Epoch [30/200] train_loss: 4.4771, val_loss: 7.2242, lr: 0.001000, 20.27s
+2024-09-26 10:37:03 INFO     epoch complete!
+2024-09-26 10:37:03 INFO     evaluating now!
+2024-09-26 10:37:05 INFO     Epoch [31/200] train_loss: 4.5168, val_loss: 5.1058, lr: 0.001000, 20.33s
+2024-09-26 10:37:23 INFO     epoch complete!
+2024-09-26 10:37:23 INFO     evaluating now!
+2024-09-26 10:37:25 INFO     Epoch [32/200] train_loss: 4.4613, val_loss: 4.9838, lr: 0.001000, 20.30s
+2024-09-26 10:37:25 INFO     Saved model at 32
+2024-09-26 10:37:25 INFO     Val loss decrease from 5.0652 to 4.9838, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch32.tar
+2024-09-26 10:37:43 INFO     epoch complete!
+2024-09-26 10:37:43 INFO     evaluating now!
+2024-09-26 10:37:45 INFO     Epoch [33/200] train_loss: 4.4179, val_loss: 4.8406, lr: 0.001000, 19.76s
+2024-09-26 10:37:45 INFO     Saved model at 33
+2024-09-26 10:37:45 INFO     Val loss decrease from 4.9838 to 4.8406, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch33.tar
+2024-09-26 10:38:03 INFO     epoch complete!
+2024-09-26 10:38:03 INFO     evaluating now!
+2024-09-26 10:38:05 INFO     Epoch [34/200] train_loss: 4.4349, val_loss: 5.4830, lr: 0.001000, 20.13s
+2024-09-26 10:38:23 INFO     epoch complete!
+2024-09-26 10:38:23 INFO     evaluating now!
+2024-09-26 10:38:25 INFO     Epoch [35/200] train_loss: 4.3951, val_loss: 5.0935, lr: 0.001000, 20.28s
+2024-09-26 10:38:44 INFO     epoch complete!
+2024-09-26 10:38:44 INFO     evaluating now!
+2024-09-26 10:38:46 INFO     Epoch [36/200] train_loss: 4.3623, val_loss: 5.5563, lr: 0.001000, 20.49s
+2024-09-26 10:39:05 INFO     epoch complete!
+2024-09-26 10:39:05 INFO     evaluating now!
+2024-09-26 10:39:07 INFO     Epoch [37/200] train_loss: 4.3348, val_loss: 5.4153, lr: 0.001000, 20.75s
+2024-09-26 10:39:25 INFO     epoch complete!
+2024-09-26 10:39:25 INFO     evaluating now!
+2024-09-26 10:39:27 INFO     Epoch [38/200] train_loss: 4.2974, val_loss: 4.8351, lr: 0.001000, 20.01s
+2024-09-26 10:39:27 INFO     Saved model at 38
+2024-09-26 10:39:27 INFO     Val loss decrease from 4.8406 to 4.8351, saving to ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406_epoch38.tar
+2024-09-26 10:39:46 INFO     epoch complete!
+2024-09-26 10:39:46 INFO     evaluating now!
+2024-09-26 10:39:48 INFO     Epoch [39/200] train_loss: 4.3107, val_loss: 5.1571, lr: 0.001000, 20.64s
+2024-09-26 10:40:05 INFO     epoch complete!
+2024-09-26 10:40:05 INFO     evaluating now!
+2024-09-26 10:40:07 INFO     Epoch [40/200] train_loss: 4.3014, val_loss: 4.9987, lr: 0.001000, 19.85s
+2024-09-26 10:40:25 INFO     epoch complete!
+2024-09-26 10:40:25 INFO     evaluating now!
+2024-09-26 10:40:27 INFO     Epoch [41/200] train_loss: 4.2980, val_loss: 5.0372, lr: 0.001000, 19.75s
+2024-09-26 10:40:45 INFO     epoch complete!
+2024-09-26 10:40:45 INFO     evaluating now!
+2024-09-26 10:40:47 INFO     Epoch [42/200] train_loss: 4.2626, val_loss: 5.3054, lr: 0.001000, 20.36s
+2024-09-26 10:41:06 INFO     epoch complete!
+2024-09-26 10:41:06 INFO     evaluating now!
+2024-09-26 10:41:08 INFO     Epoch [43/200] train_loss: 4.2592, val_loss: 5.4677, lr: 0.001000, 20.78s
+2024-09-26 10:41:27 INFO     epoch complete!
+2024-09-26 10:41:27 INFO     evaluating now!
+2024-09-26 10:41:29 INFO     Epoch [44/200] train_loss: 4.3050, val_loss: 5.4823, lr: 0.001000, 20.73s
+2024-09-26 10:41:48 INFO     epoch complete!
+2024-09-26 10:41:48 INFO     evaluating now!
+2024-09-26 10:41:50 INFO     Epoch [45/200] train_loss: 4.2331, val_loss: 5.2203, lr: 0.001000, 20.73s
+2024-09-26 10:42:08 INFO     epoch complete!
+2024-09-26 10:42:08 INFO     evaluating now!
+2024-09-26 10:42:10 INFO     Epoch [46/200] train_loss: 4.1913, val_loss: 5.1449, lr: 0.001000, 20.75s
+2024-09-26 10:42:29 INFO     epoch complete!
+2024-09-26 10:42:29 INFO     evaluating now!
+2024-09-26 10:42:31 INFO     Epoch [47/200] train_loss: 4.1768, val_loss: 5.2735, lr: 0.001000, 20.54s
+2024-09-26 10:42:49 INFO     epoch complete!
+2024-09-26 10:42:49 INFO     evaluating now!
+2024-09-26 10:42:52 INFO     Epoch [48/200] train_loss: 4.1216, val_loss: 4.8517, lr: 0.001000, 20.52s
+2024-09-26 10:43:10 INFO     epoch complete!
+2024-09-26 10:43:10 INFO     evaluating now!
+2024-09-26 10:43:12 INFO     Epoch [49/200] train_loss: 4.1042, val_loss: 4.8930, lr: 0.001000, 20.14s
+2024-09-26 10:43:30 INFO     epoch complete!
+2024-09-26 10:43:30 INFO     evaluating now!
+2024-09-26 10:43:32 INFO     Epoch [50/200] train_loss: 4.1456, val_loss: 5.1976, lr: 0.001000, 19.87s
+2024-09-26 10:43:49 INFO     epoch complete!
+2024-09-26 10:43:49 INFO     evaluating now!
+2024-09-26 10:43:51 INFO     Epoch [51/200] train_loss: 4.0900, val_loss: 5.0287, lr: 0.001000, 19.91s
+2024-09-26 10:44:09 INFO     epoch complete!
+2024-09-26 10:44:09 INFO     evaluating now!
+2024-09-26 10:44:11 INFO     Epoch [52/200] train_loss: 4.0395, val_loss: 5.0367, lr: 0.001000, 19.53s
+2024-09-26 10:44:29 INFO     epoch complete!
+2024-09-26 10:44:29 INFO     evaluating now!
+2024-09-26 10:44:31 INFO     Epoch [53/200] train_loss: 4.0823, val_loss: 5.0652, lr: 0.001000, 20.39s
+2024-09-26 10:44:31 WARNING  Early stopping at epoch: 53
+2024-09-26 10:44:31 INFO     Trained totally 54 epochs, average train time is 18.378s, average eval time is 1.971s
+2024-09-26 10:44:32 INFO     Loaded model at 38
+2024-09-26 10:44:32 INFO     Saved model at ./libcity/cache/10008/model_cache/GWNET_CHITaxi20190406.m
+2024-09-26 10:44:32 INFO     Start evaluating ...
+2024-09-26 10:44:36 INFO     Note that you select the single mode to evaluate!
+2024-09-26 10:44:36 INFO     Evaluate result is saved at ./libcity/cache/10008/evaluate_cache/2024_09_26_10_44_36_GWNET_CHITaxi20190406.csv
+2024-09-26 10:44:36 INFO     
+         MAE       RMSE
+1   2.095860   6.715778
+2   2.296798   7.510662
+3   2.462313   8.497190
+4   2.624499   9.111057
+5   2.817005   9.473977
+6   2.764506   9.810319
+7   2.875943  10.232932
+8   2.902546  10.604861
+9   3.005948  11.085653
+10  3.091129  11.439500
+11  3.173711  11.804806
+12  3.375257  12.360779
+2024-09-26 10:44:37 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:44:37 INFO     # 4, Kownledge Graph Embedding: TransE, Experiment ids: 10009
+2024-09-26 10:44:37 INFO     ----------------------------------------------------------------------------
+2024-09-26 10:44:37 INFO     Begin pipeline, task=traffic_state_pred, model_name=GWNET, dataset_name=CHITaxi20190406, exp_id=10009
+2024-09-26 10:44:37 INFO     {'task': 'traffic_state_pred', 'model': 'GWNET', 'dataset': 'CHITaxi20190406', 'saved_model': True, 'train': True, 'exp_id': 10009, 'ke_model': 'TransE', 'ke_dim': 32, 'ke_method': 'MultiHop', 'max_hop': 1, 'max_epoch': 200, 'patience': 15, 'use_early_stop': True, 'cache_dataset': False, 'output_window': 12, 'metrics': ['MAE', 'RMSE'], 'cur_times': 4, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'dropout': 0.3, 'blocks': 4, 'layers': 2, 'batch_size': 32, 'apt_layer': True, 'gcn_bool': True, 'adjtype': 'doubletransition', 'bidir_adj_mx': False, 'randomadj': True, 'kernel_size': 2, 'nhid': 32, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': False, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_rel_adj': True, 'use_apt_adj': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['inflow', 'outflow'], 'weight_col': 'cost', 'data_files': ['CHITaxi20190406'], 'geo_file': 'CHITaxi20190406', 'rel_file': 'CHITaxi20190406', 'output_dim': 2, 'time_intervals': 1800, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'ke_type': 'area', 'device': device(type='cuda', index=0)}
+2024-09-26 10:44:37 INFO     Loaded file CHITaxi20190406.geo, num_nodes=77
+2024-09-26 10:44:37 INFO     set_weight_link_or_dist: dist
+2024-09-26 10:44:37 INFO     init_weight_inf_or_zero: inf
+2024-09-26 10:44:37 INFO     Loaded file CHITaxi20190406.rel, shape=(77, 77)
+2024-09-26 10:44:37 INFO     Start Calculate the weight by Gauss kernel!
+2024-09-26 10:44:37 INFO     Loading file CHITaxi20190406.dyna
+2024-09-26 10:44:37 INFO     Loaded file CHITaxi20190406.dyna, shape=(4368, 77, 2)
+2024-09-26 10:44:37 INFO     Dataset created
+2024-09-26 10:44:37 INFO     x shape: (4345, 12, 77, 2), y shape: (4345, 12, 77, 2)
+2024-09-26 10:44:37 INFO     train	x: (3042, 12, 77, 2), y: (3042, 12, 77, 2)
+2024-09-26 10:44:37 INFO     eval	x: (434, 12, 77, 2), y: (434, 12, 77, 2)
+2024-09-26 10:44:37 INFO     test	x: (869, 12, 77, 2), y: (869, 12, 77, 2)
+2024-09-26 10:44:37 INFO     StandardScaler mean: 11.137838123415046, std: 53.15358218315973
+2024-09-26 10:44:37 INFO     NoneScaler
+2024-09-26 10:44:38 INFO     add adj_mx to supports
+2024-09-26 10:44:38 INFO     add apt_adj(v1 * v2) in forward process
+2024-09-26 10:44:38 INFO     add multi hop score in forward process
+2024-09-26 10:44:38 INFO     receptive_field: 14
+2024-09-26 10:44:38 INFO     GWNET(
+  (filter_convs): ModuleList(
+    (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+    (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+    (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+  )
+  (gate_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (2): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (4): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+    (6): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 2), stride=(1,), dilation=(2,))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 32, kernel_size=(1, 1), stride=(1,))
+  )
+  (skip_convs): ModuleList(
+    (0): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (1): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (2): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (3): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (4): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (5): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (6): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+    (7): Conv1d(32, 256, kernel_size=(1, 1), stride=(1,))
+  )
+  (bn): ModuleList(
+    (0): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (gconv): ModuleList(
+    (0): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (2): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (3): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (4): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (5): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (6): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (7): GCN(
+      (nconv): NConv()
+      (mlp): Linear(
+        (mlp): Conv2d(288, 32, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+  )
+  (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-09-26 10:44:38 INFO     nodevec1	torch.Size([77, 10])	cuda:0	True
+2024-09-26 10:44:38 INFO     nodevec2	torch.Size([10, 77])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     filter_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+2024-09-26 10:44:38 INFO     gate_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     residual_convs.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.4.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.5.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.6.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     skip_convs.7.bias	torch.Size([256])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.0.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.0.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.1.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.1.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.2.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.2.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.3.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.3.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.4.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.4.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.5.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.5.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.6.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.6.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.7.weight	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     bn.7.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.0.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.1.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.2.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.3.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.4.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.5.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.6.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.7.mlp.mlp.weight	torch.Size([32, 288, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     start_conv.bias	torch.Size([32])	cuda:0	True
+2024-09-26 10:44:38 INFO     end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     end_conv_1.bias	torch.Size([512])	cuda:0	True
+2024-09-26 10:44:38 INFO     end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+2024-09-26 10:44:38 INFO     end_conv_2.bias	torch.Size([12])	cuda:0	True
+2024-09-26 10:44:38 INFO     Total parameter numbers: 323184
+2024-09-26 10:44:38 INFO     You select `adam` optimizer.
+2024-09-26 10:44:38 WARNING  Received none train loss func and will use the loss func defined in the model.
+2024-09-26 10:44:38 INFO     Start training ...
+2024-09-26 10:44:38 INFO     num_batches:96
+2024-09-26 10:44:56 INFO     epoch complete!
+2024-09-26 10:44:56 INFO     evaluating now!
+2024-09-26 10:44:58 INFO     Epoch [0/200] train_loss: 12.1519, val_loss: 9.4448, lr: 0.001000, 20.25s
+2024-09-26 10:44:58 INFO     Saved model at 0
+2024-09-26 10:44:58 INFO     Val loss decrease from inf to 9.4448, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch0.tar
+2024-09-26 10:45:17 INFO     epoch complete!
+2024-09-26 10:45:17 INFO     evaluating now!
+2024-09-26 10:45:19 INFO     Epoch [1/200] train_loss: 9.0668, val_loss: 9.1337, lr: 0.001000, 20.66s
+2024-09-26 10:45:19 INFO     Saved model at 1
+2024-09-26 10:45:19 INFO     Val loss decrease from 9.4448 to 9.1337, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch1.tar
+2024-09-26 10:45:38 INFO     epoch complete!
+2024-09-26 10:45:38 INFO     evaluating now!
+2024-09-26 10:45:40 INFO     Epoch [2/200] train_loss: 8.3848, val_loss: 9.8372, lr: 0.001000, 20.59s
+2024-09-26 10:45:59 INFO     epoch complete!
+2024-09-26 10:45:59 INFO     evaluating now!
+2024-09-26 10:46:01 INFO     Epoch [3/200] train_loss: 7.9679, val_loss: 7.7252, lr: 0.001000, 20.91s
+2024-09-26 10:46:01 INFO     Saved model at 3
+2024-09-26 10:46:01 INFO     Val loss decrease from 9.1337 to 7.7252, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch3.tar
+2024-09-26 10:46:19 INFO     epoch complete!
+2024-09-26 10:46:19 INFO     evaluating now!
+2024-09-26 10:46:21 INFO     Epoch [4/200] train_loss: 7.8560, val_loss: 9.1004, lr: 0.001000, 20.39s
+2024-09-26 10:46:40 INFO     epoch complete!
+2024-09-26 10:46:40 INFO     evaluating now!
+2024-09-26 10:46:42 INFO     Epoch [5/200] train_loss: 7.5383, val_loss: 8.2447, lr: 0.001000, 20.67s
+2024-09-26 10:47:00 INFO     epoch complete!
+2024-09-26 10:47:00 INFO     evaluating now!
+2024-09-26 10:47:02 INFO     Epoch [6/200] train_loss: 7.5011, val_loss: 7.6909, lr: 0.001000, 20.34s
+2024-09-26 10:47:03 INFO     Saved model at 6
+2024-09-26 10:47:03 INFO     Val loss decrease from 7.7252 to 7.6909, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch6.tar
+2024-09-26 10:47:21 INFO     epoch complete!
+2024-09-26 10:47:21 INFO     evaluating now!
+2024-09-26 10:47:23 INFO     Epoch [7/200] train_loss: 7.3364, val_loss: 7.4793, lr: 0.001000, 20.39s
+2024-09-26 10:47:23 INFO     Saved model at 7
+2024-09-26 10:47:23 INFO     Val loss decrease from 7.6909 to 7.4793, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch7.tar
+2024-09-26 10:47:42 INFO     epoch complete!
+2024-09-26 10:47:42 INFO     evaluating now!
+2024-09-26 10:47:44 INFO     Epoch [8/200] train_loss: 7.0101, val_loss: 7.6767, lr: 0.001000, 20.63s
+2024-09-26 10:48:02 INFO     epoch complete!
+2024-09-26 10:48:02 INFO     evaluating now!
+2024-09-26 10:48:04 INFO     Epoch [9/200] train_loss: 6.2430, val_loss: 6.0933, lr: 0.001000, 20.64s
+2024-09-26 10:48:05 INFO     Saved model at 9
+2024-09-26 10:48:05 INFO     Val loss decrease from 7.4793 to 6.0933, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch9.tar
+2024-09-26 10:48:23 INFO     epoch complete!
+2024-09-26 10:48:23 INFO     evaluating now!
+2024-09-26 10:48:25 INFO     Epoch [10/200] train_loss: 5.7949, val_loss: 6.2161, lr: 0.001000, 20.67s
+2024-09-26 10:48:44 INFO     epoch complete!
+2024-09-26 10:48:44 INFO     evaluating now!
+2024-09-26 10:48:46 INFO     Epoch [11/200] train_loss: 5.5987, val_loss: 5.4074, lr: 0.001000, 20.37s
+2024-09-26 10:48:46 INFO     Saved model at 11
+2024-09-26 10:48:46 INFO     Val loss decrease from 6.0933 to 5.4074, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch11.tar
+2024-09-26 10:49:04 INFO     epoch complete!
+2024-09-26 10:49:04 INFO     evaluating now!
+2024-09-26 10:49:06 INFO     Epoch [12/200] train_loss: 5.4634, val_loss: 6.0694, lr: 0.001000, 20.27s
+2024-09-26 10:49:24 INFO     epoch complete!
+2024-09-26 10:49:24 INFO     evaluating now!
+2024-09-26 10:49:26 INFO     Epoch [13/200] train_loss: 5.2774, val_loss: 5.3414, lr: 0.001000, 20.21s
+2024-09-26 10:49:27 INFO     Saved model at 13
+2024-09-26 10:49:27 INFO     Val loss decrease from 5.4074 to 5.3414, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch13.tar
+2024-09-26 10:49:45 INFO     epoch complete!
+2024-09-26 10:49:45 INFO     evaluating now!
+2024-09-26 10:49:47 INFO     Epoch [14/200] train_loss: 5.2555, val_loss: 6.1454, lr: 0.001000, 20.13s
+2024-09-26 10:50:05 INFO     epoch complete!
+2024-09-26 10:50:05 INFO     evaluating now!
+2024-09-26 10:50:07 INFO     Epoch [15/200] train_loss: 5.1610, val_loss: 5.7422, lr: 0.001000, 19.97s
+2024-09-26 10:50:25 INFO     epoch complete!
+2024-09-26 10:50:25 INFO     evaluating now!
+2024-09-26 10:50:27 INFO     Epoch [16/200] train_loss: 5.0932, val_loss: 5.5476, lr: 0.001000, 20.52s
+2024-09-26 10:50:45 INFO     epoch complete!
+2024-09-26 10:50:45 INFO     evaluating now!
+2024-09-26 10:50:47 INFO     Epoch [17/200] train_loss: 4.9958, val_loss: 7.9080, lr: 0.001000, 19.90s
+2024-09-26 10:51:06 INFO     epoch complete!
+2024-09-26 10:51:06 INFO     evaluating now!
+2024-09-26 10:51:08 INFO     Epoch [18/200] train_loss: 4.8695, val_loss: 8.6351, lr: 0.001000, 20.64s
+2024-09-26 10:51:26 INFO     epoch complete!
+2024-09-26 10:51:26 INFO     evaluating now!
+2024-09-26 10:51:28 INFO     Epoch [19/200] train_loss: 4.9201, val_loss: 5.7526, lr: 0.001000, 20.32s
+2024-09-26 10:51:46 INFO     epoch complete!
+2024-09-26 10:51:46 INFO     evaluating now!
+2024-09-26 10:51:48 INFO     Epoch [20/200] train_loss: 4.7800, val_loss: 7.2661, lr: 0.001000, 20.44s
+2024-09-26 10:52:07 INFO     epoch complete!
+2024-09-26 10:52:07 INFO     evaluating now!
+2024-09-26 10:52:09 INFO     Epoch [21/200] train_loss: 4.8412, val_loss: 5.5043, lr: 0.001000, 20.40s
+2024-09-26 10:52:28 INFO     epoch complete!
+2024-09-26 10:52:28 INFO     evaluating now!
+2024-09-26 10:52:30 INFO     Epoch [22/200] train_loss: 4.7047, val_loss: 5.5955, lr: 0.001000, 20.67s
+2024-09-26 10:52:48 INFO     epoch complete!
+2024-09-26 10:52:48 INFO     evaluating now!
+2024-09-26 10:52:50 INFO     Epoch [23/200] train_loss: 4.6890, val_loss: 5.0603, lr: 0.001000, 20.55s
+2024-09-26 10:52:50 INFO     Saved model at 23
+2024-09-26 10:52:50 INFO     Val loss decrease from 5.3414 to 5.0603, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch23.tar
+2024-09-26 10:53:09 INFO     epoch complete!
+2024-09-26 10:53:09 INFO     evaluating now!
+2024-09-26 10:53:10 INFO     Epoch [24/200] train_loss: 4.6936, val_loss: 5.2063, lr: 0.001000, 20.12s
+2024-09-26 10:53:29 INFO     epoch complete!
+2024-09-26 10:53:29 INFO     evaluating now!
+2024-09-26 10:53:30 INFO     Epoch [25/200] train_loss: 4.6235, val_loss: 5.7887, lr: 0.001000, 19.98s
+2024-09-26 10:53:49 INFO     epoch complete!
+2024-09-26 10:53:49 INFO     evaluating now!
+2024-09-26 10:53:50 INFO     Epoch [26/200] train_loss: 4.5569, val_loss: 6.4620, lr: 0.001000, 20.07s
+2024-09-26 10:54:09 INFO     epoch complete!
+2024-09-26 10:54:09 INFO     evaluating now!
+2024-09-26 10:54:10 INFO     Epoch [27/200] train_loss: 4.5905, val_loss: 5.0876, lr: 0.001000, 19.99s
+2024-09-26 10:54:29 INFO     epoch complete!
+2024-09-26 10:54:29 INFO     evaluating now!
+2024-09-26 10:54:31 INFO     Epoch [28/200] train_loss: 4.5525, val_loss: 5.0771, lr: 0.001000, 20.02s
+2024-09-26 10:54:49 INFO     epoch complete!
+2024-09-26 10:54:49 INFO     evaluating now!
+2024-09-26 10:54:51 INFO     Epoch [29/200] train_loss: 4.5099, val_loss: 5.1079, lr: 0.001000, 20.58s
+2024-09-26 10:55:10 INFO     epoch complete!
+2024-09-26 10:55:10 INFO     evaluating now!
+2024-09-26 10:55:12 INFO     Epoch [30/200] train_loss: 4.4396, val_loss: 6.4738, lr: 0.001000, 20.52s
+2024-09-26 10:55:30 INFO     epoch complete!
+2024-09-26 10:55:30 INFO     evaluating now!
+2024-09-26 10:55:32 INFO     Epoch [31/200] train_loss: 4.3944, val_loss: 5.4199, lr: 0.001000, 20.17s
+2024-09-26 10:55:50 INFO     epoch complete!
+2024-09-26 10:55:50 INFO     evaluating now!
+2024-09-26 10:55:52 INFO     Epoch [32/200] train_loss: 4.3894, val_loss: 5.1969, lr: 0.001000, 20.10s
+2024-09-26 10:56:11 INFO     epoch complete!
+2024-09-26 10:56:11 INFO     evaluating now!
+2024-09-26 10:56:13 INFO     Epoch [33/200] train_loss: 4.3430, val_loss: 4.9428, lr: 0.001000, 20.78s
+2024-09-26 10:56:13 INFO     Saved model at 33
+2024-09-26 10:56:13 INFO     Val loss decrease from 5.0603 to 4.9428, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch33.tar
+2024-09-26 10:56:32 INFO     epoch complete!
+2024-09-26 10:56:32 INFO     evaluating now!
+2024-09-26 10:56:34 INFO     Epoch [34/200] train_loss: 4.3181, val_loss: 5.0840, lr: 0.001000, 20.89s
+2024-09-26 10:56:52 INFO     epoch complete!
+2024-09-26 10:56:52 INFO     evaluating now!
+2024-09-26 10:56:54 INFO     Epoch [35/200] train_loss: 4.3082, val_loss: 5.6115, lr: 0.001000, 20.63s
+2024-09-26 10:57:13 INFO     epoch complete!
+2024-09-26 10:57:13 INFO     evaluating now!
+2024-09-26 10:57:15 INFO     Epoch [36/200] train_loss: 4.3124, val_loss: 4.9518, lr: 0.001000, 20.51s
+2024-09-26 10:57:34 INFO     epoch complete!
+2024-09-26 10:57:34 INFO     evaluating now!
+2024-09-26 10:57:36 INFO     Epoch [37/200] train_loss: 4.2560, val_loss: 7.0998, lr: 0.001000, 21.21s
+2024-09-26 10:57:54 INFO     epoch complete!
+2024-09-26 10:57:54 INFO     evaluating now!
+2024-09-26 10:57:56 INFO     Epoch [38/200] train_loss: 4.2427, val_loss: 5.3191, lr: 0.001000, 20.31s
+2024-09-26 10:58:15 INFO     epoch complete!
+2024-09-26 10:58:15 INFO     evaluating now!
+2024-09-26 10:58:17 INFO     Epoch [39/200] train_loss: 4.1926, val_loss: 5.1248, lr: 0.001000, 20.71s
+2024-09-26 10:58:36 INFO     epoch complete!
+2024-09-26 10:58:36 INFO     evaluating now!
+2024-09-26 10:58:38 INFO     Epoch [40/200] train_loss: 4.1417, val_loss: 4.9036, lr: 0.001000, 20.40s
+2024-09-26 10:58:38 INFO     Saved model at 40
+2024-09-26 10:58:38 INFO     Val loss decrease from 4.9428 to 4.9036, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch40.tar
+2024-09-26 10:58:56 INFO     epoch complete!
+2024-09-26 10:58:56 INFO     evaluating now!
+2024-09-26 10:58:58 INFO     Epoch [41/200] train_loss: 4.3205, val_loss: 5.1684, lr: 0.001000, 20.39s
+2024-09-26 10:59:16 INFO     epoch complete!
+2024-09-26 10:59:16 INFO     evaluating now!
+2024-09-26 10:59:18 INFO     Epoch [42/200] train_loss: 4.1539, val_loss: 4.8248, lr: 0.001000, 20.33s
+2024-09-26 10:59:19 INFO     Saved model at 42
+2024-09-26 10:59:19 INFO     Val loss decrease from 4.9036 to 4.8248, saving to ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406_epoch42.tar
+2024-09-26 10:59:37 INFO     epoch complete!
+2024-09-26 10:59:37 INFO     evaluating now!
+2024-09-26 10:59:39 INFO     Epoch [43/200] train_loss: 4.1173, val_loss: 5.4009, lr: 0.001000, 20.66s
+2024-09-26 10:59:58 INFO     epoch complete!
+2024-09-26 10:59:58 INFO     evaluating now!
+2024-09-26 11:00:00 INFO     Epoch [44/200] train_loss: 4.1250, val_loss: 4.9222, lr: 0.001000, 20.63s
+2024-09-26 11:00:18 INFO     epoch complete!
+2024-09-26 11:00:18 INFO     evaluating now!
+2024-09-26 11:00:20 INFO     Epoch [45/200] train_loss: 4.1004, val_loss: 4.8986, lr: 0.001000, 20.22s
+2024-09-26 11:00:38 INFO     epoch complete!
+2024-09-26 11:00:38 INFO     evaluating now!
+2024-09-26 11:00:40 INFO     Epoch [46/200] train_loss: 4.0894, val_loss: 4.9460, lr: 0.001000, 19.97s
+2024-09-26 11:00:59 INFO     epoch complete!
+2024-09-26 11:00:59 INFO     evaluating now!
+2024-09-26 11:01:01 INFO     Epoch [47/200] train_loss: 4.0424, val_loss: 4.9809, lr: 0.001000, 20.54s
+2024-09-26 11:01:20 INFO     epoch complete!
+2024-09-26 11:01:20 INFO     evaluating now!
+2024-09-26 11:01:22 INFO     Epoch [48/200] train_loss: 4.1172, val_loss: 5.4897, lr: 0.001000, 21.05s
+2024-09-26 11:01:41 INFO     epoch complete!
+2024-09-26 11:01:41 INFO     evaluating now!
+2024-09-26 11:01:43 INFO     Epoch [49/200] train_loss: 4.0701, val_loss: 5.4195, lr: 0.001000, 21.03s
+2024-09-26 11:02:02 INFO     epoch complete!
+2024-09-26 11:02:02 INFO     evaluating now!
+2024-09-26 11:02:04 INFO     Epoch [50/200] train_loss: 4.0500, val_loss: 5.1148, lr: 0.001000, 21.54s
+2024-09-26 11:02:23 INFO     epoch complete!
+2024-09-26 11:02:23 INFO     evaluating now!
+2024-09-26 11:02:26 INFO     Epoch [51/200] train_loss: 4.0235, val_loss: 4.9487, lr: 0.001000, 21.34s
+2024-09-26 11:02:45 INFO     epoch complete!
+2024-09-26 11:02:45 INFO     evaluating now!
+2024-09-26 11:02:47 INFO     Epoch [52/200] train_loss: 4.0064, val_loss: 5.1539, lr: 0.001000, 21.63s
+2024-09-26 11:03:07 INFO     epoch complete!
+2024-09-26 11:03:07 INFO     evaluating now!
+2024-09-26 11:03:09 INFO     Epoch [53/200] train_loss: 4.0145, val_loss: 5.2645, lr: 0.001000, 21.41s
+2024-09-26 11:03:28 INFO     epoch complete!
+2024-09-26 11:03:28 INFO     evaluating now!
+2024-09-26 11:03:30 INFO     Epoch [54/200] train_loss: 3.9696, val_loss: 5.1474, lr: 0.001000, 21.70s
+2024-09-26 11:03:50 INFO     epoch complete!
+2024-09-26 11:03:50 INFO     evaluating now!
+2024-09-26 11:03:52 INFO     Epoch [55/200] train_loss: 3.9945, val_loss: 5.0344, lr: 0.001000, 21.52s
+2024-09-26 11:04:11 INFO     epoch complete!
+2024-09-26 11:04:11 INFO     evaluating now!
+2024-09-26 11:04:13 INFO     Epoch [56/200] train_loss: 3.9580, val_loss: 4.8406, lr: 0.001000, 21.52s
+2024-09-26 11:04:33 INFO     epoch complete!
+2024-09-26 11:04:33 INFO     evaluating now!
+2024-09-26 11:04:35 INFO     Epoch [57/200] train_loss: 3.9373, val_loss: 4.8417, lr: 0.001000, 21.61s
+2024-09-26 11:04:35 WARNING  Early stopping at epoch: 57
+2024-09-26 11:04:35 INFO     Trained totally 58 epochs, average train time is 18.611s, average eval time is 1.984s
+2024-09-26 11:04:35 INFO     Loaded model at 42
+2024-09-26 11:04:35 INFO     Saved model at ./libcity/cache/10009/model_cache/GWNET_CHITaxi20190406.m
+2024-09-26 11:04:35 INFO     Start evaluating ...
+2024-09-26 11:04:40 INFO     Note that you select the single mode to evaluate!
+2024-09-26 11:04:40 INFO     Evaluate result is saved at ./libcity/cache/10009/evaluate_cache/2024_09_26_11_04_40_GWNET_CHITaxi20190406.csv
+2024-09-26 11:04:40 INFO     
+         MAE       RMSE
+1   2.190216   6.573959
+2   2.317132   7.507666
+3   2.533702   8.531857
+4   2.625159   9.094087
+5   2.721815   9.579026
+6   2.737278   9.750271
+7   2.799087   9.983747
+8   2.860838  10.211453
+9   2.893668  10.383230
+10  2.956260  10.623373
+11  3.010713  10.937094
+12  3.089645  11.454542
+2024-09-26 11:04:40 INFO     ----------------------------------------------------------------------------
+2024-09-26 11:04:40 INFO     Kownledge Graph Embedding: TransE, Experiment ids: [10005, 10006, 10007, 10008, 10009]
+2024-09-26 11:04:40 INFO     ----------------------------------------------------------------------------
+2024-09-26 11:04:40 INFO     Average: 
+         MAE       RMSE
+0   2.233327   6.800160
+1   2.422178   7.799291
+2   2.620473   8.818933
+3   2.722272   9.370086
+4   2.854705   9.690724
+5   2.882896   9.950560
+6   2.944536  10.273494
+7   3.019779  10.632380
+8   3.064271  11.002640
+9   3.139843  11.407996
+10  3.235355  11.733813
+11  3.376170  12.313405 
+2024-09-26 11:04:40 INFO     Standard deviation: 
+         MAE      RMSE
+0   0.098333  0.272582
+1   0.123495  0.433619
+2   0.126907  0.503664
+3   0.116747  0.493858
+4   0.085515  0.287053
+5   0.109868  0.209189
+6   0.105956  0.159124
+7   0.116374  0.237305
+8   0.108792  0.362980
+9   0.104049  0.454533
+10  0.127871  0.440989
+11  0.159204  0.549650
+2024-09-26 11:04:40 INFO     ----------------------------------------------------------------------------
+2024-09-26 11:04:40 INFO     12 steps Average: 
+        MAE     RMSE
+0  2.876317  9.98279
+2024-09-26 11:04:40 INFO     12 steps Standard deviation: 
+        MAE      RMSE
+0  0.115259  0.367046
