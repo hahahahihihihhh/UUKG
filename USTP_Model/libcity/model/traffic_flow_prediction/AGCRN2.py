@@ -1,26 +1,17 @@
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
-import numpy as np
-import os
 from logging import getLogger
 from libcity.model.abstract_traffic_state_model import AbstractTrafficStateModel
 from libcity.model import loss
 
 
 class AVWGCN(nn.Module):
-    def __init__(self, dim_in, dim_out, cheb_k, embed_dim, ke_method, dataset, ke_model, ke_dim, max_hop):
+    def __init__(self, dim_in, dim_out, cheb_k, embed_dim):
         super(AVWGCN, self).__init__()
         self.cheb_k = cheb_k
         self.weights_pool = nn.Parameter(torch.FloatTensor(embed_dim, cheb_k, dim_in, dim_out))
         self.bias_pool = nn.Parameter(torch.FloatTensor(embed_dim, dim_out))
-
-        self.ke_method = ke_method
-        self.dataset = dataset
-        self.ke_model = ke_model
-        self.ke_dim = ke_dim
-        self.max_hop = max_hop
-
 
     def forward(self, x, node_embeddings):
         # x shaped[B, N, C], node_embeddings shaped [N, D] -> supports shaped [N, N]
@@ -28,15 +19,6 @@ class AVWGCN(nn.Module):
         node_num = node_embeddings.shape[0]
         supports = F.softmax(F.relu(torch.mm(node_embeddings, node_embeddings.transpose(0, 1))), dim=1)
         support_set = [torch.eye(node_num).to(supports.device), supports]
-
-        if self.ke_method == "MultiHop":
-            mh_score = np.loadtxt(os.path.join("KG/model/{}/MultiHop/{}".
-                                 format(self.dataset, self.ke_model),
-                                 "{}_{}hop.csv".
-                                 format(self.ke_dim, self.max_hop)))
-            mh_score = torch.from_numpy(mh_score.astype(np.float32)).to(self.device)
-            support_set += [mh_score]
-
         # default cheb_k = 3
         for k in range(2, self.cheb_k):
             support_set.append(torch.matmul(2 * supports, support_set[-1]) - support_set[-2])
@@ -118,7 +100,7 @@ class AVWDCRNN(nn.Module):
         return torch.stack(init_states, dim=0)      # (num_layers, B, N, hidden_dim)
 
 
-class AGCRN(AbstractTrafficStateModel):
+class AGCRN2(AbstractTrafficStateModel):
     def __init__(self, config, data_feature):
         self.num_nodes = data_feature.get('num_nodes', 1)
         self.feature_dim = data_feature.get('feature_dim', 1)

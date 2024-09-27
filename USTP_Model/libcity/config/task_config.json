@@ -83,14 +83,14 @@
     },
     "traffic_state_pred": {
         "allowed_model": [
-            "DCRNN", "STGCN", "GWNET2", "AGCRN", "TGCLSTM", "TGCN", "TemplateTSP",
+            "DCRNN", "STGCN", "GWNET2", "AGCRN2", "TGCLSTM", "TGCN", "TemplateTSP",
             "ASTGCN", "MSTGCN", "MTGNN", "ACFM", "STResNet", "RNN", "LSTM", "GRU", "AutoEncoder", "Seq2Seq",
             "STResNetCommon", "ACFMCommon", "ASTGCNCommon", "MSTGCNCommon", "ToGCN", "CONVGCN", "STG2Seq",
             "DMVSTNet", "ATDM", "GMAN", "GTS", "STDN", "HGCN", "STSGCN", "STAGGCN", "STNN", "ResLSTM", "DGCN",
             "MultiSTGCnet", "STMGAT", "CRANN", "STTN", "CONVGCNCommon", "DSAN", "DKFN", "CCRNN", "MultiSTGCnetCommon",
             "GEML", "FNN", "GSNet", "CSTN", "D2STGNN", "STID","STGODE", "STNorm", "DMSTGCN", "ESG", "SSTBAN", "STTSNet",
             "FOGS", "RGSL", "DSTAGNN", "STPGCN", "HIEST", "STAEformer", "TESTAM", "MultiSPANS", "SimST", "TimeMixer",
-            "MegaCRN", "Trafformer", "STSSL", "STWave","PDFormer","GWNET","MHopDCRNN"
+            "MegaCRN", "Trafformer", "STSSL", "STWave","PDFormer","GWNET","AGCRN","MHopDCRNN"
         ],
         "allowed_dataset": [
             "METR_LA", "PEMS_BAY", "PEMSD3", "PEMSD4", "PEMSD7", "PEMSD8", "PEMSD7(M)",
@@ -222,7 +222,7 @@
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
-        "AGCRN": {
+        "AGCRN2": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
@@ -458,6 +458,11 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "GWNET": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "AGCRN": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

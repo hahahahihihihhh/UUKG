@@ -1,7 +1,6 @@
 """
 训练并评估单一模型的脚本
 """
-import argparse
 import os
 # os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 from libcity.pipeline import run_model
@@ -13,8 +12,8 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = 'Concat'
-config_file = 'config/CHITaxi20190406/AGCRN/{}/config_GIE.json'.format(ke_method)
+ke_method = ''
+config_file = 'config/CHITaxi20190406/GWNET/{}/config.json'.format(ke_method)
 
 def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
@@ -34,9 +33,9 @@ def train(config, total = 5):
     #     ext, ke_model = "ExtSpace", config.get('ke_model', '')
 
     ke_model = config.get('ke_model', '')
-    # save_dir = os.path.join(log, config['dataset'], config['model'], ke_method, ke_model)
+    save_dir = os.path.join(log, config['dataset'], config['model'], ke_method, ke_model)
 
-    save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
+    # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
     ensure_dir(save_dir)
     # print(save_dir)
 
@@ -86,13 +85,15 @@ def train(config, total = 5):
     avg_results = np.zeros([predict_steps, len(eval_metrics)])
     std_results = np.zeros([predict_steps, len(eval_metrics)])
     for _i in range(final_results_five_train.shape[0]):
-        avg_mae_rmse = np.mean(final_results_five_train[_i, :, :], axis=1)
+        avg_mae_rmse_mape = np.mean(final_results_five_train[_i, :, :], axis=1)
         std_mae = np.std(final_results_five_train[_i, :, :][0])
         std_rmse = np.std(final_results_five_train[_i, :, :][1])
+        std_mape = np.std(final_results_five_train[_i, :, :][2])
 
-        avg_results[_i] = avg_mae_rmse
+        avg_results[_i] = avg_mae_rmse_mape
         std_results[_i][0] = std_mae
         std_results[_i][1] = std_rmse
+        std_results[_i][2] = std_mape
 
     # 保存各预测步指标均值和标准差
     df_avg_results = pd.DataFrame(avg_results, columns=eval_metrics)
@@ -106,8 +107,8 @@ def train(config, total = 5):
     # 保存所有预测步指标均值和标准差
     avg_steps_results = np.mean(avg_results, axis=0)
     std_steps_results = np.mean(std_results, axis=0)
-    df_avg_steps_results = pd.DataFrame(np.array(avg_steps_results).reshape(1, 2), columns=eval_metrics)
-    df_std_steps_results = pd.DataFrame(np.array(std_steps_results).reshape(1, 2), columns=eval_metrics)
+    df_avg_steps_results = pd.DataFrame(np.array(avg_steps_results).reshape(1, 3), columns=eval_metrics)
+    df_std_steps_results = pd.DataFrame(np.array(std_steps_results).reshape(1, 3), columns=eval_metrics)
     df_avg_steps_results.to_csv(os.path.join(save_dir, 'avg_steps_result.csv'), index=False)
     df_std_steps_results.to_csv(os.path.join(save_dir, 'std_steps_result.csv'), index=False)
     logger.info('----------------------------------------------------------------------------')

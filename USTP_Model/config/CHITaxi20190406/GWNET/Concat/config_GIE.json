@@ -15,6 +15,6 @@
     "use_early_stop": true,
     "cache_dataset": false,
     "output_window": 12,
-    "metrics": ["MAE", "RMSE"]
+    "metrics": ["MAE", "RMSE", "masked_MAPE"]
 
 }
