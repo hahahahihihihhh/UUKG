@@ -12,8 +12,8 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-ke_method = ''
-config_file = 'config/CHITaxi20190406/GWNET/{}/config.json'.format(ke_method)
+ke_method = 'MultiHop'
+config_file = 'config/CHITaxi20190406/AGCRN/{}/config_GIE.json'.format(ke_method)
 
 def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
