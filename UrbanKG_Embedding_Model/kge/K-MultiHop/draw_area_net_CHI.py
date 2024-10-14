@@ -2,7 +2,7 @@ import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
-from UrbanKG_Embedding_Model.kge.utils.graph import Graph_Matrix
+from utils.graph import Graph_Matrix
 
 ANA, area_num = 1, 77
 entity2id = pd.read_csv("../../data/CHI/entity2id_CHI.txt", sep=" ", header=None)
