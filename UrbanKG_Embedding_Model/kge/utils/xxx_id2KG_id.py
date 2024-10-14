@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 dataset = "CHI" # CHI or NYC
-entity2id = pd.read_csv(".././data/{0}/entity2id_{0}.txt".format(dataset), sep = " ", header = None, names = ['entity','id'])
+entity2id = pd.read_csv("../../data/{0}/entity2id_{0}.txt".format(dataset), sep = " ", header = None, names = ['entity','id'])
 xxx_id2KG_id_prefix = "xxx_id2KG_id"
 
 def area_id2KG_id():

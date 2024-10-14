@@ -2,11 +2,10 @@ import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
-from UrbanKG_data.KMH.utils.graph import Graph_Matrix
+from UrbanKG_Embedding_Model.kge.utils.graph import Graph_Matrix
 
 ANA, area_num = 1, 77
-df = pd.read_csv("../UrbanKG/CHI/triplets_CHI.txt", sep=" ", header=None)
-entity2id = pd.read_csv("../UrbanKG/CHI/entity2id_CHI.txt", sep=" ", header=None)
+entity2id = pd.read_csv("../../data/CHI/entity2id_CHI.txt", sep=" ", header=None)
 
 def draw_directed_graph(my_graph):
     G = nx.DiGraph()  # 建立一个空的无向图G

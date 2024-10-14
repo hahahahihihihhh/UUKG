@@ -8,7 +8,7 @@ import torch
 ANA, area_num = 1, 77
 ke_dim = 32
 embeddings_prefix = "../xxx_embeddings/CHI/TransE"
-KMHpath_prefix = "CHI/TransE"
+KMHpath_prefix = "./"
 def load_obj(file_name):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
@@ -38,7 +38,7 @@ def main():
                 p = torch.tensor(area_embedding[_s])
             path[_s][_t] = p
     ensure_dir(KMHpath_prefix)
-    save_obj(os.path.join(KMHpath_prefix, '{}_1hop.pkl'.format(ke_dim)), path)
+    save_obj(KMHpath_prefix + '{}_1hop.pkl'.format(ke_dim), path)
 
 if __name__ == '__main__':
     main()

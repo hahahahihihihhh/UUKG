@@ -1,4 +1,5 @@
 {
+  "ke_type": "CHIArea",
   "num_nodes": 77,
   "ke_model": "TransE",
   "ke_dim": 32,
