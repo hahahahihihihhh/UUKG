@@ -51,11 +51,11 @@ class AVWGCN(nn.Module):
                 support_set2.append(torch.matmul(2 * supports2, support_set2[-1]) - support_set2[-2])
 
             supports2 = torch.stack(support_set2, dim=0)  # cheb_k, N, N
-            # weights2 = torch.einsum('nd,dkio->nkio', node_embeddings,
-            #                             self.weights_pool2)  # N, cheb_k, dim_in, dim_out
+            weights2 = torch.einsum('nd,dkio->nkio', node_embeddings,
+                                        self.weights_pool2)  # N, cheb_k, dim_in, dim_out
             x_g2 = torch.einsum("knm,bmc->bknc", supports2, x)  # B, cheb_k, N, dim_in
             x_g2 = x_g2.permute(0, 2, 1, 3)  # B, N, cheb_k, dim_in
-            x_gconv += torch.einsum('bnki,nkio->bno', x_g2, weights)  # B, N, dim_out
+            x_gconv += torch.einsum('bnki,nkio->bno', x_g2, weights2)  # B, N, dim_out
 
         return x_gconv
 

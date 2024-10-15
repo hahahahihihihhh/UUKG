@@ -2,8 +2,8 @@ import pickle
 import pandas as pd
 
 ANA, area_num = 1, 77
-df = pd.read_csv("../UrbanKG/CHI/triplets_CHI.txt", sep=" ", header=None)
-entity2id = pd.read_csv("../UrbanKG/CHI/entity2id_CHI.txt", sep=" ", header=None)
+df = pd.read_csv("../../data/CHI/triplets_CHI.txt", sep=" ", header=None)
+entity2id = pd.read_csv("../../data/CHI/entity2id_CHI.txt", sep=" ", header=None)
 
 def get_area_id(area: str) -> int:
     return int(area.split("/")[1])

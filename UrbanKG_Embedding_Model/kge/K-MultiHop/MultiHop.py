@@ -11,7 +11,7 @@ config_file = 'config.json'
 with open(config_file) as config:
     config = json.load(config)
 
-ke_model, ke_dim  = config["ke_model"], config["ke_dim"]
+ke_model, ke_type, ke_dim  = config["ke_model"], config['ke_type'], config["ke_dim"]
 max_hop, num_nodes = config["max_hop"], config["num_nodes"]
 attn_num_layers, attn_num_heads = config["attn_num_layers"], config["attn_num_heads"]
 
@@ -115,7 +115,8 @@ def process_feats(origin_path_feats):
     return max_path_len, mh_feat, mh_value_mask, mh_padding_mask, i1d_to_ij2d
 
 def main():
-    path_feat_prefix = './{}/'.format(ke_model)
+    # path_feat_prefix = './{}/{}/'.format(ke_type, ke_model)
+    path_feat_prefix = ''
     # process path feat
     path_feat_path = path_feat_prefix + '{}_{}hop.pkl'.format(ke_dim, max_hop)
     with open(path_feat_path, mode='rb') as f:

@@ -29,10 +29,10 @@ DATA_PATH = '../data'
 # model_path = "embedding_model/CHI/TransE"
 # model_path = "embedding_model/CHI/TransH"
 
-model_path = "embedding_model/NYC/GIE"
+model_path = "../ke_model/NYC/GIE"
 
 
-KG_id_path_prefix, save_path_prefix = "used_xxx_id2KG_id", "xxx_embeddings"
+KG_id_path_prefix, save_path_prefix = "./K-Emb/used_xxx_id2KG_id", "xxx_embeddings"
 args = None
 
 def init_parser(config):

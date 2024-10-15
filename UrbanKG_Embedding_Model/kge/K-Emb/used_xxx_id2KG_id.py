@@ -1,8 +1,8 @@
 import os.path
 import pandas as pd
 
-dataset = "NYC" # CHI or NYC
-entity2id_CHI = pd.read_csv(".././data/{0}/entity2id_{0}.txt".format(dataset), sep = " ", header = None, names = ['entity','id'])
+dataset = "CHI" # CHI or NYC
+entity2id_CHI = pd.read_csv("../../data/{0}/entity2id_{0}.txt".format(dataset), sep = " ", header = None, names = ['entity','id'])
 used_xxx_id_prefix = "used_xxx_id"
 xxx_id2KG_id_prefix = "xxx_id2KG_id"
 used_xxx_id2KG_id_prefix = "used_xxx_id2KG_id"
