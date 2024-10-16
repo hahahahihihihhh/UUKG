@@ -78,6 +78,32 @@ with open("../UrbanKG/NYC/test_NYC.txt") as f:
     for line in f.readlines():
         Test.append(line)
 print("NYC Test:", len(Test))
+print("---------------------------------------------------------")
+"""
+
+"""
+rel_count = {
+    "PLA": 0,
+    "RLA": 0,
+    "JLA": 0,
+    "PBB": 0,
+    "RBB": 0,
+    "JBB": 0,
+    "ALB": 0,
+    "JBR": 0,
+    "BNB": 0,
+    "ANA": 0,
+    "PHPC": 0,
+    "RHRC": 0,
+    "JHJC": 0
+}
+with open("../UrbanKG/NYC/UrbanKG_NYC.txt") as f:
+    for line in f.readlines():
+        for k, _ in rel_count.items():
+            if k in line:
+                rel_count[k] += 1
+for k, v in rel_count.items():
+    print("NYC {}: {}".format(k, v))
 
 
 '''
@@ -97,6 +123,20 @@ NYC:
     NYC Train: 837216
     NYC Valid: 46512
     NYC Test: 46512
+    NYC PLA: 62450
+    ---------------------------------------------------------
+    NYC RLA: 110919
+    NYC JLA: 62437
+    NYC PBB: 62450
+    NYC RBB: 110919
+    NYC JBB: 62437
+    NYC ALB: 284
+    NYC JBR: 221838
+    NYC BNB: 6
+    NYC ANA: 694
+    NYC PHPC: 62450
+    NYC RHRC: 110919
+    NYC JHJC: 62437
 '''
 
 

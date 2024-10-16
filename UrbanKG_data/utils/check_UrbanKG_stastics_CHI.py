@@ -78,6 +78,32 @@ with open("../UrbanKG/CHI/test_CHI.txt") as f:
     for line in f.readlines():
         Test.append(line)
 print("CHI Test:", len(Test))
+print("---------------------------------------------------------")
+"""
+
+"""
+rel_count = {
+    "PLA": 0,
+    "RLA": 0,
+    "JLA": 0,
+    "PBB": 0,
+    "RBB": 0,
+    "JBB": 0,
+    "ALB": 0,
+    "JBR": 0,
+    "BNB": 0,
+    "ANA": 0,
+    "PHPC": 0,
+    "RHRC": 0,
+    "JHJC": 0
+}
+with open("../UrbanKG/CHI/UrbanKG_CHI.txt") as f:
+    for line in f.readlines():
+        for k, _ in rel_count.items():
+            if k in line:
+                rel_count[k] += 1
+for k, v in rel_count.items():
+    print("CHI {}: {}".format(k, v))
 
 
 '''
@@ -97,6 +123,20 @@ CHI:
     CHI Train: 507960
     CHI Valid: 28220
     CHI Test: 28220
+    ---------------------------------------------------------
+    CHI PLA: 31573
+    CHI RLA: 71578
+    CHI JLA: 37086
+    CHI PBB: 31573
+    CHI RBB: 71578
+    CHI JBB: 37086
+    CHI ALB: 123
+    CHI JBR: 143156
+    CHI BNB: 16
+    CHI ANA: 394
+    CHI PHPC: 31573
+    CHI RHRC: 71578
+    CHI JHJC: 37086
 '''
 
 
