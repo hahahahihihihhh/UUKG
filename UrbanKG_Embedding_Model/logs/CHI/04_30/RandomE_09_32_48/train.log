@@ -1,7 +1,0 @@
-2024-04-30 09:32:48 INFO     Saving logs in: ./logs\CHI\04_30\RandomE_09_32_48
-2024-04-30 09:32:49 INFO     	 (140602, 26, 140602)
-2024-04-30 09:32:49 INFO     Total number of parameters 4781300
-2024-04-30 09:32:49 INFO     	 Start training
-2024-04-30 09:32:49 INFO     	 Optimization finished
-2024-04-30 09:33:23 INFO     	 valid MR: 68276.34 | MRR: 0.000 | H@1: 0.000 | H@3: 0.000 | H@10: 0.000
-2024-04-30 09:33:55 INFO     	 test MR: 67996.34 | MRR: 0.000 | H@1: 0.000 | H@3: 0.000 | H@10: 0.000
