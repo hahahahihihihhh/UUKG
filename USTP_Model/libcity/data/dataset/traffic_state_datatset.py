@@ -22,12 +22,12 @@ class TrafficStateDataset(AbstractDataset):
         self.config = config
         self.dataset = self.config.get('dataset', '')
         # !!!
-        self.ke_model = config.get('ke_model', '')
-        self.ke_type = self.config.get('ke_type', '')
-        self.ext_time_dim = 0
-        self.ext_space_dim = 0
-        self.ke_dim = config.get('ke_dim', 32)
-        self.ke_method = config.get('ke_method', '')
+        # self.ke_model = config.get('ke_model', '')
+        # self.ke_type = self.config.get('ke_type', '')
+        # self.ext_time_dim = 0
+        # self.ext_space_dim = 0
+        # self.ke_dim = config.get('ke_dim', 32)
+        # self.ke_method = config.get('ke_method', '')
         # !!!
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
@@ -646,24 +646,24 @@ class TrafficStateDataset(AbstractDataset):
                         data_list.append(data_ind)
         data = np.concatenate(data_list, axis=-1)   # [4368, 77, 2]
         # !!! ---Concat
-        assert self.load_external == True
-        self.ext_time_dim = data.shape[-1] - feature_dim
-        if self.ke_method == 'Concat':
-            entity_embeddings = np.load(os.path.join("KG/model/{}/Concat/{}".
-                                                     format(self.dataset, self.ke_model),
-                                                     "{}_{}d.npy".
-                                                     format(self.ke_type, self.ke_dim))
-            )   # [77, 32]
-            self.ext_space_dim = self.ke_dim
-            new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
-            for _ in range(num_samples):
-                new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
-            print('new_data shape : ', new_data.shape)
-            return new_data
-        return data
+        # self.ext_space_dim = 0
+        # self.ke_method = config.get('ke_method', '')
+        # assert self.load_external == True
+        # self.ext_time_dim = data.shape[-1] - feature_dim
+        # if self.ke_method == 'Concat':
+        #     entity_embeddings = np.load(os.path.join("KG/{}/{}".
+        #                                              format(self.dataset, self.ke_model),
+        #                                              "{}_{}d.npy".
+        #                                              format(self.ke_type, self.ke_dim))
+        #     )   # [77, 32]
+        #     self.ext_space_dim = self.ke_dim
+        #     new_data = np.zeros([num_samples, num_nodes, feature_dim + self.ext_time_dim + self.ext_space_dim])   # [4368, 77, 2 + 32]
+        #     for _ in range(num_samples):
+        #         new_data[_] = np.concatenate([data[_], entity_embeddings], axis=1)
+        #     print('new_data shape : ', new_data.shape)
+        #     return new_data
         # !!! ---Concat
-        # print(data.shape, data)
-        # return data
+        return data
 
     def _add_external_information_4d(self, df, ext_data=None):
         """
@@ -1002,11 +1002,11 @@ class TrafficStateDataset(AbstractDataset):
         self.ext_dim = self.feature_dim - self.output_dim
         self.scaler = self._get_scalar(self.scaler_type,
                                        x_train[..., :self.output_dim], y_train[..., :self.output_dim])
-        # self.ext_scaler = self._get_scalar(self.ext_scaler_type,
-        #                                    x_train[..., self.output_dim:], y_train[..., self.output_dim:])
-        # !!!
         self.ext_scaler = self._get_scalar(self.ext_scaler_type,
-                                           x_train[..., -self.ext_space_dim:], y_train[..., -self.ext_space_dim:])
+                                           x_train[..., self.output_dim:], y_train[..., self.output_dim:])
+        # !!!
+        # self.ext_scaler = self._get_scalar(self.ext_scaler_type,
+        #                                    x_train[..., -self.ext_space_dim:], y_train[..., -self.ext_space_dim:])
         # !!!
         x_train[..., :self.output_dim] = self.scaler.transform(x_train[..., :self.output_dim])
         y_train[..., :self.output_dim] = self.scaler.transform(y_train[..., :self.output_dim])
@@ -1015,19 +1015,19 @@ class TrafficStateDataset(AbstractDataset):
         x_test[..., :self.output_dim] = self.scaler.transform(x_test[..., :self.output_dim])
         y_test[..., :self.output_dim] = self.scaler.transform(y_test[..., :self.output_dim])
         if self.normal_external:
-            # x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
-            # y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
-            # x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
-            # y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
-            # x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
-            # y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
+            x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
+            y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
+            x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
+            y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
+            x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
+            y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
             # !!!
-            x_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_train[..., -self.ext_space_dim:])
-            y_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_train[..., -self.ext_space_dim:])
-            x_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_val[..., -self.ext_space_dim:])
-            y_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_val[..., -self.ext_space_dim:])
-            x_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_test[..., -self.ext_space_dim:])
-            y_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_test[..., -self.ext_space_dim:])
+            # x_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_train[..., -self.ext_space_dim:])
+            # y_train[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_train[..., -self.ext_space_dim:])
+            # x_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_val[..., -self.ext_space_dim:])
+            # y_val[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_val[..., -self.ext_space_dim:])
+            # x_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(x_test[..., -self.ext_space_dim:])
+            # y_test[..., -self.ext_space_dim:] = self.ext_scaler.transform(y_test[..., -self.ext_space_dim:])
             # !!!
         # 把训练集的X和y聚合在一起成为list，测试集验证集同理
         # x_train/y_train: (num_samples, input_length, ..., feature_dim)

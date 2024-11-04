@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -100,7 +101,7 @@ class GCN(nn.Module):
         return h
 
 
-class GWNET2(AbstractTrafficStateModel):
+class KMHNet(AbstractTrafficStateModel):
     def __init__(self, config, data_feature):
         self.adj_mx = data_feature.get('adj_mx')
         self.num_nodes = data_feature.get('num_nodes', 1)
@@ -111,10 +112,10 @@ class GWNET2(AbstractTrafficStateModel):
         self.blocks = config.get('blocks', 4)
         self.layers = config.get('layers', 2)
         self.gcn_bool = config.get('gcn_bool', True)
-        self.addaptadj = config.get('addaptadj', True)
+        self.use_rel_adj = config.get('use_rel_adj', True)
+        self.use_apt_adj = config.get('use_apt_adj', True)
         self.adjtype = config.get('adjtype', 'doubletransition')
         self.randomadj = config.get('randomadj', True)
-        self.aptonly = config.get('aptonly', True)
         self.kernel_size = config.get('kernel_size', 2)
         self.nhid = config.get('nhid', 32)
         self.residual_channels = config.get('residual_channels', self.nhid)
@@ -125,6 +126,10 @@ class GWNET2(AbstractTrafficStateModel):
         self.output_window = config.get('output_window', 1)
         self.output_dim = self.data_feature.get('output_dim', 1)
         self.device = config.get('device', torch.device('cpu'))
+        self.dataset = config.get('dataset', '')
+        self.ke_dim = config.get('ke_dim', 200)
+        self.ke_model = config.get('ke_model', '')
+        self.max_hop = config.get('max_hop', 2)
 
         self.apt_layer = config.get('apt_layer', True)
         if self.apt_layer:
@@ -145,30 +150,29 @@ class GWNET2(AbstractTrafficStateModel):
                                     out_channels=self.residual_channels,
                                     kernel_size=(1, 1))
 
-        self.cal_adj(self.adjtype)
-        self.supports = [torch.tensor(i).to(self.device) for i in self.adj_mx]
+        # init rel, poi, apt types of supports
+        self.supports, self.supports_len = [], 0
+        if self.use_rel_adj:
+            self.cal_adj(self.adjtype)
+            self.supports += [torch.tensor(i).to(self.device) for i in self.adj_mx]
+            self._logger.info('add adj_mx to supports')
+        self.supports_len = len(self.supports)
         if self.randomadj:
             self.aptinit = None
         else:
             self.aptinit = self.supports[0]
-        if self.aptonly:
-            self.supports = None
 
         receptive_field = self.output_dim
 
-        self.supports_len = 0
-        if self.supports is not None:
-            self.supports_len += len(self.supports)
-
-        if self.gcn_bool and self.addaptadj:
+        if self.gcn_bool and self.use_apt_adj:
+            assert (self.supports is not None)
             if self.aptinit is None:
                 if self.supports is None:
                     self.supports = []
                 self.nodevec1 = nn.Parameter(torch.randn(self.num_nodes, 10).to(self.device),
-                                             requires_grad=True).to(self.device)
+                                             requires_grad=True).to(self.device)    # source node embedding
                 self.nodevec2 = nn.Parameter(torch.randn(10, self.num_nodes).to(self.device),
-                                             requires_grad=True).to(self.device)
-                self.supports_len += 1
+                                             requires_grad=True).to(self.device)    # target node embedding
             else:
                 if self.supports is None:
                     self.supports = []
@@ -177,7 +181,17 @@ class GWNET2(AbstractTrafficStateModel):
                 initemb2 = torch.mm(torch.diag(p[:10] ** 0.5), n[:, :10].t())
                 self.nodevec1 = nn.Parameter(initemb1, requires_grad=True).to(self.device)
                 self.nodevec2 = nn.Parameter(initemb2, requires_grad=True).to(self.device)
-                self.supports_len += 1
+            self.supports_len += 1
+            self._logger.info('add apt_adj(v1 * v2) in forward process')
+
+        mh_score = np.loadtxt(os.path.join("KG/{}/{}".
+                             format(self.dataset, self.ke_model),
+                             "{}_{}hop.csv".
+                             format(self.ke_dim, self.max_hop)))
+        mh_score = torch.from_numpy(mh_score.astype(np.float32)).to(self.device)
+        self.supports += [mh_score]
+        self.supports_len += 1
+        self._logger.info('add multi hop score in forward process')
 
         for b in range(self.blocks):
             additional_scope = self.kernel_size - 1
@@ -226,7 +240,7 @@ class GWNET2(AbstractTrafficStateModel):
 
         in_len = inputs.size(3)
         if in_len < self.receptive_field:
-            x = nn.functional.pad(inputs, (self.receptive_field - in_len, 0, 0, 0))
+            x = nn.functional.pad(inputs, (self.receptive_field - in_len, 0, 0, 0)) # (batch_size, feature_dim, num_nodes, receptive_field)
         else:
             x = inputs
         x = self.start_conv(x)  # (batch_size, residual_channels, num_nodes, self.receptive_field)
@@ -234,10 +248,9 @@ class GWNET2(AbstractTrafficStateModel):
 
         # calculate the current adaptive adj matrix once per iteration
         new_supports = None
-        if self.gcn_bool and self.addaptadj and self.supports is not None:
+        if self.gcn_bool and self.use_apt_adj and self.supports is not None:
             adp = F.softmax(F.relu(torch.mm(self.nodevec1, self.nodevec2)), dim=1)
             new_supports = self.supports + [adp]
-
         # WaveNet layers
         for i in range(self.blocks * self.layers):
 
@@ -256,11 +269,11 @@ class GWNET2(AbstractTrafficStateModel):
             # dilated convolution
             filter = self.filter_convs[i](residual)
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
-            filter = torch.tanh(filter)
+            filter = torch.tanh(filter)     # TCN-a
             gate = self.gate_convs[i](residual)
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
-            gate = torch.sigmoid(gate)
-            x = filter * gate
+            gate = torch.sigmoid(gate)      # TCN-b
+            x = filter * gate               # Gated TCN
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
             # parametrized skip connection
             s = x
@@ -275,7 +288,7 @@ class GWNET2(AbstractTrafficStateModel):
             # (batch_size, skip_channels, num_nodes, receptive_field-kernel_size+1)
             if self.gcn_bool and self.supports is not None:
                 # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
-                if self.addaptadj:
+                if self.use_apt_adj:
                     x = self.gconv[i](x, new_supports)
                 else:
                     x = self.gconv[i](x, self.supports)

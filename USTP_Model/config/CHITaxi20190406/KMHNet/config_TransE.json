@@ -1,14 +1,12 @@
 {
     "task": "traffic_state_pred",
-    "model": "GWNET",
+    "model": "KMHNet",
     "dataset": "CHITaxi20190406",
 
-    "exp_id": 10020,
+    "exp_id": 10005,
     "ke_model": "TransE",
     "ke_dim": 32,
-    "ke_method": "Concat",
-
-    "load_external": true,
+    "max_hop": 1,
 
     "max_epoch": 200,
     "patience": 15,

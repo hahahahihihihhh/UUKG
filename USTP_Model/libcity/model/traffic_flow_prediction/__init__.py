@@ -1,4 +1,4 @@
-from libcity.model.traffic_flow_prediction.AGCRN2 import AGCRN2
+from libcity.model.traffic_flow_prediction.AGCRN import AGCRN
 from libcity.model.traffic_flow_prediction.ASTGCN import ASTGCN
 from libcity.model.traffic_flow_prediction.MSTGCN import MSTGCN
 from libcity.model.traffic_flow_prediction.ACFM import ACFM
@@ -34,10 +34,10 @@ from libcity.model.traffic_flow_prediction.TimeMixer import TimeMixer
 from libcity.model.traffic_flow_prediction.STSSL import STSSL
 from libcity.model.traffic_flow_prediction.STWave import STWave
 from libcity.model.traffic_flow_prediction.PDFormer import PDFormer
-from libcity.model.traffic_flow_prediction.AGCRN import AGCRN
+from libcity.model.traffic_flow_prediction.KMHopAGCRN import KMHopAGCRN
 
 __all__ = [
-    "AGCRN2",
+    "AGCRN",
     "ASTGCN",
     "MSTGCN",
     "ACFM",
@@ -73,5 +73,5 @@ __all__ = [
     "STSSL",
     "STWave",
     "PDFormer",
-    "AGCRN",
+    "KMHopAGCRN",
 ]

@@ -25,21 +25,19 @@ def get_entity2id_relation2id(KG, entity2id, relation2id):
             relations.append(temp[1])
     entity = sorted(list(set(entity)))
     relations = sorted(list(set(relations)))
-    f.close()
+
     with open(entity2id, 'w') as f2:
         for i in range(len(entity)):
             f2.write(entity[i] + ' ')
             f2.write(str(i))
             f2.write('\n')
-        f2.close()
-
 
     with open(relation2id, 'w') as f3:
         for j in range(len(relations)):
+            print(111)
             f3.write(relations[j]+' ')
             f3.write(str(j))
             f3.write('\n')
-        f3.close()
 
 def produce_train_val_test(KG, entity2id, realtion2id, triple):
     h_r_t = []
@@ -120,6 +118,7 @@ if __name__ == "__main__":
     test_NYC = './UrbanKG/NYC/test_NYC.txt'
 
     get_entity2id_relation2id(KG_NYC, entity2id_NYC, relation2id_NYC)
+    exit(0)
     produce_train_val_test(KG_NYC, entity2id_NYC, relation2id_NYC, triple_NYC)
     get_train_val_test(triple_NYC, train_NYC, valid_NYC, test_NYC)
 

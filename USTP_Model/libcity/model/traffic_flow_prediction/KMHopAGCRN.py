@@ -1,17 +1,26 @@
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
+import numpy as np
+import os
 from logging import getLogger
 from libcity.model.abstract_traffic_state_model import AbstractTrafficStateModel
 from libcity.model import loss
 
 
 class AVWGCN(nn.Module):
-    def __init__(self, dim_in, dim_out, cheb_k, embed_dim):
+    def __init__(self, dim_in, dim_out, cheb_k, embed_dim, dataset, ke_model, ke_dim, max_hop, device):
         super(AVWGCN, self).__init__()
         self.cheb_k = cheb_k
         self.weights_pool = nn.Parameter(torch.FloatTensor(embed_dim, cheb_k, dim_in, dim_out))
         self.bias_pool = nn.Parameter(torch.FloatTensor(embed_dim, dim_out))
+
+        self.dataset = dataset
+        self.ke_model = ke_model
+        self.ke_dim = ke_dim
+        self.max_hop = max_hop
+        self.device = device
+        self.weights_pool2 = nn.Parameter(torch.FloatTensor(embed_dim, cheb_k, dim_in, dim_out))
 
     def forward(self, x, node_embeddings):
         # x shaped[B, N, C], node_embeddings shaped [N, D] -> supports shaped [N, N]
@@ -28,16 +37,34 @@ class AVWGCN(nn.Module):
         x_g = torch.einsum("knm,bmc->bknc", supports, x)      # B, cheb_k, N, dim_in
         x_g = x_g.permute(0, 2, 1, 3)  # B, N, cheb_k, dim_in
         x_gconv = torch.einsum('bnki,nkio->bno', x_g, weights) + bias     # B, N, dim_out
+
+        mh_score = np.loadtxt(os.path.join("KG/{}/{}".
+                                           format(self.dataset, self.ke_model),
+                                           "{}_{}hop.csv".
+                                           format(self.ke_dim, self.max_hop)))
+        mh_score = torch.from_numpy(mh_score.astype(np.float32)).to(self.device)
+        supports2 = mh_score
+        support_set2 = [torch.eye(node_num).to(supports.device), supports2]
+        for k in range(2, self.cheb_k):
+            support_set2.append(torch.matmul(2 * supports2, support_set2[-1]) - support_set2[-2])
+
+        supports2 = torch.stack(support_set2, dim=0)  # cheb_k, N, N
+        weights2 = torch.einsum('nd,dkio->nkio', node_embeddings,
+                                    self.weights_pool2)  # N, cheb_k, dim_in, dim_out
+        x_g2 = torch.einsum("knm,bmc->bknc", supports2, x)  # B, cheb_k, N, dim_in
+        x_g2 = x_g2.permute(0, 2, 1, 3)  # B, N, cheb_k, dim_in
+        x_gconv += torch.einsum('bnki,nkio->bno', x_g2, weights2)  # B, N, dim_out
+
         return x_gconv
 
 
 class AGCRNCell(nn.Module):
-    def __init__(self, node_num, dim_in, dim_out, cheb_k, embed_dim):
+    def __init__(self, node_num, dim_in, dim_out, cheb_k, embed_dim, dataset, ke_model, ke_dim, max_hop, device):
         super(AGCRNCell, self).__init__()
         self.node_num = node_num
         self.hidden_dim = dim_out
-        self.gate = AVWGCN(dim_in+self.hidden_dim, 2*dim_out, cheb_k, embed_dim)
-        self.update = AVWGCN(dim_in+self.hidden_dim, dim_out, cheb_k, embed_dim)
+        self.gate = AVWGCN(dim_in+self.hidden_dim, 2*dim_out, cheb_k, embed_dim, dataset, ke_model, ke_dim, max_hop, device)
+        self.update = AVWGCN(dim_in+self.hidden_dim, dim_out, cheb_k, embed_dim, dataset, ke_model, ke_dim, max_hop, device)
 
     def forward(self, x, state, node_embeddings):
         # x: B, N, input_dim
@@ -67,11 +94,19 @@ class AVWDCRNN(nn.Module):
         assert self.num_layers >= 1, 'At least one DCRNN layer in the Encoder.'
 
         self.dcrnn_cells = nn.ModuleList()
+
+        self.dataset = config.get('dataset', '')
+        assert self.dataset != ''
+        self.ke_model = config.get('ke_model', 'TransE')
+        self.ke_dim = config.get('ke_dim', 32)
+        self.max_hop = config.get('max_hop', 1)
+        self.device = config.get('device', 'cpu')
+
         self.dcrnn_cells.append(AGCRNCell(self.num_nodes, self.feature_dim,
-                                          self.hidden_dim, self.cheb_k, self.embed_dim))
+                                          self.hidden_dim, self.cheb_k, self.embed_dim, self.dataset, self.ke_model, self.ke_dim, self.max_hop, self.device))
         for _ in range(1, self.num_layers):
             self.dcrnn_cells.append(AGCRNCell(self.num_nodes, self.hidden_dim,
-                                              self.hidden_dim, self.cheb_k, self.embed_dim))
+                                              self.hidden_dim, self.cheb_k, self.embed_dim, self.dataset, self.ke_model, self.ke_dim, self.max_hop, self.device))
 
     def forward(self, x, init_state, node_embeddings):
         # shape of x: (B, T, N, D)
@@ -100,7 +135,7 @@ class AVWDCRNN(nn.Module):
         return torch.stack(init_states, dim=0)      # (num_layers, B, N, hidden_dim)
 
 
-class AGCRN2(AbstractTrafficStateModel):
+class KMHopAGCRN(AbstractTrafficStateModel):
     def __init__(self, config, data_feature):
         self.num_nodes = data_feature.get('num_nodes', 1)
         self.feature_dim = data_feature.get('feature_dim', 1)

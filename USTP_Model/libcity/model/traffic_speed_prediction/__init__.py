@@ -1,6 +1,6 @@
 from libcity.model.traffic_speed_prediction.DCRNN import DCRNN
 from libcity.model.traffic_speed_prediction.STGCN import STGCN
-from libcity.model.traffic_speed_prediction.GWNET2 import GWNET2
+from libcity.model.traffic_speed_prediction.GWNET import GWNET
 from libcity.model.traffic_speed_prediction.MTGNN import MTGNN
 from libcity.model.traffic_speed_prediction.TGCLSTM import TGCLSTM
 from libcity.model.traffic_speed_prediction.TGCN import TGCN
@@ -25,12 +25,12 @@ from libcity.model.traffic_speed_prediction.STAEformer import STAEformer
 from libcity.model.traffic_speed_prediction.TESTAM import TESTAM
 from libcity.model.traffic_speed_prediction.MegaCRN import MegaCRN
 from libcity.model.traffic_speed_prediction.Trafformer import Trafformer
-from libcity.model.traffic_speed_prediction.GWNET import GWNET
+from libcity.model.traffic_speed_prediction.KMHNet import KMHNet
 
 __all__ = [
     "DCRNN",
     "STGCN",
-    "GWNET2",
+    "GWNET",
     "TGCLSTM",
     "TGCN",
     "TemplateTSP",
@@ -55,5 +55,5 @@ __all__ = [
     "TESTAM",
     "MegaCRN",
     "Trafformer",
-    "GWNET"
+    "KMHNet"
 ]
