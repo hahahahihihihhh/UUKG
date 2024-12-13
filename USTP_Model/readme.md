@@ -7,14 +7,12 @@ This code is the official PyTorch implementation of [UUKG: Unified Urban Knowled
 Create a python 3.7 environment and install dependencies:
 
 ```bash
-conda create -n libcity python==3.7.3
+conda create -n libcity python=3.7
 conda activate libcity
-conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
+conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.7 -c pytorch -c nvidia
+cd ./USTP_Model
 pip install -r requirements.txt
 ```
-after install the environment, we should solve the problem
-![img.png](img.png)
-through https://zhuanlan.zhihu.com/p/659534878
 
 ## Directory Structure
 

@@ -12,7 +12,7 @@ import json
 
 log = './logs/'
 cache = './libcity/cache/'
-config_file = 'config/CHITaxi20190406/GWNET/config.json'
+config_file = 'config/CHITaxi20190406/TGCN/config.json'
 
 def train(config, total = 5):
     predict_steps, eval_metrics = config['output_window'], config["metrics"]
@@ -32,9 +32,9 @@ def train(config, total = 5):
     #     ext, ke_model = "ExtSpace", config.get('ke_model', '')
 
     ke_model = config.get('ke_model', '')
-    save_dir = os.path.join(log, config['dataset'], config['model'], ke_model)
+    # save_dir = os.path.join(log, config['dataset'], config['model'], ke_model)
 
-    # save_dir = os.path.join(log, config['dataset'], config['model'], 'Test')
+    save_dir = os.path.join(log, config['dataset'], config['model'], 'tmp')
     ensure_dir(save_dir)
     # print(save_dir)
 
